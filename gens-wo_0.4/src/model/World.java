@@ -26,6 +26,12 @@ public class World extends Storable {
 		return res;
 	}
 	
+	public static World generateNewWorld(World res, String uniID) {
+		if(res == null) res = new World();
+		//TODO
+		return res;
+	}
+	
 	public String getWorldID() {
 		return worldID;
 	}

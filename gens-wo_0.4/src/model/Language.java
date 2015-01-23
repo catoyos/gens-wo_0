@@ -13,6 +13,12 @@ public class Language extends Storable {
 		return res;
 	}
 
+	public static Language generateNewLanguage(Language res, String zoneID) {
+		if(res == null) res = new Language();
+		//TODO
+		return res;
+	}
+
 	@Override
 	public String toFileString() {
 		// TODO Auto-generated method stub

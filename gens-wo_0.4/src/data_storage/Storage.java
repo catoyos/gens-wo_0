@@ -3,13 +3,13 @@ package data_storage;
 import java.io.IOException;
 import java.util.List;
 
+import model.Arch;
 import model.City;
 import model.Individual;
 import model.Language;
 import model.Storable;
 import model.World;
 import model.Zone;
-import model.interfaces.IAIEngine;
 import model.interfaces.IStorage;
 
 public class Storage implements IStorage {
@@ -33,17 +33,14 @@ public class Storage implements IStorage {
 		return new Storage(uniID);
 	}
 
-	public static IStorage getInitiatedStorage(String uniID, IAIEngine engine) {
-		AIEngine.set(engine);
+	public static IStorage getInitiatedStorage(String uniID) {
 		Storage st = new Storage(uniID);
-		engine.setStorage(st);
-		st.initialLoad();
+		Storage.initiateStorage(st);
 		return st;
 	}
 
-	public static void initiateStorage(Storage st, IAIEngine engine) {
-		AIEngine.set(engine);
-		engine.setStorage(st);
+	public static void initiateStorage(Storage st) {
+		Arch.setStorage(st);
 		st.initialLoad();
 	}
 	

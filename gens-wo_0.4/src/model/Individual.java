@@ -49,6 +49,16 @@ public class Individual extends Storable {
 		//TODO
 		return res;
 	}
+	public static Individual generateNewIndividual(Individual res, String strCity, float birthDate) {
+		if(res == null) res = new Individual();
+		//TODO
+		return res;
+	}
+	public static Individual generateIndividualFromParents(Individual res, Individual father, Individual mother, float birthDate) {
+		if(res == null) res = new Individual();
+		//TODO
+		return res;
+	}
 	
 	public String getIndividualID() {
 		return individualID;

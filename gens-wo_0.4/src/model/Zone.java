@@ -27,6 +27,11 @@ public class Zone extends Storable {
 		//TODO
 		return res;
 	}
+	public static Zone generateNewZone(Zone res, String worldID) {
+		if(res == null) res = new Zone();
+		//TODO
+		return res;
+	}
 	
 	public String getZoneID() {
 		return zoneID;

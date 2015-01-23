@@ -4,7 +4,6 @@ import java.util.HashMap;
 import java.util.List;
 
 import model.Language;
-import model.Zone;
 import model.Storable.StorableType;
 
 public class LanguageStorage extends AbstractStorage<Language> {

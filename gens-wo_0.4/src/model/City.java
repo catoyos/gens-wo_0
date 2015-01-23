@@ -27,6 +27,11 @@ public class City extends Storable {
 		//TODO
 		return res;
 	}
+	public static City generateNewCity(City res, String worldID, String parentZoneID2) {
+		if(res == null) res = new City();
+		//TODO
+		return res;
+	}
 
 	public String getCityID() {
 		return cityID;
