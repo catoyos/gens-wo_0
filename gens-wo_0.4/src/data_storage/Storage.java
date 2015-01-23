@@ -146,19 +146,35 @@ public class Storage implements IStorage {
 	}
 
 	/* (non-Javadoc)
-	 * @see data_storage.IStorage#getWorldFromFile(java.lang.String)
+	 * @see data_storage.IStorage#getWorldByIdFromMemory(java.lang.String)
 	 */
 	@Override
-	public World getWorldFromFile(String itemid) {
-		return ws.getItemFromFile(itemid);
+	public World getWorldByIdFromMemory(String itemid) {
+		return ws.getItemByIdFromMemory(itemid);
 	}
 
 	/* (non-Javadoc)
-	 * @see data_storage.IStorage#getWorldsFromFile(java.util.List)
+	 * @see data_storage.IStorage#getWorldsByIdFromMemory(java.util.List)
 	 */
 	@Override
-	public List<World> getWorldsFromFile(List<String> itemids) {
-		return ws.getItemsFromFile(itemids);
+	public List<World> getWorldsByIdFromMemory(List<String> itemids) {
+		return ws.getItemsByIdFromFile(itemids);
+	}
+
+	/* (non-Javadoc)
+	 * @see data_storage.IStorage#getWorldByIdFromFile(java.lang.String)
+	 */
+	@Override
+	public World getWorldByIdFromFile(String itemid) {
+		return ws.getItemByIdFromFile(itemid);
+	}
+
+	/* (non-Javadoc)
+	 * @see data_storage.IStorage#getWorldsByIdFromFile(java.util.List)
+	 */
+	@Override
+	public List<World> getWorldsByIdFromFile(List<String> itemids) {
+		return ws.getItemsByIdFromFile(itemids);
 	}
 
 	/* (non-Javadoc)
@@ -250,19 +266,35 @@ public class Storage implements IStorage {
 	}
 
 	/* (non-Javadoc)
-	 * @see data_storage.IStorage#getZoneFromFile(java.lang.String)
+	 * @see data_storage.IStorage#getZoneByIdFromMemory(java.lang.String)
 	 */
 	@Override
-	public Zone getZoneFromFile(String itemid) {
-		return zs.getItemFromFile(itemid);
+	public Zone getZoneByIdFromMemory(String itemid) {
+		return zs.getItemByIdFromMemory(itemid);
 	}
 
 	/* (non-Javadoc)
-	 * @see data_storage.IStorage#getZonesFromFile(java.util.List)
+	 * @see data_storage.IStorage#getZonesByIdFromMemory(java.util.List)
 	 */
 	@Override
-	public List<Zone> getZonesFromFile(List<String> itemids) {
-		return zs.getItemsFromFile(itemids);
+	public List<Zone> getZonesByIdFromMemory(List<String> itemids) {
+		return zs.getItemsByIdFromFile(itemids);
+	}
+
+	/* (non-Javadoc)
+	 * @see data_storage.IStorage#getZoneByIdFromFile(java.lang.String)
+	 */
+	@Override
+	public Zone getZoneByIdFromFile(String itemid) {
+		return zs.getItemByIdFromFile(itemid);
+	}
+
+	/* (non-Javadoc)
+	 * @see data_storage.IStorage#getZonesByIdFromFile(java.util.List)
+	 */
+	@Override
+	public List<Zone> getZonesByIdFromFile(List<String> itemids) {
+		return zs.getItemsByIdFromFile(itemids);
 	}
 
 	/* (non-Javadoc)
@@ -354,19 +386,35 @@ public class Storage implements IStorage {
 	}
 
 	/* (non-Javadoc)
-	 * @see model.interfaces.IStorage#getLanguageFromFile(java.lang.String)
+	 * @see data_storage.IStorage#getLanguageByIdFromMemory(java.lang.String)
 	 */
 	@Override
-	public Language getLanguageFromFile(String itemid) {
-		return ls.getItemFromFile(itemid);
+	public Language getLanguageByIdFromMemory(String itemid) {
+		return ls.getItemByIdFromMemory(itemid);
 	}
 
 	/* (non-Javadoc)
-	 * @see model.interfaces.IStorage#getLanguagesFromFile(java.util.List)
+	 * @see data_storage.IStorage#getLanguagesByIdFromMemory(java.util.List)
 	 */
 	@Override
-	public List<Language> getLanguagesFromFile(List<String> itemids) {
-		return ls.getItemsFromFile(itemids);
+	public List<Language> getLanguagesByIdFromMemory(List<String> itemids) {
+		return ls.getItemsByIdFromFile(itemids);
+	}
+
+	/* (non-Javadoc)
+	 * @see data_storage.IStorage#getLanguageByIdFromFile(java.lang.String)
+	 */
+	@Override
+	public Language getLanguageByIdFromFile(String itemid) {
+		return ls.getItemByIdFromFile(itemid);
+	}
+
+	/* (non-Javadoc)
+	 * @see data_storage.IStorage#getLanguagesByIdFromFile(java.util.List)
+	 */
+	@Override
+	public List<Language> getLanguagesByIdFromFile(List<String> itemids) {
+		return ls.getItemsByIdFromFile(itemids);
 	}
 
 	/* (non-Javadoc)
@@ -458,19 +506,35 @@ public class Storage implements IStorage {
 	}
 
 	/* (non-Javadoc)
-	 * @see data_storage.IStorage#getCityFromFile(java.lang.String)
+	 * @see data_storage.IStorage#getCityByIdFromMemory(java.lang.String)
 	 */
 	@Override
-	public City getCityFromFile(String itemid) {
-		return cs.getItemFromFile(itemid);
+	public City getCityByIdFromMemory(String itemid) {
+		return cs.getItemByIdFromMemory(itemid);
 	}
 
 	/* (non-Javadoc)
-	 * @see data_storage.IStorage#getCitiesFromFile(java.util.List)
+	 * @see data_storage.IStorage#getCitysByIdFromMemory(java.util.List)
 	 */
 	@Override
-	public List<City> getCitiesFromFile(List<String> itemids) {
-		return cs.getItemsFromFile(itemids);
+	public List<City> getCitiesByIdFromMemory(List<String> itemids) {
+		return cs.getItemsByIdFromFile(itemids);
+	}
+
+	/* (non-Javadoc)
+	 * @see data_storage.IStorage#getCityByIdFromFile(java.lang.String)
+	 */
+	@Override
+	public City getCityByIdFromFile(String itemid) {
+		return cs.getItemByIdFromFile(itemid);
+	}
+
+	/* (non-Javadoc)
+	 * @see data_storage.IStorage#getCitysByIdFromFile(java.util.List)
+	 */
+	@Override
+	public List<City> getCitiesByIdFromFile(List<String> itemids) {
+		return cs.getItemsByIdFromFile(itemids);
 	}
 
 	/* (non-Javadoc)
@@ -571,19 +635,35 @@ public class Storage implements IStorage {
 	}
 
 	/* (non-Javadoc)
-	 * @see data_storage.IStorage#getIndividualFromFile(java.lang.String)
+	 * @see data_storage.IStorage#getIndividualByIdFromMemory(java.lang.String)
 	 */
 	@Override
-	public Individual getIndividualFromFile(String itemid) {
-		return is.getItemFromFile(itemid);
+	public Individual getIndividualByIdFromMemory(String itemid) {
+		return is.getItemByIdFromMemory(itemid);
 	}
 
 	/* (non-Javadoc)
-	 * @see data_storage.IStorage#getIndividualsFromFile(java.util.List)
+	 * @see data_storage.IStorage#getIndividualsByIdFromMemory(java.util.List)
 	 */
 	@Override
-	public List<Individual> getIndividualsFromFile(List<String> itemids) {
-		return is.getItemsFromFile(itemids);
+	public List<Individual> getIndividualsByIdFromMemory(List<String> itemids) {
+		return is.getItemsByIdFromFile(itemids);
+	}
+
+	/* (non-Javadoc)
+	 * @see data_storage.IStorage#getIndividualByIdFromFile(java.lang.String)
+	 */
+	@Override
+	public Individual getIndividualByIdFromFile(String itemid) {
+		return is.getItemByIdFromFile(itemid);
+	}
+
+	/* (non-Javadoc)
+	 * @see data_storage.IStorage#getIndividualsByIdFromFile(java.util.List)
+	 */
+	@Override
+	public List<Individual> getIndividualsByIdFromFile(List<String> itemids) {
+		return is.getItemsByIdFromFile(itemids);
 	}
 
 	/* (non-Javadoc)

@@ -58,13 +58,25 @@ public class CityStorage extends AbstractStorage<City> {
 	}
 
 	@Override
-	protected City getItemFromFile(String itemid) {
+	protected City getItemByIdFromMemory(String itemid) {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
-	protected List<City> getItemsFromFile(List<String> itemids) {
+	protected List<City> getItemsByIdFromMemory(List<String> itemids) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	protected City getItemByIdFromFile(String itemid) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	protected List<City> getItemsByIdFromFile(List<String> itemids) {
 		// TODO Auto-generated method stub
 		return null;
 	}

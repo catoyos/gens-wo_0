@@ -61,13 +61,25 @@ public interface IStorage {
 	 * @param itemid
 	 * @return
 	 */
-	public abstract World getWorldFromFile(String itemid);
+	public abstract World getWorldByIdFromMemory(String itemid);
 
 	/**
 	 * @param itemids
 	 * @return
 	 */
-	public abstract List<World> getWorldsFromFile(List<String> itemids);
+	public abstract List<World> getWorldsByIdFromMemory(List<String> itemids);
+
+	/**
+	 * @param itemid
+	 * @return
+	 */
+	public abstract World getWorldByIdFromFile(String itemid);
+
+	/**
+	 * @param itemids
+	 * @return
+	 */
+	public abstract List<World> getWorldsByIdFromFile(List<String> itemids);
 
 	/**
 	 * @param item
@@ -134,13 +146,25 @@ public interface IStorage {
 	 * @param itemid
 	 * @return
 	 */
-	public abstract Zone getZoneFromFile(String itemid);
+	public abstract Zone getZoneByIdFromMemory(String itemid);
 
 	/**
 	 * @param itemids
 	 * @return
 	 */
-	public abstract List<Zone> getZonesFromFile(List<String> itemids);
+	public abstract List<Zone> getZonesByIdFromMemory(List<String> itemids);
+
+	/**
+	 * @param itemid
+	 * @return
+	 */
+	public abstract Zone getZoneByIdFromFile(String itemid);
+
+	/**
+	 * @param itemids
+	 * @return
+	 */
+	public abstract List<Zone> getZonesByIdFromFile(List<String> itemids);
 
 	/**
 	 * @param item
@@ -207,13 +231,25 @@ public interface IStorage {
 	 * @param itemid
 	 * @return
 	 */
-	public abstract Language getLanguageFromFile(String itemid);
+	public abstract Language getLanguageByIdFromMemory(String itemid);
 
 	/**
 	 * @param itemids
 	 * @return
 	 */
-	public abstract List<Language> getLanguagesFromFile(List<String> itemids);
+	public abstract List<Language> getLanguagesByIdFromMemory(List<String> itemids);
+
+	/**
+	 * @param itemid
+	 * @return
+	 */
+	public abstract Language getLanguageByIdFromFile(String itemid);
+
+	/**
+	 * @param itemids
+	 * @return
+	 */
+	public abstract List<Language> getLanguagesByIdFromFile(List<String> itemids);
 
 	/**
 	 * @param item
@@ -281,13 +317,25 @@ public interface IStorage {
 	 * @param itemid
 	 * @return
 	 */
-	public abstract City getCityFromFile(String itemid);
+	public abstract City getCityByIdFromMemory(String itemid);
 
 	/**
 	 * @param itemids
 	 * @return
 	 */
-	public abstract List<City> getCitiesFromFile(List<String> itemids);
+	public abstract List<City> getCitiesByIdFromMemory(List<String> itemids);
+
+	/**
+	 * @param itemid
+	 * @return
+	 */
+	public abstract City getCityByIdFromFile(String itemid);
+
+	/**
+	 * @param itemids
+	 * @return
+	 */
+	public abstract List<City> getCitiesByIdFromFile(List<String> itemids);
 
 	/**
 	 * @param item
@@ -364,13 +412,25 @@ public interface IStorage {
 	 * @param itemid
 	 * @return
 	 */
-	public abstract Individual getIndividualFromFile(String itemid);
+	public abstract Individual getIndividualByIdFromMemory(String itemid);
 
 	/**
 	 * @param itemids
 	 * @return
 	 */
-	public abstract List<Individual> getIndividualsFromFile(List<String> itemids);
+	public abstract List<Individual> getIndividualsByIdFromMemory(List<String> itemids);
+
+	/**
+	 * @param itemid
+	 * @return
+	 */
+	public abstract Individual getIndividualByIdFromFile(String itemid);
+
+	/**
+	 * @param itemids
+	 * @return
+	 */
+	public abstract List<Individual> getIndividualsByIdFromFile(List<String> itemids);
 
 	/**
 	 * @param item

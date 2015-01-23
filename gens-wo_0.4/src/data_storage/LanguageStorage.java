@@ -12,7 +12,7 @@ public class LanguageStorage extends AbstractStorage<Language> {
 	
 	public LanguageStorage(String id) {
 		super(id, StorableType.LANGUAGE, "langs.dat");
-		this.depot = new HashMap<String, Zone>(5);
+		this.depot = new HashMap<String, Language>(5);
 	}
 
 	protected Language generateNewItem(String zoneID) {
@@ -58,13 +58,25 @@ public class LanguageStorage extends AbstractStorage<Language> {
 	}
 
 	@Override
-	protected Language getItemFromFile(String itemid) {
+	protected Language getItemByIdFromMemory(String itemid) {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
-	protected List<Language> getItemsFromFile(List<String> itemids) {
+	protected List<Language> getItemsByIdFromMemory(List<String> itemids) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	protected Language getItemByIdFromFile(String itemid) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	protected List<Language> getItemsByIdFromFile(List<String> itemids) {
 		// TODO Auto-generated method stub
 		return null;
 	}

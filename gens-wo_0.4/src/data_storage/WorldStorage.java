@@ -58,19 +58,27 @@ public class WorldStorage extends AbstractStorage<World> {
 	}
 
 	@Override
-	protected World getItemFromFile(String itemid) {
+	protected World getItemByIdFromMemory(String itemid) {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
-	protected List<World> getItemsFromFile(List<String> itemids) {
+	protected List<World> getItemsByIdFromMemory(List<String> itemids) {
 		// TODO Auto-generated method stub
-		List<World> res = new LinkedList<World>();
-		for (String wid : itemids) {
-			res.add(getItemFromFile(wid));
-		}
-		return res;
+		return null;
+	}
+
+	@Override
+	protected World getItemByIdFromFile(String itemid) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	protected List<World> getItemsByIdFromFile(List<String> itemids) {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 	@Override

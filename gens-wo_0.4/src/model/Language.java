@@ -6,6 +6,12 @@ public class Language extends Storable {
 		super(StorableType.LANGUAGE);
 		// TODO Auto-generated constructor stub
 	}
+	
+	public static Language generateFromString(Language res, String str) {
+		if(res == null) res = new Language();
+		//TODO
+		return res;
+	}
 
 	@Override
 	public String toFileString() {

@@ -12,15 +12,15 @@ public abstract class Storable {
 	public static Storable generateFromString(String string, StorableType type){
 		switch (type) {
 		case WORLD:
-//			return World.generateFromString(AIEngine.aie.getClearWorld(), string);
+			return World.generateFromString(Arch.sto.getClearWorld(), string);
 		case ZONE:
-//			return Zone.generateFromString(AIEngine.aie.getClearZone(), string);
+			return Zone.generateFromString(Arch.sto.getClearZone(), string);
 		case LANGUAGE:
-//			return Zone.generateFromString(AIEngine.aie.getClearZone(), string);
+			return Language.generateFromString(Arch.sto.getClearLanguage(), string);
 		case CITY:
-//			return City.generateFromString(AIEngine.aie.getClearCity(), string);
+			return City.generateFromString(Arch.sto.getClearCity(), string);
 		case INDIVIDUAL:
-//			return Individual.generateFromString(AIEngine.aie.getClearIndividual(), string);
+			return Individual.generateFromString(Arch.sto.getClearIndividual(), string);
 
 		default: return null;
 		}

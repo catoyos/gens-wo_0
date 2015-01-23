@@ -20,6 +20,12 @@ public class World extends Storable {
 		super(StorableType.WORLD);
 	}
 	
+	public static World generateFromString(World res, String str) {
+		if(res == null) res = new World();
+		//TODO
+		return res;
+	}
+	
 	public String getWorldID() {
 		return worldID;
 	}

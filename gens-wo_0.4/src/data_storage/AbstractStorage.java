@@ -7,72 +7,6 @@ import java.util.List;
 import model.Storable;
 import model.Storable.StorableType;
 
-class CustomIDStr implements Comparable<CustomIDStr> {
-	
-	private static final int PRIME = 31;
-	
-	final String str;
-	private int hashcode;
-	private boolean hcset;
-	
-	public CustomIDStr(String str) {
-		this.str = str;
-		this.hashcode = hashCode();
-	}
-
-	@Override
-	public int compareTo(CustomIDStr arg0) {
-		return str.compareTo(arg0.str);
-	}
-	
-	@Override
-	public int hashCode() {
-		if (!hcset) {
-			int result = 1;
-			if (str == null) {
-				result = 0;
-			} else {
-				for (int i = 0; i < 12 &&  i < str.length(); i++) {
-					result = PRIME * result + str.charAt(i);
-				}
-			}
-			hashcode = result;
-			hcset = true;
-		}
-		return hashcode;
-	}
-	
-	@Override
-	public boolean equals(Object obj) {
-		if (this == obj) {
-			return true;
-		}
-		if (obj == null) {
-			return false;
-		}
-		if (getClass() != obj.getClass()) {
-			return false;
-		}
-		CustomIDStr other = (CustomIDStr) obj;
-		if (hashcode != obj.hashCode()) {
-			return false;
-		}
-		if (str == null) {
-			if (other.str != null) {
-				return false;
-			}
-		} else if (!str.equals(other.str)) {
-			return false;
-		}
-		return true;
-	}
-	
-	@Override
-	public String toString() {
-		return str;
-	}	
-}
-
 public abstract class AbstractStorage<T extends Storable> {
 	
 	
@@ -81,6 +15,11 @@ public abstract class AbstractStorage<T extends Storable> {
 	protected String fileroot;
 	private File mainfile;
 
+	/**
+	 * @param id
+	 * @param type	type of Storable to store, as defined in Storable.StorableType
+	 * @param filename	path to the backing file INSIDE the default folder
+	 */
 	protected AbstractStorage(String id, StorableType type, String filename) {
 		this.id = id;
 		this.TYPE = type;
@@ -88,74 +27,120 @@ public abstract class AbstractStorage<T extends Storable> {
 		this.mainfile = new File(StorageIO.getDefaultFilePath(fileroot, filename));
 	}
 
-	/**
-	 * @return
-	 */
-	protected abstract int getNItems();
 
 	/**
-	 * @return
+	 * @return	number of distinct items stored
 	 */
-	protected abstract List<String> getItemIdsList();
+	protected abstract int getNItems(); //TODO separar memoria/archivo
 
 	/**
-	 * @return
+	 * @return	list of the IDs of all the stored items
 	 */
-	protected abstract List<T> getItemsList();
+	protected abstract List<String> getItemIdsList(); //TODO separar memoria/archivo
 
 	/**
-	 * @return
+	 * @return	list of all the items
+	 */
+	protected abstract List<T> getItemsList(); //TODO separar memoria/archivo
+
+	/**
+	 * @return	a clear instance of T
 	 */
 	protected abstract T getClearItem();
 
 	/**
-	 * @param itemid
-	 * @return
+	 * Returns an item by first looking for it in memory, and then,
+	 * if not present, in the backing file
+	 * 
+	 * @param itemid	ID of the item to return
+	 * @return	item with itemid ID or null if not stored
 	 */
 	protected abstract T getItemById(String itemid);
 
 	/**
-	 * @param itemids
-	 * @return
+	 * Returns a list of items in the same order as the list of IDs,
+	 * by first looking for them in memory, and then, if not present,
+	 * in the backing file
+	 * 
+	 * @param itemids	list of ID of the items to return
+	 * @return	list of items (in the same order as itemids), or 
+	 * 	null for the ones not stored
 	 */
 	protected abstract List<T> getItemsById(List<String> itemids);
 
 	/**
-	 * @param itemid
-	 * @return
+	 * Returns an item present in memory
+	 * 
+	 * @param itemid	ID of the item to return
+	 * @return	item with itemid ID or null if not stored
 	 */
-	protected abstract T getItemFromFile(String itemid);
+	protected abstract T getItemByIdFromMemory(String itemid);
 
 	/**
-	 * @param itemids
-	 * @return
+	 * Returns a list of items in the same order as the list of IDs,
+	 * present in memory
+	 * 
+	 * @param itemids	list of ID of the items to return
+	 * @return	list of items (in the same order as itemids), or 
+	 * 	null for the ones not stored
 	 */
-	protected abstract List<T> getItemsFromFile(List<String> itemids);
+	protected abstract List<T> getItemsByIdFromMemory(List<String> itemids);
 
 	/**
+	 * Returns an item from the backing file, ignoring whether or not
+	 * it's present in memory. If it IS in memory, this does not overwrite
+	 * it
+	 * 
+	 * @param itemid	ID of the item to return
+	 * @return	item with itemid ID or null if not stored
+	 */
+	protected abstract T getItemByIdFromFile(String itemid);
+
+	
+	/**
+	 * Returns a list of items in the same order as the list of IDs,
+	 * from the backing file, ignoring whether or not they are present 
+	 * in memory. If they ARE in memory, this does not overwrite them
+	 * 
+	 * @param itemids	list of ID of the items to return
+	 * @return	list of items (in the same order as itemids), or 
+	 * 	null for the ones not stored
+	 */
+	protected abstract List<T> getItemsByIdFromFile(List<String> itemids);
+
+	/**
+	 * Inserts an item
+	 * 
 	 * @param item
 	 */
 	protected abstract void insertItem(T item);
 
 	/**
+	 * Checks if an item exists either in memory or in the backing file
+	 * 
 	 * @param itemid
 	 * @return
 	 */
 	protected abstract boolean exists(String itemid);
 
 	/**
+	 * Checks if an item exists either in memory
+	 * 
 	 * @param itemid
 	 * @return
 	 */
 	protected abstract boolean isInMemory(String itemid);
 	
 	/**
+	 * Checks if an item exists either in the backing file
+	 * 
 	 * @param itemid
 	 * @return
 	 */
 	protected abstract boolean isInFile(String itemid);
 
 	/**
+	 * 
 	 * 
 	 */
 	protected abstract void finish();

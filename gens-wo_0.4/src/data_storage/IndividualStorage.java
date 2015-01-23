@@ -67,19 +67,27 @@ public class IndividualStorage extends AbstractStorage<Individual> {
 	}
 
 	@Override
-	protected Individual getItemFromFile(String itemid) {
+	protected Individual getItemByIdFromMemory(String itemid) {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
-	protected List<Individual> getItemsFromFile(List<String> itemids) {
+	protected List<Individual> getItemsByIdFromMemory(List<String> itemids) {
 		// TODO Auto-generated method stub
-		List<Individual> res = new LinkedList<Individual>();
-		for (String wid : itemids) {
-			res.add(getItemFromFile(wid));
-		}
-		return res;
+		return null;
+	}
+
+	@Override
+	protected Individual getItemByIdFromFile(String itemid) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	protected List<Individual> getItemsByIdFromFile(List<String> itemids) {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 	@Override

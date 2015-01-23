@@ -44,6 +44,12 @@ public class Individual extends Storable {
 		super(StorableType.INDIVIDUAL);
 	}
 	
+	public static Individual generateFromString(Individual res, String str) {
+		if(res == null) res = new Individual();
+		//TODO
+		return res;
+	}
+	
 	public String getIndividualID() {
 		return individualID;
 	}

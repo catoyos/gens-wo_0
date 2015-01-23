@@ -21,6 +21,12 @@ public class City extends Storable {
 	public City() {
 		super(StorableType.CITY);
 	}
+	
+	public static City generateFromString(City res, String str) {
+		if(res == null) res = new City();
+		//TODO
+		return res;
+	}
 
 	public String getCityID() {
 		return cityID;

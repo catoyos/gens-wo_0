@@ -22,6 +22,12 @@ public class Zone extends Storable {
 		// TODO Auto-generated constructor stub
 	}
 	
+	public static Zone generateFromString(Zone res, String str) {
+		if(res == null) res = new Zone();
+		//TODO
+		return res;
+	}
+	
 	public String getZoneID() {
 		return zoneID;
 	}

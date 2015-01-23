@@ -57,19 +57,27 @@ public class ZoneStorage extends AbstractStorage<Zone> {
 	}
 
 	@Override
-	protected Zone getItemFromFile(String itemid) {
+	protected Zone getItemByIdFromMemory(String itemid) {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
-	protected List<Zone> getItemsFromFile(List<String> itemids) {
+	protected List<Zone> getItemsByIdFromMemory(List<String> itemids) {
 		// TODO Auto-generated method stub
-		List<Zone> res = new LinkedList<Zone>();
-		for (String wid : itemids) {
-			res.add(getItemFromFile(wid));
-		}
-		return res;
+		return null;
+	}
+
+	@Override
+	protected Zone getItemByIdFromFile(String itemid) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	protected List<Zone> getItemsByIdFromFile(List<String> itemids) {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 	@Override
