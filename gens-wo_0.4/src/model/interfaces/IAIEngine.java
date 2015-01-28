@@ -36,8 +36,12 @@ public interface IAIEngine {
 	public abstract Individual getRandomCitizen(Zone zone);
 
 	public abstract List<Individual> getRandomCitizens(Zone zone, int n);
+	
+	public abstract List<City> getAdjacentZones(Zone zone);
+	
+	public abstract boolean isZoneAdjacent(Zone zone, Zone adj);
 
-	public abstract void updateCitizens(Zone zone, float moment);
+	public abstract void updateIndividuals(Zone zone, float moment);
 
 /*---------------------------------------------------*/
 	public abstract void finish();

@@ -89,7 +89,7 @@ public class MyAIEngine implements IAIEngine {
 	}
 
 	@Override
-	public void updateCitizens(Zone zone, float moment) {
+	public void updateIndividuals(Zone zone, float moment) {
 		// TODO Auto-generated method stub
 		
 	}

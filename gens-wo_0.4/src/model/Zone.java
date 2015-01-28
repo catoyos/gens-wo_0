@@ -192,14 +192,51 @@ public class Zone extends Storable {
 	public List<Individual> getRandomCitizens(int n) {
 		return Arch.aie == null ? null : Arch.aie.getRandomCitizens(this, n);
 	}
+	
+	/**
+	 * 
+	 * @return
+	 */
+	public List<City> getAdjacentCities() {
+		return Arch.aie == null ? null : Arch.aie.getAdjacentCities(this);
+	}
+	
+	/**
+	 * 
+	 * @return
+	 */
+	public List<Zone> getAdjacentZones() {
+		return Arch.aie == null ? null : Arch.aie.getAdjacentZones(this);
+	}
+
+	/**
+	 * 
+	 * @param zone
+	 * @return
+	 */
+	public boolean isZoneAdjacent(Zone adj) {
+		if(adj == null) return false;
+		return Arch.aie == null ? false : Arch.aie.isZoneAdjacent(this, adj);
+	}
+
+	/**
+	 * 
+	 * @param zone
+	 * @return
+	 */
+	public boolean isCityAdjacent(City adj) {
+		if(adj == null) return false;
+		return Arch.aie == null ? false : Arch.aie.isCityAdjacent(this, adj);
+	}
+
 
 	/**
 	 * 
 	 * @param moment
 	 */
-	public void updateCitizens(float moment) {
+	public void updateIndividuals(float moment) {
 		if (Arch.aie != null) {
-			Arch.aie.updateCitizens(this, moment);
+			Arch.aie.updateIndividuals(this, moment);
 		}
 	}
 
