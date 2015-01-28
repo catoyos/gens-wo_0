@@ -1,6 +1,8 @@
 package model;
 
+import java.util.Arrays;
 import java.util.Collection;
+import java.util.LinkedList;
 import java.util.List;
 
 import model.utils.StringUtils;
@@ -12,24 +14,54 @@ public class Zone extends Storable {
 	public static long getNewIDn() { return newIDn; }
 	
 	private String zoneID;
-	private String parentWorld;
+	private String parentWorldID;
 	private Language lang;
 	private List<String> cityIDs;
 	private float lastUpdated;
 	
 	public Zone() {
 		super(StorableType.ZONE);
-		// TODO Auto-generated constructor stub
+		this.cityIDs = new LinkedList<String>();
+		this.lang = new Language();
 	}
 	
-	public static Zone generateFromString(Zone res, String str) {
-		if(res == null) res = new Zone();
-		//TODO
+	public static Zone generateNewZone(Zone res, String worldID) {
+		res.zoneID = worldID + StringUtils.generateId((int)(newIDn++ % StringUtils.ID_N_25_2), 2);
+		res.parentWorldID = worldID;
+		res.lang = new Language();
+		if (res.cityIDs == null) {
+			res.cityIDs = new LinkedList<String>();
+		} else {
+			res.cityIDs.clear();
+		}
+		res.lastUpdated = 0;
 		return res;
 	}
-	public static Zone generateNewZone(Zone res, String worldID) {
-		if(res == null) res = new Zone();
-		//TODO
+	
+	public static Zone generateFromString(Zone res, String string) {
+		String[] data = string.split(",");
+		res.zoneID = data[0];
+		res.parentWorldID = data[1];
+		try {
+			res.lastUpdated = Float.parseFloat(data[2]);
+		} catch (Exception e) {
+			e.printStackTrace();
+			res.lastUpdated = 0;
+		}
+		
+		if (res.lang == null) {
+			res.lang = new Language();
+		}
+		res.lang = Language.generateFromString(res.lang, "");//TODO
+		
+		if (data.length > 2) {
+			res.cityIDs = Arrays.asList(data[3].split("@"));
+		} else if (res.cityIDs == null) {
+			res.cityIDs = new LinkedList<String>();
+		} else {
+			res.cityIDs.clear();
+		}
+		
 		return res;
 	}
 	
@@ -40,11 +72,11 @@ public class Zone extends Storable {
 		this.zoneID = zoneID;
 	}
 	
-	public String getParentWorld() {
-		return parentWorld;
+	public String getParentWorldID() {
+		return parentWorldID;
 	}
-	public void setParentWorld(String parentWorld) {
-		this.parentWorld = parentWorld;
+	public void setParentWorldID(String parentWorldID) {
+		this.parentWorldID = parentWorldID;
 	}
 	
 	public Language getLang() {
@@ -102,10 +134,96 @@ public class Zone extends Storable {
 	public void modifyUpdated(float lapse) {
 		this.lastUpdated += lapse;
 	}
-	@Override
-	public String toFileString() {
-		// TODO Auto-generated method stub
-		return null;
+	
+	/*------------------------------------------------*/
+	/**
+	 * 
+	 * @return
+	 */
+	public List<City> getCities() {
+		return Arch.sto == null ? null : Arch.sto.getCitiesById(cityIDs);
+	}
+	
+	/**
+	 * 
+	 * @return
+	 */
+	public World getParentWorld() {
+		return Arch.sto == null ? null : Arch.sto.getWorldById(parentWorldID);
+	}
+	
+	/**
+	 * 
+	 * @return
+	 */
+	public City getRandomCity() {
+		return Arch.aie == null ? null : Arch.aie.getRandomCity(this);
 	}
 
+	/**
+	 * 
+	 * @return
+	 */
+	public City getRandomCityPopWeighted() {
+		return Arch.aie == null ? null : Arch.aie.getRandomCityPopWeighted(this);
+	}
+
+	/**
+	 * 
+	 * @return
+	 */
+	public int getNCitizens() {
+		return Arch.aie == null ? -1 : Arch.aie.getNCitizens(this);
+	}
+
+	/**
+	 * 
+	 * @return
+	 */
+	public Individual getRandomCitizen() {
+		return Arch.aie == null ? null : Arch.aie.getRandomCitizen(this);
+	}
+
+	/**
+	 * 
+	 * @param n
+	 * @return
+	 */
+	public List<Individual> getRandomCitizens(int n) {
+		return Arch.aie == null ? null : Arch.aie.getRandomCitizens(this, n);
+	}
+
+	/**
+	 * 
+	 * @param moment
+	 */
+	public void updateCitizens(float moment) {
+		if (Arch.aie != null) {
+			Arch.aie.updateCitizens(this, moment);
+		}
+	}
+
+	/*------------------------------------------------*/
+	
+	@Override
+	public String toFileString() {
+		StringBuilder res = new StringBuilder();
+		res.append(zoneID).append(",");
+		res.append(parentWorldID).append(",");
+		res.append(lastUpdated);
+		if (!cityIDs.isEmpty()) {
+			res.append(",").append(cityIDs.get(0));
+			for (int i = 1; i < cityIDs.size(); i++) {
+				res.append("@").append(cityIDs.get(i));
+			}
+		} else {
+			res.append(",");
+		}
+		return res.toString();
+	}
+
+	@Override
+	public String toString() {
+		return "Zone [zoneID=" + zoneID + "]";
+	}
 }

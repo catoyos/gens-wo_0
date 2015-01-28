@@ -21,5 +21,10 @@ public class Genome {
 	public void setGenes(short[][] genes) {
 		this.genes = genes;
 	}
+
+	public short getGenValue(int i, int j) {
+		// TODO Auto-generated method stub
+		return 0;
+	}
 	
 }
