@@ -1,7 +1,10 @@
 package ai_engine;
 
+import java.util.Collections;
+import java.util.LinkedList;
 import java.util.List;
 
+import model.Arch;
 import model.City;
 import model.Individual;
 import model.Zone;
@@ -12,23 +15,48 @@ public class MyAIEngineZone {
 	public static City getRandomCity(Zone zone) {
 		int nzs = zone.getNCities();
 		if (nzs > 1) {
-			return Arch.getCityById(world.getCityIDs().get((int) (Math.random() * nzs)));
+			return Arch.getCityById(zone.getCityIDs().get(MyAIEngine.RND.nextInt(nzs)));
 		} else if (nzs == 1) {
-			return Arch.getCityById(world.getCityIDs().get(0));
+			return Arch.getCityById(zone.getCityIDs().get(0));
 		} else {
 			return null;
 		}
 	}
 
 	public static City getRandomCityPopWeighted(Zone zone) {
-		// TODO Auto-generated method stub
-		return null;
+		City res = null;
+		int nzs = zone.getNCities();
+		if (nzs > 1) {
+			List<City> cities = zone.getCities();
+			int[] zz = new int[nzs];
+			int totinds = 0;
+			for (int i = 0; i < zz.length; i++) {
+				zz[i] = cities.get(i).getNCitizens();
+				totinds += zz[i];
+			}
+			if (totinds > 0) {
+				int rzpos = MyAIEngine.RND.nextInt(totinds);
+				for (int i = 0; i < zz.length && res == null; i++) {
+					rzpos -= zz[i];
+					if (rzpos <= 0) {
+						res = cities.get(i);
+					}
+				}
+			} else {
+				res = getRandomCity(zone);
+			}
+
+		} else if (nzs == 1) {
+			res = Arch.getCityById(zone.getCityIDs().get(0));
+		}
+
+		return res;
 	}
 
 	public static int getNCitizens(Zone zone) {
 		int res = 0;
 		if (zone.getNCities() > 0) {
-			List<City> cities = world.getCities();
+			List<City> cities = zone.getCities();
 			for (City cns : cities) {
 				res += cns.getNCitizens();
 			}
@@ -36,14 +64,47 @@ public class MyAIEngineZone {
 		return res;
 	}
 
-	public static Individual getRandomCitizen(Zone zone) {
-		// TODO Auto-generated method stub
-		return null;
+	public static Individual getRandomCitizen(Zone zone) {		
+		Individual res = null;
+		if (zone.getNCities() > 0) {
+			City rz = getRandomCityPopWeighted(zone);
+			if (rz != null && rz.getNCitizens() > 0) {
+				res = rz.getRandomCitizen();
+			}
+		}
+		return res;
 	}
 
 	public static List<Individual> getRandomCitizens(Zone zone, int n) {
-		// TODO Auto-generated method stub
-		return null;
+		List<Individual> res = new LinkedList<Individual>();
+		if (n > 1) {
+			List<City> cities = zone.getCities();
+			int[] zz = new int[cities.size()];
+			float totinds = 0;
+			for (int i = 0; i < zz.length; i++) {
+				zz[i] = cities.get(i).getNCitizens();
+				totinds += zz[i];
+			}
+			if (totinds > 0) {
+				for (int i = 0; i < zz.length; i++) {
+					if (zz[i] > 0) {
+						int idx = (int) Math.ceil(n * zz[i] / totinds);
+						res.addAll(cities.get(i).getRandomCitizens(idx));
+					}
+				}
+				if (res.size() > 3) {
+					Collections.shuffle(res);
+				}
+			}
+		} else if (n == 1) {
+			res.add(getRandomCitizen(zone));
+		}
+
+		if (res.size() > n) {
+			return res.subList(0, n + 1);
+		} else {
+			return res;
+		}
 	}
 	
 	public static List<String> getAdjacentCityIDs(Zone zone){
@@ -76,10 +137,10 @@ public class MyAIEngineZone {
 			String cid = cities.get(0);
 			aux = Arch.getCityById(cid);
 			auzn = aux.getParentZoneID();
-			if(zone.getID().equals(auzn) && !res.contains(auzn)){
+			if(zone.getZoneID().equals(auzn) && !res.contains(auzn)){
 				res.add(auzn);
 				if(cities.size() > 1){
-					cities.removeAll(Arch.getZoneByID(auzn).getZoneIDs());
+					cities.removeAll(Arch.getZoneById(auzn).getCityIDs());
 				} else {
 					cities.remove(0);
 				}
@@ -95,16 +156,16 @@ public class MyAIEngineZone {
 	}
 	
 	public static boolean isCityAdjacent(Zone zone, City adj){
-		if(zone==null||adj==null)
+		if(zone==null || adj==null)
 			return false;
 			
 		if(zone.getZoneID().equals(adj.getParentZoneID()))
 			return false;
 			
-		if(zone.getNCities()==0)
+		if(zone.getNCities() == 0)
 			return false;
 			
-		adct = adj.getAdjacentCityIDs();
+		String[] adct = adj.getAdjacentCityIDs();
 		for(int i = 0; i < adct.length; i++){
 			if(zone.containsCityID(adct[i])) return true;
 		}
@@ -113,7 +174,28 @@ public class MyAIEngineZone {
 	}
 	
 	public static boolean isZoneAdjacent(Zone zone, Zone adj){
-		// TODO Auto-generated method stub
+		if (zone==null || adj==null)
+			return false;
+			
+		if (zone.getZoneID().equals(adj.getZoneID()))
+			return false;
+			
+		if (zone.getNCities() == 0 || adj.getNCities() == 0)
+			return false;
+		
+		Zone aux = null;
+		List<String> cities = null;
+		if (zone.getNCities() < adj.getNCities()) {
+			aux = adj;
+			cities = getAdjacentCityIDs(zone);
+		} else {
+			aux = zone;
+			cities = getAdjacentCityIDs(adj);
+		}
+		for (String string : cities) {
+			if(aux.containsCityID(string)) return true;
+		}
+				
 		return false;
 	}
 

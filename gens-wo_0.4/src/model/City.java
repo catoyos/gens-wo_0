@@ -1,6 +1,7 @@
 package model;
 
-import java.util.Collection;
+import java.util.Arrays;
+import java.util.LinkedList;
 import java.util.List;
 
 import model.utils.StringUtils;
@@ -9,27 +10,55 @@ public class City extends Storable {
 
 	public static enum Direction { NORTH, EAST, SOUTH, WEST };
 
-	private static long newIDn = (long) (Math.random() * StringUtils.ID_N_25_3);
+	private static long newIDn = Arch.RND.nextInt(StringUtils.ID_N_25_3);
 	public static void setNewIDn(long nid) { newIDn = nid; }
 	public static long getNewIDn() { return newIDn; }
 
 	private String cityID;
 	private String parentZoneID;
-	private List<String> individuals;
+	private List<String> citizens;
 	private String[] adjacentCityIDs;
 	
 	public City() {
 		super(StorableType.CITY);
+		this.citizens = new LinkedList<String>();
 	}
 	
-	public static City generateFromString(City res, String str) {
-		if(res == null) res = new City();
-		//TODO
+	public static City generateNewCity(City res, String worldID, String parentZoneID) {
+		res.cityID = worldID + StringUtils.generateId((int)(newIDn++ % StringUtils.ID_N_25_3), 3);
+		res.parentZoneID = parentZoneID;
+		
+		if (res.citizens == null) {
+			res.citizens = new LinkedList<String>();
+		} else {
+			res.citizens.clear();
+		}
+		res.adjacentCityIDs = new String[4];
 		return res;
 	}
-	public static City generateNewCity(City res, String worldID, String parentZoneID2) {
-		if(res == null) res = new City();
-		//TODO
+	
+	public static City generateFromString(City res, String string) {
+		String[] data = string.split(",");
+		res.cityID = data[0];
+		res.parentZoneID = data[1];
+
+		if (data.length > 1 && !"".equals(data[2])) {
+			res.citizens = Arrays.asList(data[2].split("@"));
+		} else if (res.citizens == null) {
+			res.citizens = new LinkedList<String>();
+		} else {
+			res.citizens.clear();
+		}
+		
+		res.adjacentCityIDs = new String[4];
+		if (data.length > 2) {
+			String[] cts = data[3].split("@");
+			for (int i = 0; i < cts.length && i < res.adjacentCityIDs.length; i++) {
+				if (!"-".equals(cts[i])) {
+					res.adjacentCityIDs[i] = cts[i];
+				}
+			}
+		}
 		return res;
 	}
 
@@ -49,88 +78,100 @@ public class City extends Storable {
 		this.parentZoneID = parentZoneID;
 	}
 
-	public List<String> getIndividuals() {
-		return individuals;
+	public List<String> getCitizens() {
+		return citizens;
 	}
 
-	public void setIndividuals(List<String> individuals) {
-		this.individuals = individuals;
+	public void setCitizens(List<String> individuals) {
+		this.citizens = individuals;
 	}
 
-	public void addIndividualId(String sIndividualID) {
-		individuals.add(sIndividualID);
+	public void addCitizen(String sIndividualID) {
+		citizens.add(sIndividualID);
 	}
 
-	public void addIndividual(Individual zIndividual) {
-		individuals.add(zIndividual.getIndividualID());
+	public void addCitizen(Individual zIndividual) {
+		citizens.add(zIndividual.getIndividualID());
 	}
 
-	public void addAllIndividualIDs(Collection<String> sIndividualIDs) {
-		individuals.addAll(sIndividualIDs);
+	public boolean containsCitizen(String sIndividualID) {
+		return citizens.contains(sIndividualID);
 	}
 
-	public void addAllIndividuals(Collection<Individual> zIndividuals) {
-		for (Individual ind : zIndividuals) {
-			individuals.add(ind.getIndividualID());
-		}
+	public boolean containsCitizen(Individual zIndividual) {
+		return citizens.contains(zIndividual.getIndividualID());
 	}
 
-	public boolean containsIndividualID(String sIndividualID) {
-		return individuals.contains(sIndividualID);
+	public boolean isEmptyCitizens() {
+		return citizens.isEmpty();
 	}
 
-	public boolean containsIndividual(Individual zIndividual) {
-		return individuals.contains(zIndividual.getIndividualID());
+	public boolean removeCitizen(String sIndividualID) {
+		return citizens.remove(sIndividualID);
 	}
 
-	public boolean isEmptyIndividualIDs() {
-		return individuals.isEmpty();
+	public boolean removeCitizen(Individual zIndividual) {
+		return citizens.remove(zIndividual.getIndividualID());
 	}
 
-	public boolean removeIndividualID(String sIndividualID) {
-		return individuals.remove(sIndividualID);
-	}
-
-	public boolean removeIndividual(Individual zIndividual) {
-		return individuals.remove(zIndividual.getIndividualID());
-	}
-
-	public int getNIndividuals() {
-		return individuals.size();
+	public int getNCitizens() {
+		return citizens.size();
 	}
 
 	public String[] getAdjacentCityIDs() {
 		return adjacentCityIDs;
 	}
 
-	public void setAdjacentCityIDs(String[] adjacentCityIDs) {
+	protected void setAdjacentCityIDs(String[] adjacentCityIDs) {
 		this.adjacentCityIDs = adjacentCityIDs;
 	}
 	
-	public void setAdjacentCities(City[] acs){
+	protected void setAdjacentCities(City[] acs){
 		for (int i = 0; i < adjacentCityIDs.length &&  i < acs.length; i++) {
 			adjacentCityIDs[i] = acs[i].cityID;
 		}
 	}
-
-	public void setAdjacentCity(City acs, Direction dir){
-		setAdjacentCityID(acs.cityID, dir);
-	}
 	
-	public void setAdjacentCityID(String acs, Direction dir){
-		int res = -1;
+	public static void setAdjacentCities(City ca, Direction dir, City cb){
+		int resA = -1;
+		int resB = -1;
 		switch (dir) {
-		case NORTH: res = 0;
+		case NORTH:
+			resA = 0;
+			resB = 2;
 			break;
-		case EAST: res = 1;
+		case EAST:
+			resA = 1;
+			resB = 3;
 			break;
-		case SOUTH: res = 2;
+		case SOUTH:
+			resA = 2;
+			resB = 0;
 			break;
-		case WEST: res = 3;
+		case WEST:
+			resA = 3;
+			resB = 1;
 			break;
 		}
 		try {
-			adjacentCityIDs[res] = acs;
+			City cc = null;
+			
+			if (ca.adjacentCityIDs[resA] != null) {
+				cc = Arch.getCityById(ca.adjacentCityIDs[resA]);
+				if (ca.cityID.equals(cc.adjacentCityIDs[resB])) {
+					cc.adjacentCityIDs[resB] = null;
+				}
+			}
+			
+			if (cb.adjacentCityIDs[resB] != null) {
+				cc = Arch.getCityById(cb.adjacentCityIDs[resB]);
+				if (cb.cityID.equals(cc.adjacentCityIDs[resA])) {
+					cc.adjacentCityIDs[resA] = null;
+				}
+			}
+			
+			ca.adjacentCityIDs[resA] = cb.cityID;
+			cb.adjacentCityIDs[resB] = ca.cityID;
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -152,10 +193,58 @@ public class City extends Storable {
 		return adjacentCityIDs[res];
 	}
 	
-	@Override
+	/*------------------------------------------------*/
+
+	public List<Individual> getCitizenInd() {
+		return Arch.sto == null ? null : Arch.sto.getIndividualsById(citizens);
+	}
+
+	public Zone getParentZone() {
+		return Arch.sto == null ? null : Arch.sto.getZoneById(parentZoneID);
+	}
+
+	public Language getLanguage() {
+		Zone aux = getParentZone();
+		return aux == null ? null : aux.getLang();
+	}
+
+	public Individual getRandomCitizen() {
+		return Arch.aie == null ? null : Arch.aie.getRandomCitizen(this);
+	}
+
+	public List<Individual> getRandomCitizens(int n) {
+		return Arch.aie == null ? null : Arch.aie.getRandomCitizens(this, n);
+	}
+	
+	/*------------------------------------------------*/
+
+
 	public String toFileString() {
-		// TODO Auto-generated method stub
-		return null;
+		StringBuilder res = new StringBuilder();
+		res.append(cityID).append(",");
+		res.append(parentZoneID).append(",");
+		if (!citizens.isEmpty()) {
+			res.append(citizens.get(0));
+			for (int i = 1; i < citizens.size(); i++) {
+				res.append("@").append(citizens.get(i));
+			}
+		}
+		
+		res.append(",");
+		for (String string : adjacentCityIDs) {
+			if (string != null) {
+				res.append(string);
+			} else {
+				res.append("-");
+			}
+			res.append("@");
+		}
+		return res.toString();
+	}
+
+	@Override
+	public String toString() {
+		return "City [cityID=" + cityID + ", citizens=" + citizens + "]";
 	}
 
 }

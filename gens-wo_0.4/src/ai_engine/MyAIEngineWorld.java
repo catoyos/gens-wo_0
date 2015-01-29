@@ -18,7 +18,7 @@ public class MyAIEngineWorld {
 	public Zone getRandomZone(World world) {
 		int nzs = world.getNZones();
 		if (nzs > 1) {
-			return Arch.getZoneById(world.getZoneIDs().get((int) (Math.random() * nzs)));
+			return Arch.getZoneById(world.getZoneIDs().get(MyAIEngine.RND.nextInt(nzs)));
 		} else if (nzs == 1) {
 			return Arch.getZoneById(world.getZoneIDs().get(0));
 		} else {
@@ -38,7 +38,7 @@ public class MyAIEngineWorld {
 				totinds += zz[i];
 			}
 			if (totinds > 0) {
-				int rzpos = (int) (totinds * Math.random());
+				int rzpos = MyAIEngine.RND.nextInt(totinds);
 				for (int i = 0; i < zz.length && res == null; i++) {
 					rzpos -= zz[i];
 					if (rzpos <= 0) {
@@ -67,7 +67,7 @@ public class MyAIEngineWorld {
 				totcit += zz[i];
 			}
 			if (totcit > 0) {
-				int rzpos = (int) (totcit * Math.random());
+				int rzpos = MyAIEngine.RND.nextInt(totcit);
 				for (int i = 0; i < zz.length && res == null; i++) {
 					rzpos -= zz[i];
 					if (rzpos <= 0) {

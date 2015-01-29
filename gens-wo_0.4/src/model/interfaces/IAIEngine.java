@@ -25,8 +25,8 @@ public interface IAIEngine {
 
 	public abstract void updateIndividuals(World world);
 
-/*---------------------------------------------------*/
-	
+	/*---------------------------------------------------*/
+
 	public abstract City getRandomCity(Zone zone);
 
 	public abstract City getRandomCityPopWeighted(Zone zone);
@@ -36,15 +36,25 @@ public interface IAIEngine {
 	public abstract Individual getRandomCitizen(Zone zone);
 
 	public abstract List<Individual> getRandomCitizens(Zone zone, int n);
-	
-	public abstract List<City> getAdjacentZones(Zone zone);
-	
+
+	public abstract List<City> getAdjacentCities(Zone zone);
+
+	public abstract List<Zone> getAdjacentZones(Zone zone);
+
+	public abstract boolean isCityAdjacent(Zone zone, City adj);
+
 	public abstract boolean isZoneAdjacent(Zone zone, Zone adj);
 
 	public abstract void updateIndividuals(Zone zone, float moment);
 
-/*---------------------------------------------------*/
+	/*---------------------------------------------------*/
+
+	public abstract Individual getRandomCitizen(City city);
+
+	public abstract List<Individual> getRandomCitizens(City city, int n);
+
+	/*---------------------------------------------------*/
+
 	public abstract void finish();
-/*---------------------------------------------------*/
 
 }

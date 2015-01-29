@@ -1,7 +1,6 @@
 package model;
 
 import java.util.Arrays;
-import java.util.Collection;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -9,7 +8,7 @@ import model.utils.StringUtils;
 
 public class Zone extends Storable {
 
-	private static long newIDn = (long) (Math.random() * StringUtils.ID_N_25_2);
+	private static long newIDn = Arch.RND.nextInt(StringUtils.ID_N_25_2);
 	public static void setNewIDn(long nid) { newIDn = nid; }
 	public static long getNewIDn() { return newIDn; }
 	
@@ -98,14 +97,7 @@ public class Zone extends Storable {
 	public void addCity(City zCity) {
 		cityIDs.add(zCity.getCityID());
 	}
-	public void addAllCityIDs(Collection<String> sCityIDs) {
-		cityIDs.addAll(sCityIDs);
-	}
-	public void addAllCities(Collection<City> zCities) {
-		for (City city : zCities) {
-			cityIDs.add(city.getCityID());
-		}
-	}
+
 	public boolean containsCityID(String sCityID) {
 		return cityIDs.contains(sCityID);
 	}
