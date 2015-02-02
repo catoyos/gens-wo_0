@@ -17,7 +17,8 @@ public class ZoneStorage extends AbstractStorage<Zone> {
 	}
 
 	protected Zone generateNewItem(String worldID) {
-		Zone res = Zone.generateNewZone(getClearItem(), worldID);
+		Zone res = getClearItem();
+		Zone.generateNewZone(res, worldID);
 		insertItem(res);
 		return res;
 	}

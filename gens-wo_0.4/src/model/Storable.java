@@ -9,20 +9,31 @@ public abstract class Storable {
 	}
 
 	public static Storable generateFromString(String string, StorableType type){
+		Storable res = null;
 		switch (type) {
 		case WORLD:
-			return World.generateFromString(Arch.getClearWorld(), string);
+			res = Arch.getClearWorld();
+			World.generateFromString((World) res, string);
+			break;
 		case ZONE:
-			return Zone.generateFromString(Arch.getClearZone(), string);
+			res = Arch.getClearZone();
+			Zone.generateFromString((Zone) res, string);
+			break;
 		case LANGUAGE:
-			return Language.generateFromString(Arch.getClearLanguage(), string);
+			res = Arch.getClearLanguage();
+			Language.generateFromString((Language) res, string);
+			break;
 		case CITY:
-			return City.generateFromString(Arch.getClearCity(), string);
+			res = Arch.getClearCity();
+			City.generateFromString((City) res, string);
+			break;
 		case INDIVIDUAL:
-			return Individual.generateFromString(Arch.getClearIndividual(), string);
-
-		default: return null;
+			res = Arch.getClearIndividual();
+			Individual.generateFromString((Individual) res, string);
+			break;
 		}
+		
+		return res;
 	}
 		
 	public static String toFileString(Storable item){

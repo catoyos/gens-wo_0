@@ -20,14 +20,16 @@ public class IndividualStorage extends AbstractStorage<Individual> {
 
 	protected Individual generateNewItem(City city, float birthDate) {
 		String strCity = city.getCityID();
-		Individual res = Individual.generateNewIndividual(getClearItem(), strCity, birthDate);
+		Individual res = getClearItem();
+		Individual.generateNewIndividual(res, strCity, birthDate);
 		insertItem(res);
 		return res;
 	}
 
 	public Individual generateNewItem(Individual father, Individual mother,
 			float birthDate) {
-		Individual res = Individual.generateIndividualFromParents(getClearItem(), father, mother, birthDate);
+		Individual res = getClearItem();
+		Individual.generateIndividualFromParents(res, father, mother, birthDate);
 		insertItem(res);
 		return res;
 	}

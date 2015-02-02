@@ -1,21 +1,21 @@
 package data_storage;
 
-import java.util.HashMap;
 import java.util.List;
 
 import model.Language;
 import model.Storable.StorableType;
 
 public class LanguageStorage extends AbstractStorage<Language> {
-	private HashMap<String, Language> depot;
-	
+	// private HashMap<String, Language> depot;
+
 	public LanguageStorage(String id) {
 		super(id, StorableType.LANGUAGE, "langs.dat");
-		this.depot = new HashMap<String, Language>(5);
+		// this.depot = new HashMap<String, Language>(5);
 	}
 
 	protected Language generateNewItem(String zoneID) {
-		Language res = Language.generateNewLanguage(getClearItem(), zoneID);
+		Language res = getClearItem();
+		Language.generateNewLanguage(res, zoneID);
 		insertItem(res);
 		return res;
 	}

@@ -24,7 +24,7 @@ public class City extends Storable {
 		this.citizens = new LinkedList<String>();
 	}
 	
-	public static City generateNewCity(City res, String worldID, String parentZoneID) {
+	public static void generateNewCity(City res, String worldID, String parentZoneID) {
 		res.cityID = worldID + StringUtils.generateId((int)(newIDn++ % StringUtils.ID_N_25_3), 3);
 		res.parentZoneID = parentZoneID;
 		
@@ -34,10 +34,9 @@ public class City extends Storable {
 			res.citizens.clear();
 		}
 		res.adjacentCityIDs = new String[4];
-		return res;
 	}
 	
-	public static City generateFromString(City res, String string) {
+	public static void generateFromString(City res, String string) {
 		String[] data = string.split(",");
 		res.cityID = data[0];
 		res.parentZoneID = data[1];
@@ -59,7 +58,6 @@ public class City extends Storable {
 				}
 			}
 		}
-		return res;
 	}
 
 	public String getCityID() {
@@ -153,6 +151,7 @@ public class City extends Storable {
 			resB = 1;
 			break;
 		}
+		
 		try {
 			City cc = null;
 			
@@ -214,6 +213,10 @@ public class City extends Storable {
 
 	public List<Individual> getRandomCitizens(int n) {
 		return Arch.aie == null ? null : Arch.aie.getRandomCitizens(this, n);
+	}
+
+	public void changeParentZone(Zone nZone) {
+		if(Arch.aie != null) Arch.aie.changeParentZone(this, nZone);
 	}
 	
 	/*------------------------------------------------*/

@@ -22,7 +22,7 @@ public class World extends Storable {
 		this.zoneIDs = new LinkedList<String>();
 	}
 	
-	public static World generateNewWorld(World res, String uniID) {
+	public static void generateNewWorld(World res, String uniID) {
 		res.worldID = uniID + StringUtils.generateId((int)(newIDn++ % StringUtils.ID_N_25_2), 2);
 		res.parentUni = uniID;
 		if (res.zoneIDs == null) {
@@ -31,11 +31,9 @@ public class World extends Storable {
 			res.zoneIDs.clear();
 		}
 		res.moment = 0;
-		
-		return res;
 	}
 	
-	public static World generateFromString(World res, String str) {
+	public static void generateFromString(World res, String str) {
 		String[] data = str.split(",");
 		res.worldID = data[0];
 		res.parentUni = data[1];
@@ -53,8 +51,6 @@ public class World extends Storable {
 		} else {
 			res.zoneIDs.clear();
 		}
-		
-		return res;
 	}
 	
 	public String getWorldID() {

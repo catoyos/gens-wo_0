@@ -24,7 +24,7 @@ public class Zone extends Storable {
 		this.lang = new Language();
 	}
 	
-	public static Zone generateNewZone(Zone res, String worldID) {
+	public static void generateNewZone(Zone res, String worldID) {
 		res.zoneID = worldID + StringUtils.generateId((int)(newIDn++ % StringUtils.ID_N_25_2), 2);
 		res.parentWorldID = worldID;
 		res.lang = new Language();
@@ -34,10 +34,9 @@ public class Zone extends Storable {
 			res.cityIDs.clear();
 		}
 		res.lastUpdated = 0;
-		return res;
 	}
 	
-	public static Zone generateFromString(Zone res, String string) {
+	public static void generateFromString(Zone res, String string) {
 		String[] data = string.split(",");
 		res.zoneID = data[0];
 		res.parentWorldID = data[1];
@@ -48,10 +47,8 @@ public class Zone extends Storable {
 			res.lastUpdated = 0;
 		}
 		
-		if (res.lang == null) {
-			res.lang = new Language();
-		}
-		res.lang = Language.generateFromString(res.lang, "");//TODO
+		if (res.lang == null) res.lang = new Language();
+		Language.generateFromString(res.lang, null);//TODO
 		
 		if (data.length > 2) {
 			res.cityIDs = Arrays.asList(data[3].split("@"));
@@ -60,8 +57,7 @@ public class Zone extends Storable {
 		} else {
 			res.cityIDs.clear();
 		}
-		
-		return res;
+
 	}
 	
 	public String getZoneID() {

@@ -4,7 +4,10 @@ import java.util.List;
 import java.util.Random;
 
 import model.City;
+import model.Genome;
 import model.Individual;
+import model.Individual.Gender;
+import model.Language;
 import model.World;
 import model.Zone;
 import model.interfaces.IAIEngine;
@@ -134,9 +137,178 @@ public class MyAIEngine implements IAIEngine {
 	}
 
 	@Override
+	public Gender getGender(Genome genome) {
+		// TODO Auto-generated method stub
+		return MyAIEngineGenome.getGender(genome);
+	}
+
+	@Override
+	public byte getSexOrientation(Genome genome) {
+		// TODO Auto-generated method stub
+		return MyAIEngineGenome.getSexOrientation(genome);
+	}
+
+	@Override
+	public short getStrength(Genome genome) {
+		// TODO Auto-generated method stub
+		return MyAIEngineGenome.getStrength(genome);
+	}
+
+	@Override
+	public short getConstitution(Genome genome) {
+		// TODO Auto-generated method stub
+		return MyAIEngineGenome.getConstitution(genome);
+	}
+
+	@Override
+	public short getSpeed(Genome genome) {
+		// TODO Auto-generated method stub
+		return MyAIEngineGenome.getSpeed(genome);
+	}
+
+	@Override
+	public short getIntelligence(Genome genome) {
+		// TODO Auto-generated method stub
+		return MyAIEngineGenome.getIntelligence(genome);
+	}
+
+	@Override
+	public short getWisdom(Genome genome) {
+		// TODO Auto-generated method stub
+		return MyAIEngineGenome.getWisdom(genome);
+	}
+
+	@Override
+	public short getCharisma(Genome genome) {
+		// TODO Auto-generated method stub
+		return MyAIEngineGenome.getCharisma(genome);
+	}
+
+	@Override
+	public short getBeauty(Genome genome) {
+		// TODO Auto-generated method stub
+		return MyAIEngineGenome.getBeauty(genome);
+	}
+
+	@Override
+	public short getFertility(Genome genome) {
+		// TODO Auto-generated method stub
+		return MyAIEngineGenome.getFertility(genome);
+	}
+
+	@Override
+	public short getHorniness(Genome genome) {
+		// TODO Auto-generated method stub
+		return MyAIEngineGenome.getHorniness(genome);
+	}
+
+	@Override
+	public short getComformity(Genome genome) {
+		// TODO Auto-generated method stub
+		return MyAIEngineGenome.getComformity(genome);
+	}
+
+	@Override
+	public double getChromosomeDominance(int chromosome) {
+		// TODO Auto-generated method stub
+		return MyAIEngineGenome.getChromosomeDominance(chromosome);
+	}
+
+	@Override
 	public void finish() {
 		// TODO Auto-generated method stub
 		
+	}
+
+	@Override
+	public String getRandomName(Language language, Gender gender) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public String getRandomSurname(Language language) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public void changeParentZone(City city, Zone nZone) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public String getCurrentCityFromParents(Individual father, Individual mother) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public String[] getNameSurnamesFromParents(Gender gender,
+			Individual father, Individual mother) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public float getRepInheritedFromParents(Individual father, Individual mother) {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	@Override
+	public boolean pairIndividuals(Individual indA, Individual indB) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public boolean[] agreeToPair(Individual indA, Individual indB) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public List<City> getAvailableMigrationTargets(Individual individual) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public void killIndividual(Individual individual, float deathDate) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void migrateTo(Individual individual, City nucity) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public int getDeseabilidad(Individual individual) {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	@Override
+	public List<Individual> getAncestors(Individual individual, int lvl) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public List<Individual> getDescendants(Individual individual, int lvl) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public List<Individual> getRelatives(Individual individual, int lvl) {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 
