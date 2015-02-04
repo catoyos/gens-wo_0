@@ -15,313 +15,278 @@ import model.interfaces.IAIEngine;
 public class MyAIEngine implements IAIEngine {
 
 	protected static final Random RND = new Random();
+
+	/*----------WORLD------------------------------------*/
 	
 	@Override
 	public Zone getRandomZone(World world) {
-		// TODO Auto-generated method stub
-		return null;
+		return MyAIEngineWorld.getRandomZone(world);
 	}
 
 	@Override
 	public Zone getRandomZonePopWeighted(World world) {
-		// TODO Auto-generated method stub
-		return null;
+		return MyAIEngineWorld.getRandomZonePopWeighted(world);
 	}
 
 	@Override
 	public Zone getRandomZoneSizeWeighted(World world) {
-		// TODO Auto-generated method stub
-		return null;
+		return MyAIEngineWorld.getRandomZoneSizeWeighted(world);
 	}
 
 	@Override
 	public int getNCitizens(World world) {
-		// TODO Auto-generated method stub
-		return 0;
+		return MyAIEngineWorld.getNCitizens(world);
 	}
 
 	@Override
 	public Individual getRandomCitizen(World world) {
-		// TODO Auto-generated method stub
-		return null;
+		return MyAIEngineWorld.getRandomCitizen(world);
 	}
 
 	@Override
 	public List<Individual> getRandomCitizens(World world, int n) {
-		// TODO Auto-generated method stub
-		return null;
+		return MyAIEngineWorld.getRandomCitizens(world, n);
 	}
 
 	@Override
 	public void updateZones(World world) {
-		// TODO Auto-generated method stub
-		
+		MyAIEngineWorld.updateZones(world);
 	}
 
 	@Override
 	public void updateIndividuals(World world) {
-		// TODO Auto-generated method stub
+		MyAIEngineWorld.updateIndividuals(world);
 		
 	}
 
+	/*----------ZONE-------------------------------------*/
+
 	@Override
 	public City getRandomCity(Zone zone) {
-		// TODO Auto-generated method stub
-		return null;
+		return MyAIEngineZone.getRandomCity(zone);
 	}
 
 	@Override
 	public City getRandomCityPopWeighted(Zone zone) {
-		// TODO Auto-generated method stub
-		return null;
+		return MyAIEngineZone.getRandomCity(zone);
 	}
 
 	@Override
 	public int getNCitizens(Zone zone) {
-		// TODO Auto-generated method stub
-		return 0;
+		return MyAIEngineZone.getNCitizens(zone);
 	}
 
 	@Override
 	public Individual getRandomCitizen(Zone zone) {
-		// TODO Auto-generated method stub
-		return null;
+		return MyAIEngineZone.getRandomCitizen(zone);
 	}
 
 	@Override
 	public List<Individual> getRandomCitizens(Zone zone, int n) {
-		// TODO Auto-generated method stub
-		return null;
+		return MyAIEngineZone.getRandomCitizens(zone, n);
 	}
 
 	@Override
 	public List<City> getAdjacentCities(Zone zone) {
-		// TODO Auto-generated method stub
-		return null;
+		return MyAIEngineZone.getAdjacentCities(zone);
 	}
 
 	@Override
 	public List<Zone> getAdjacentZones(Zone zone) {
-		// TODO Auto-generated method stub
-		return null;
+		return MyAIEngineZone.getAdjacentZones(zone);
 	}
 
 	@Override
 	public boolean isCityAdjacent(Zone zone, City adj) {
-		// TODO Auto-generated method stub
-		return false;
+		return MyAIEngineZone.isCityAdjacent(zone, adj);
 	}
 
 	@Override
 	public boolean isZoneAdjacent(Zone zone, Zone adj) {
-		// TODO Auto-generated method stub
-		return false;
+		return MyAIEngineZone.isZoneAdjacent(zone, adj);
 	}
 
 	@Override
 	public void updateIndividuals(Zone zone, float moment) {
-		// TODO Auto-generated method stub
-		
+		MyAIEngineZone.updateIndividuals(zone, moment);
+	}
+
+	/*----------LANG-------------------------------------*/
+
+	@Override
+	public String getRandomName(Language language, Gender gender) {
+		return MyAIEngineLanguage.getRandomName(language, gender);
 	}
 
 	@Override
+	public String getRandomSurname(Language language) {
+		return MyAIEngineLanguage.getRandomSurname(language);
+	}
+
+	/*----------CITY-------------------------------------*/
+
+	@Override
 	public Individual getRandomCitizen(City city) {
-		// TODO Auto-generated method stub
-		return null;
+		return MyAIEngineCity.getRandomCitizen(city);
 	}
 
 	@Override
 	public List<Individual> getRandomCitizens(City city, int n) {
-		// TODO Auto-generated method stub
-		return null;
+		return MyAIEngineCity.getRandomCitizens(city, n);
 	}
 
 	@Override
+	public void changeParentZone(City city, Zone nZone) {
+		MyAIEngineCity.changeParentZone(city, nZone);
+	}
+
+	/*----------INDIVIDUAL-------------------------------*/
+
+	@Override
 	public String getCurrentCityFromParents(Individual father, Individual mother) {
-		// TODO Auto-generated method stub
-		return null;
+		return MyAIEngineIndividual.getCurrentCityFromParents(father, mother);
 	}
 
 	@Override
 	public String[] getNameSurnamesFromParents(Gender gender,
 			Individual father, Individual mother) {
-		// TODO Auto-generated method stub
-		return null;
+		return MyAIEngineIndividual.getNameSurnamesFromParents(gender, father, mother);
 	}
 
 	@Override
 	public float getRepInheritedFromParents(Individual father, Individual mother) {
-		// TODO Auto-generated method stub
-		return 0;
+		return MyAIEngineIndividual.getRepInheritedFromParents(father, mother);
 	}
 
 	@Override
 	public void pairIndividuals(Individual indA, Individual indB) {
-		// TODO Auto-generated method stub
+		MyAIEngineIndividual.pairIndividuals(indA, indB);
 	}
 
 	@Override
 	public void divorce(Individual indA, Individual indB) {
-		// TODO Auto-generated method stub
+		MyAIEngineIndividual.divorce(indA, indB);
 	}
 
 	@Override
 	public boolean[] agreeToPair(Individual indA, Individual indB, float moment) {
-		// TODO Auto-generated method stub
-		return null;
+		return MyAIEngineIndividual.agreeToPair(indA, indB, moment);
 	}
 
 	@Override
 	public List<City> getAvailableMigrationTargets(Individual individual) {
-		// TODO Auto-generated method stub
-		return null;
+		return MyAIEngineIndividual.getAvailableMigrationTargets(individual);
 	}
 
 	@Override
 	public void killIndividual(Individual individual, float deathDate) {
-		// TODO Auto-generated method stub
-		
+		MyAIEngineIndividual.killIndividual(individual, deathDate);
 	}
 
 	@Override
 	public void migrateTo(Individual individual, City nucity) {
-		// TODO Auto-generated method stub
-		
+		MyAIEngineIndividual.migrateTo(individual, nucity);
 	}
 
 	@Override
-	public int getDesirability(Individual individual) {
-		// TODO Auto-generated method stub
-		return 0;
+	public float getDesirability(Individual individual) {
+		return MyAIEngineIndividual.getDesirability(individual);
 	}
 
 	@Override
-	public int getGenderAttraction(Individual individual, Gender target) {
-		// TODO Auto-generated method stub
-		return 0;
+	public float getGenderAttraction(Individual individual, Gender target) {
+		return MyAIEngineIndividual.getGenderAttraction(individual, target);
 	}
 
 	@Override
 	public List<Individual> getAncestors(Individual individual, int lvl) {
-		// TODO Auto-generated method stub
-		return null;
+		return MyAIEngineIndividual.getAncestors(individual, lvl);
 	}
 
 	@Override
 	public List<Individual> getDescendants(Individual individual, int lvl) {
-		// TODO Auto-generated method stub
-		return null;
+		return MyAIEngineIndividual.getDescendants(individual, lvl);
 	}
 
 	@Override
 	public List<Individual> getRelatives(Individual individual, int lvl) {
-		// TODO Auto-generated method stub
-		return null;
+		return MyAIEngineIndividual.getRelatives(individual, lvl);
 	}
+
+	/*----------GENOME-----------------------------------*/
 
 	@Override
 	public Gender getGender(Genome genome) {
-		// TODO Auto-generated method stub
 		return MyAIEngineGenome.getGender(genome);
 	}
 
 	@Override
 	public byte getSexOrientation(Genome genome) {
-		// TODO Auto-generated method stub
 		return MyAIEngineGenome.getSexOrientation(genome);
 	}
 
 	@Override
 	public short getStrength(Genome genome) {
-		// TODO Auto-generated method stub
 		return MyAIEngineGenome.getStrength(genome);
 	}
 
 	@Override
 	public short getConstitution(Genome genome) {
-		// TODO Auto-generated method stub
 		return MyAIEngineGenome.getConstitution(genome);
 	}
 
 	@Override
 	public short getSpeed(Genome genome) {
-		// TODO Auto-generated method stub
 		return MyAIEngineGenome.getSpeed(genome);
 	}
 
 	@Override
 	public short getIntelligence(Genome genome) {
-		// TODO Auto-generated method stub
 		return MyAIEngineGenome.getIntelligence(genome);
 	}
 
 	@Override
 	public short getWisdom(Genome genome) {
-		// TODO Auto-generated method stub
 		return MyAIEngineGenome.getWisdom(genome);
 	}
 
 	@Override
 	public short getCharisma(Genome genome) {
-		// TODO Auto-generated method stub
 		return MyAIEngineGenome.getCharisma(genome);
 	}
 
 	@Override
 	public short getBeauty(Genome genome) {
-		// TODO Auto-generated method stub
 		return MyAIEngineGenome.getBeauty(genome);
 	}
 
 	@Override
 	public short getFertility(Genome genome) {
-		// TODO Auto-generated method stub
 		return MyAIEngineGenome.getFertility(genome);
 	}
 
 	@Override
 	public short getHorniness(Genome genome) {
-		// TODO Auto-generated method stub
 		return MyAIEngineGenome.getHorniness(genome);
 	}
 
 	@Override
 	public short getComformity(Genome genome) {
-		// TODO Auto-generated method stub
 		return MyAIEngineGenome.getComformity(genome);
 	}
 
 	@Override
 	public double getChromosomeDominance(int chromosome) {
-		// TODO Auto-generated method stub
 		return MyAIEngineGenome.getChromosomeDominance(chromosome);
 	}
+
+	/*----------META-------------------------------------*/
 
 	@Override
 	public void finish() {
 		// TODO Auto-generated method stub
 		
 	}
-
-	@Override
-	public String getRandomName(Language language, Gender gender) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public String getRandomSurname(Language language) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public void changeParentZone(City city, Zone nZone) {
-		// TODO Auto-generated method stub
-		
-	}
-
-
-
-
+	
+	
 }

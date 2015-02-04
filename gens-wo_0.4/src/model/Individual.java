@@ -52,12 +52,20 @@ public class Individual extends Storable {
 	
 	public static void generateNewIndividual(Individual res,
 			String cityID, float birthDate) {
-		res.originalZoneID = Arch.getCityById(cityID).getParentZoneID();
-		Language lang = Arch.getZoneById(res.originalZoneID).getLang();
-
+		Language lang = null;
+		if(Arch.cityExists(cityID))//TODO debug
+			res.originalZoneID = Arch.getCityById(cityID).getParentZoneID();
+		if(res.originalZoneID == null) { //TODO debug
+			res.originalZoneID="XXXXXXXXX";
+		} else {
+			lang = Arch.getZoneById(res.originalZoneID).getLang();
+		}
+		
 		res.individualID = generateId(newIDn++, res.originalZoneID.substring( res.originalZoneID.length() - 2, res.originalZoneID.length()));
-		res.surnameA = lang.getRandomSurname();
-		res.surnameB = lang.getRandomSurname();
+		if(lang != null) { //TODO debug
+			res.surnameA = lang.getRandomSurname();
+			res.surnameB = lang.getRandomSurname();
+		}
 		res.birthDate = birthDate;
 		res.deathDate = -1;
 		res.currentCityID = cityID;
@@ -77,7 +85,7 @@ public class Individual extends Storable {
 
 		loadDataFromGenome(res);
 		
-		res.name = lang.getRandomName(res.gender);
+		if(lang != null) res.name = lang.getRandomName(res.gender);//TODO debug
 
 	}
 
@@ -261,7 +269,7 @@ public class Individual extends Storable {
 		this.partnerID = partnerID;
 	}
 	public boolean hasPartner(){
-		return partnerID == null;
+		return partnerID != null;
 	}
 	public List<String> getChildrenID() {
 		return childrenID;
@@ -355,7 +363,7 @@ public class Individual extends Storable {
 	}
 
 	public short[] getCharactValues() {
-		short[] res = new short[9];
+		short[] res = new short[10];
 		res[0] = strength;
 		res[1] = constitution;
 		res[2] = speed;
@@ -441,7 +449,7 @@ public class Individual extends Storable {
 		return Arch.aie == null ? 0 : Arch.aie.getGenderAttraction(this, target);
 	}
 	
-	public float getDeseabilidad() {
+	public float getDesirability() {
 		return Arch.aie == null ? 0 : Arch.aie.getDesirability(this);
 	}
 	

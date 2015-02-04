@@ -15,7 +15,7 @@ public class MyAIEngineWorld {
 //		return Arch.getZonesById(world.getZoneIDs());
 //	}
 
-	public Zone getRandomZone(World world) {
+	public static Zone getRandomZone(World world) {
 		int nzs = world.getNZones();
 		if (nzs > 1) {
 			return Arch.getZoneById(world.getZoneIDs().get(MyAIEngine.RND.nextInt(nzs)));
@@ -26,7 +26,7 @@ public class MyAIEngineWorld {
 		}
 	}
 
-	public Zone getRandomZonePopWeighted(World world) {
+	public static Zone getRandomZonePopWeighted(World world) {
 		Zone res = null;
 		int nzs = world.getNZones();
 		if (nzs > 1) {
@@ -55,7 +55,7 @@ public class MyAIEngineWorld {
 		return res;
 	}
 
-	public Zone getRandomZoneSizeWeighted(World world) {
+	public static Zone getRandomZoneSizeWeighted(World world) {
 		Zone res = null;
 		int nzs = world.getNZones();
 		if (nzs > 1) {
@@ -84,7 +84,7 @@ public class MyAIEngineWorld {
 		return res;
 	}
 
-	public int getNCitizens(World world) {
+	public static int getNCitizens(World world) {
 		int res = 0;
 		if (world.getNZones() > 0) {
 			List<Zone> zones = world.getZones();
@@ -95,7 +95,7 @@ public class MyAIEngineWorld {
 		return res;
 	}
 
-	public Individual getRandomCitizen(World world) {
+	public static Individual getRandomCitizen(World world) {
 		Individual res = null;
 		if (world.getNZones() > 0) {
 			Zone rz = getRandomZonePopWeighted(world);
@@ -106,7 +106,7 @@ public class MyAIEngineWorld {
 		return res;
 	}
 
-	public List<Individual> getRandomCitizens(World world, int n) {
+	public static List<Individual> getRandomCitizens(World world, int n) {
 		List<Individual> res = new LinkedList<Individual>();
 
 		if (n > 1) {
@@ -139,12 +139,12 @@ public class MyAIEngineWorld {
 		}
 	}
 
-	public void updateZones(World world) {
+	public static void updateZones(World world) {
 		// TODO Auto-generated method stub
 
 	}
 
-	public void updateIndividuals(World world) {
+	public static void updateIndividuals(World world) {
 		// TODO Auto-generated method stub
 
 	}

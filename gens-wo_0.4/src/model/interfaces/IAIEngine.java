@@ -12,6 +12,8 @@ import model.Zone;
 
 public interface IAIEngine {
 
+	/*----------WORLD------------------------------------*/
+
 	public abstract Zone getRandomZone(World world);
 
 	public abstract Zone getRandomZonePopWeighted(World world);
@@ -28,7 +30,7 @@ public interface IAIEngine {
 
 	public abstract void updateIndividuals(World world);
 
-	/*---------------------------------------------------*/
+	/*----------ZONE-------------------------------------*/
 
 	public abstract City getRandomCity(Zone zone);
 
@@ -50,13 +52,13 @@ public interface IAIEngine {
 
 	public abstract void updateIndividuals(Zone zone, float moment);
 
-	/*---------------------------------------------------*/
+	/*----------LANG-------------------------------------*/
 
 	public abstract String getRandomName(Language language, Gender gender);
 
 	public abstract String getRandomSurname(Language language);
 
-	/*---------------------------------------------------*/
+	/*----------CITY-------------------------------------*/
 
 	public abstract Individual getRandomCitizen(City city);
 
@@ -64,7 +66,7 @@ public interface IAIEngine {
 
 	public abstract void changeParentZone(City city, Zone nZone);
 
-	/*---------------------------------------------------*/
+	/*----------INDIVIDUAL-------------------------------*/
 
 	public abstract String getCurrentCityFromParents(Individual father, Individual mother);
 
@@ -84,9 +86,9 @@ public interface IAIEngine {
 	
 	public abstract void migrateTo(Individual individual, City nucity);
 
-	public abstract int getDesirability(Individual individual);
+	public abstract float getDesirability(Individual individual);
 
-	public abstract int getGenderAttraction(Individual individual, Gender target);
+	public abstract float getGenderAttraction(Individual individual, Gender target);
 
 	public abstract List<Individual> getAncestors(Individual individual, int lvl);
 
@@ -94,7 +96,7 @@ public interface IAIEngine {
 
 	public abstract List<Individual> getRelatives(Individual individual, int lvl);
 
-	/*---------------------------------------------------*/
+	/*----------GENOME-----------------------------------*/
 
 	public abstract Gender getGender(Genome genome);
 
@@ -122,10 +124,8 @@ public interface IAIEngine {
 
 	public abstract double getChromosomeDominance(int chromosome);
 
-	/*---------------------------------------------------*/
+	/*----------META-------------------------------------*/
 
 	public abstract void finish();
-
-
 
 }

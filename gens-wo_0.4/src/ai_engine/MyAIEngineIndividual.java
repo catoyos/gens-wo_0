@@ -94,10 +94,10 @@ public class MyAIEngineIndividual {
 			res[1] = false;
 		}
 
-		if (res[0] && ((attA * desB)/100 < MyAIEngine.RND.nextFloat())) {
+		if (res[0] && ((attA * desB * 0.1f) < MyAIEngine.RND.nextFloat())) {
 			res[0] = false;
 		}
-		if (res[1] && ((attB * desA)/100 < MyAIEngine.RND.nextFloat())) {
+		if (res[1] && ((attB * desA * 0.1f) < MyAIEngine.RND.nextFloat())) {
 			res[1] = false;
 		}
 
@@ -119,9 +119,13 @@ public class MyAIEngineIndividual {
 
 	}
 
-	public static int getDesirability(Individual individual) {
-		// TODO Auto-generated method stub
-		return 0;
+	public static float getDesirability(Individual individual) {
+		short[] caracs = individual.getCharactValues();
+		float res=individual.getRep();
+		for (short s : caracs) {
+			res += (s * 0.1f);
+		}
+		return res;
 	}
 	public static float getGenderAttraction(Individual individual, Gender target) {
 		short sexOrientation = individual.getSexOrientation();

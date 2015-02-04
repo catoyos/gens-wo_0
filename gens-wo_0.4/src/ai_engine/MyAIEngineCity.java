@@ -6,6 +6,7 @@ import java.util.List;
 import model.Arch;
 import model.City;
 import model.Individual;
+import model.Zone;
 
 public class MyAIEngineCity {
 
@@ -34,5 +35,14 @@ public class MyAIEngineCity {
 			}
 		}
 		return res;
+	}
+
+	public static void changeParentZone(City city, Zone nZone) {
+		if (city.getParentZoneID() != null) {
+			Zone parent = city.getParentZone();
+			parent.removeCity(city);
+		}
+		nZone.addCity(city);
+		city.setParentZoneID(nZone.getZoneID());
 	}
 }
