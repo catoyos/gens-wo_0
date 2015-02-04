@@ -8,7 +8,7 @@ import model.Storable.StorableType;
 public class LanguageStorage extends AbstractStorage<Language> {
 	// private HashMap<String, Language> depot;
 
-	public LanguageStorage(String id) {
+	protected LanguageStorage(String id) {
 		super(id, StorableType.LANGUAGE, "langs.dat");
 		// this.depot = new HashMap<String, Language>(5);
 	}

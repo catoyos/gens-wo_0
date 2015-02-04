@@ -137,6 +137,89 @@ public class MyAIEngine implements IAIEngine {
 	}
 
 	@Override
+	public String getCurrentCityFromParents(Individual father, Individual mother) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public String[] getNameSurnamesFromParents(Gender gender,
+			Individual father, Individual mother) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public float getRepInheritedFromParents(Individual father, Individual mother) {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	@Override
+	public void pairIndividuals(Individual indA, Individual indB) {
+		// TODO Auto-generated method stub
+	}
+
+	@Override
+	public void divorce(Individual indA, Individual indB) {
+		// TODO Auto-generated method stub
+	}
+
+	@Override
+	public boolean[] agreeToPair(Individual indA, Individual indB, float moment) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public List<City> getAvailableMigrationTargets(Individual individual) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public void killIndividual(Individual individual, float deathDate) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void migrateTo(Individual individual, City nucity) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public int getDesirability(Individual individual) {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	@Override
+	public int getGenderAttraction(Individual individual, Gender target) {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	@Override
+	public List<Individual> getAncestors(Individual individual, int lvl) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public List<Individual> getDescendants(Individual individual, int lvl) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public List<Individual> getRelatives(Individual individual, int lvl) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
 	public Gender getGender(Genome genome) {
 		// TODO Auto-generated method stub
 		return MyAIEngineGenome.getGender(genome);
@@ -236,79 +319,6 @@ public class MyAIEngine implements IAIEngine {
 	public void changeParentZone(City city, Zone nZone) {
 		// TODO Auto-generated method stub
 		
-	}
-
-	@Override
-	public String getCurrentCityFromParents(Individual father, Individual mother) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public String[] getNameSurnamesFromParents(Gender gender,
-			Individual father, Individual mother) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public float getRepInheritedFromParents(Individual father, Individual mother) {
-		// TODO Auto-generated method stub
-		return 0;
-	}
-
-	@Override
-	public boolean pairIndividuals(Individual indA, Individual indB) {
-		// TODO Auto-generated method stub
-		return false;
-	}
-
-	@Override
-	public boolean[] agreeToPair(Individual indA, Individual indB) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public List<City> getAvailableMigrationTargets(Individual individual) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public void killIndividual(Individual individual, float deathDate) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void migrateTo(Individual individual, City nucity) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public int getDeseabilidad(Individual individual) {
-		// TODO Auto-generated method stub
-		return 0;
-	}
-
-	@Override
-	public List<Individual> getAncestors(Individual individual, int lvl) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public List<Individual> getDescendants(Individual individual, int lvl) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public List<Individual> getRelatives(Individual individual, int lvl) {
-		// TODO Auto-generated method stub
-		return null;
 	}
 
 

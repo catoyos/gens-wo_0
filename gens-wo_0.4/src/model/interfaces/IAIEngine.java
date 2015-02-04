@@ -72,9 +72,11 @@ public interface IAIEngine {
 
 	public abstract float getRepInheritedFromParents(Individual father, Individual mother);
 
-	public abstract boolean pairIndividuals(Individual indA, Individual indB);
+	public abstract void pairIndividuals(Individual indA, Individual indB);
+
+	public abstract void divorce(Individual indA, Individual indB);
 	
-	public abstract boolean[] agreeToPair(Individual indA, Individual indB);
+	public abstract boolean[] agreeToPair(Individual indA, Individual indB, float moment);
 	
 	public abstract List<City> getAvailableMigrationTargets(Individual individual);
 
@@ -82,7 +84,9 @@ public interface IAIEngine {
 	
 	public abstract void migrateTo(Individual individual, City nucity);
 
-	public abstract int getDeseabilidad(Individual individual);
+	public abstract int getDesirability(Individual individual);
+
+	public abstract int getGenderAttraction(Individual individual, Gender target);
 
 	public abstract List<Individual> getAncestors(Individual individual, int lvl);
 

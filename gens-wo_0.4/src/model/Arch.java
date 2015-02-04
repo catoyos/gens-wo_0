@@ -25,7 +25,7 @@ public final class Arch {
 
 	public static World getClearWorld() {
 		if (sto == null) {
-			System.out.println("??");
+			System.err.println("??");
 			return null;
 		} else {
 			return sto.getClearWorld();
@@ -34,7 +34,7 @@ public final class Arch {
 
 	public static Zone getClearZone() {
 		if (sto == null) {
-			System.out.println("??");
+			System.err.println("??");
 			return null;
 		} else {
 			return sto.getClearZone();
@@ -43,7 +43,7 @@ public final class Arch {
 
 	public static Language getClearLanguage() {
 		if (sto == null) {
-			System.out.println("??");
+			System.err.println("??");
 			return null;
 		} else {
 			return sto.getClearLanguage();
@@ -52,7 +52,7 @@ public final class Arch {
 
 	public static City getClearCity() {
 		if (sto == null) {
-			System.out.println("??");
+			System.err.println("??");
 			return null;
 		} else {
 			return sto.getClearCity();
@@ -61,7 +61,7 @@ public final class Arch {
 
 	public static Individual getClearIndividual() {
 		if (sto == null) {
-			System.out.println("??");
+			System.err.println("??");
 			return null;
 		} else {
 			return sto.getClearIndividual();

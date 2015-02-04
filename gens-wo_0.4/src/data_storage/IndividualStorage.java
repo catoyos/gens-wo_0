@@ -26,8 +26,7 @@ public class IndividualStorage extends AbstractStorage<Individual> {
 		return res;
 	}
 
-	public Individual generateNewItem(Individual father, Individual mother,
-			float birthDate) {
+	protected Individual generateNewItem(Individual father, Individual mother, float birthDate) {
 		Individual res = getClearItem();
 		Individual.generateIndividualFromParents(res, father, mother, birthDate);
 		insertItem(res);

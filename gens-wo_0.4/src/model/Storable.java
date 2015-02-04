@@ -3,6 +3,8 @@ package model;
 public abstract class Storable {
 	public static enum StorableType { WORLD, ZONE, LANGUAGE, CITY, INDIVIDUAL }
 	public final StorableType TYPE;
+	public boolean modified = false;
+	public byte instances = 0;
 	
 	public Storable(StorableType type){
 		this.TYPE = type;

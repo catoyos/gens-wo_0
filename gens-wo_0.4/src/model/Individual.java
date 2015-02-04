@@ -212,6 +212,9 @@ public class Individual extends Storable {
 	public void setBirthDate(float birthDate) {
 		this.birthDate = birthDate;
 	}
+	public float getAge(float moment) {
+		return moment - birthDate;
+	}
 	public float getDeathDate() {
 		return deathDate;
 	}
@@ -256,6 +259,9 @@ public class Individual extends Storable {
 	}
 	public void setPartnerID(String partnerID) {
 		this.partnerID = partnerID;
+	}
+	public boolean hasPartner(){
+		return partnerID == null;
 	}
 	public List<String> getChildrenID() {
 		return childrenID;
@@ -382,6 +388,10 @@ public class Individual extends Storable {
 	public Zone getOriginalZone(){
 		return Arch.sto == null ? null : Arch.sto.getZoneById(originalZoneID);
 	}
+	public Language getLanguage(){
+		Zone oz = getOriginalZone();
+		return oz == null ? null : oz.getLang();
+	}
 	public City getCurrentCity(){
 		return Arch.sto == null ? null : Arch.sto.getCityById(currentCityID);
 	}
@@ -393,56 +403,46 @@ public class Individual extends Storable {
 	}
 	
 
-	private static String getCurrentCityFromParents( Individual father, Individual mother) {
-//		if (father.isAlive() == mother.isAlive()) {
-//			if (father.getRep() > (2 * mother.getRep())){
-//				return father.currentCityID;
-//			} else {
-//				return mother.currentCityID;
-//			}
-//		} else {
-//			if (father.isAlive()){
-//				return father.currentCityID;
-//			} else {
-//				return mother.currentCityID;
-//			}
-//		}
-		return Arch.aie == null ? null : Arch.aie.getCurrentCityFromParents(father,mother);
+	private static String getCurrentCityFromParents(Individual father, Individual mother) {
+		return Arch.aie == null ? null : Arch.aie.getCurrentCityFromParents(father, mother);
 	}
 	
-	private static String[] getNameSurnamesFromParents(Gender gender, Individual father,
-			Individual mother) {
+	private static String[] getNameSurnamesFromParents(Gender gender, Individual father, Individual mother) {
 		return Arch.aie == null ? null : Arch.aie.getNameSurnamesFromParents(gender, father, mother);
 	}
 	
 	private static float getRepInheritedFromParents(Individual father, Individual mother) {
-//		return Math.round(25 * (father.getRep() + mother.getRep())) * 0.01f;
 		return Arch.aie == null ? 0 : Arch.aie.getRepInheritedFromParents(father,mother);
 	}
 	
-	public static boolean[] agreeToPair(Individual indA, Individual indB){
-		return Arch.aie == null ? null : Arch.aie.agreeToPair(indA,indB);
+	public static boolean[] agreeToPair(Individual indA, Individual indB, float moment){
+		return Arch.aie == null ? null : Arch.aie.agreeToPair(indA, indB, moment);
 	}
-	public static boolean pairIndividuals(Individual indA, Individual indB){
-		return Arch.aie == null ? false : Arch.aie.pairIndividuals(indA,indB);
+	public static void pairIndividuals(Individual indA, Individual indB){
+		if (Arch.aie != null) Arch.aie.pairIndividuals(indA, indB);
 	}
+	public static void divorce(Individual indA, Individual indB){
+		if (Arch.aie != null) Arch.aie.divorce(indA, indB);
+	}
+
 	public List<City> getAvailableMigrationTargets() {
 		return Arch.aie == null ? null : Arch.aie.getAvailableMigrationTargets(this);
 //		String[] res = (Arch.sto == null ? null : Arch.sto.getCityById(currentCityID).getAdjacentCityIDs());
 //		return res == null ? null : Arch.sto.getCitiesById(Arrays.asList(res));
 	}
 	public void killIndividual(float deathDate){
-		if (Arch.aie != null) {
-			Arch.aie.killIndividual(this,deathDate);
-		}
+		if (Arch.aie != null) Arch.aie.killIndividual(this,deathDate);
 	}
 	public void migrateTo(City nucity){
-		if (Arch.aie != null) {
-			Arch.aie.migrateTo(this,nucity);
-		}
+		if (Arch.aie != null) Arch.aie.migrateTo(this, nucity);
 	}
+	
+	public float getGenderAttraction(Gender target) {
+		return Arch.aie == null ? 0 : Arch.aie.getGenderAttraction(this, target);
+	}
+	
 	public float getDeseabilidad() {
-		return Arch.aie == null ? 0 : Arch.aie.getDeseabilidad(this);
+		return Arch.aie == null ? 0 : Arch.aie.getDesirability(this);
 	}
 	
 	public List<Individual> getAncestors(int lvl) {
