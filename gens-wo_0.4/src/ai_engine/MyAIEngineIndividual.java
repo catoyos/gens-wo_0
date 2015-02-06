@@ -7,7 +7,7 @@ import model.Arch;
 import model.City;
 import model.Individual;
 import model.Individual.Gender;
-import model.Language;
+import model.Zone;
 
 public class MyAIEngineIndividual {
 
@@ -31,18 +31,20 @@ public class MyAIEngineIndividual {
 
 	public static String[] getNameSurnamesFromParents(Gender gender, Individual father, Individual mother) {
 		String[] res = new String[3];
-		Language lang = null;
+		Zone lang = null;
 		float difrep = father.getRep() - mother.getRep();
 		if ((difrep > 0) || ((difrep == 0) && (father.getBirthDate() < mother.getBirthDate()))) {
-			lang = father.getLanguage();
+			lang = father.getOriginalZone();
 			res[1] = father.getSurnameA();
 			res[2] = mother.getSurnameA();
 		} else {
-			lang = mother.getLanguage();
+			lang = mother.getOriginalZone();
 			res[1] = mother.getSurnameA();
 			res[2] = father.getSurnameA();
 		}
-		res[0] = lang.getRandomName(gender);
+		if (lang != null) {
+			res[0] = lang.getRandomName(gender);
+		}
 		
 		return res;
 	}

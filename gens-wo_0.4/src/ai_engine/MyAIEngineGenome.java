@@ -14,7 +14,8 @@ public class MyAIEngineGenome {
 
 	public static byte getSexOrientation(Genome genome) {
 		short gv = genome.getGenValue(1, 0);
-		short gw = genome.getGenValue(3, 0);
+//		short gw = (short) (genome.getGenValue(3, 0));
+		short gw = (short) (15-genome.getGenValue(3, 0));
 //		return (byte) (64 - 128 * gv * gv * gv / 3375);
 //		return (byte) (32 - 64 * gv * gv * gv / 3375);
 		return (byte) (32 - 64 * gv * gw / 225);

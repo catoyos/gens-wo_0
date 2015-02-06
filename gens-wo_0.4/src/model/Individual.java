@@ -52,20 +52,19 @@ public class Individual extends Storable {
 	
 	public static void generateNewIndividual(Individual res,
 			String cityID, float birthDate) {
-		Language lang = null;
-		if(Arch.cityExists(cityID))//TODO debug
-			res.originalZoneID = Arch.getCityById(cityID).getParentZoneID();
-		if(res.originalZoneID == null) { //TODO debug
+		Zone oZone = null;
+		if(Arch.cityExists(cityID))
+			oZone = Arch.getCityById(cityID).getParentZone();
+		
+		if(res.originalZoneID == null) {
 			res.originalZoneID="XXXXXXXXX";
 		} else {
-			lang = Arch.getZoneById(res.originalZoneID).getLang();
+			res.originalZoneID = oZone.getZoneID();
+			res.surnameA = oZone.getRandomSurname();
+			res.surnameB = oZone.getRandomSurname();
 		}
 		
 		res.individualID = generateId(newIDn++, res.originalZoneID.substring( res.originalZoneID.length() - 2, res.originalZoneID.length()));
-		if(lang != null) { //TODO debug
-			res.surnameA = lang.getRandomSurname();
-			res.surnameB = lang.getRandomSurname();
-		}
 		res.birthDate = birthDate;
 		res.deathDate = -1;
 		res.currentCityID = cityID;
@@ -85,8 +84,8 @@ public class Individual extends Storable {
 
 		loadDataFromGenome(res);
 		
-		if(lang != null) res.name = lang.getRandomName(res.gender);//TODO debug
-
+		if(oZone != null) res.name = oZone.getRandomName(res.gender);
+		
 	}
 
 	public static void generateFromString(Individual res, String string) {
@@ -138,7 +137,13 @@ public class Individual extends Storable {
 	public static void generateIndividualFromParents(Individual res, Individual father, Individual mother, float birthDate) {
 		
 		res.currentCityID = getCurrentCityFromParents(father, mother);
-		res.originalZoneID = Arch.getCityById(res.currentCityID).getParentZoneID();
+		
+		if(Arch.cityExists(res.currentCityID))//TODO debug
+			res.originalZoneID = Arch.getCityById(res.currentCityID).getParentZoneID();
+		
+		if(res.originalZoneID == null) { //TODO debug
+			res.originalZoneID="XXXXXXXXX";
+		}
 		
 		if (res.genome == null) res.genome = new Genome();
 		Genome.generateGenomeFromParents(res.genome, father.genome, mother.genome);
@@ -396,10 +401,10 @@ public class Individual extends Storable {
 	public Zone getOriginalZone(){
 		return Arch.sto == null ? null : Arch.sto.getZoneById(originalZoneID);
 	}
-	public Language getLanguage(){
-		Zone oz = getOriginalZone();
-		return oz == null ? null : oz.getLang();
-	}
+//	public Language getLanguage(){
+//		Zone oz = getOriginalZone();
+//		return oz == null ? null : oz.getLang();
+//	}
 	public City getCurrentCity(){
 		return Arch.sto == null ? null : Arch.sto.getCityById(currentCityID);
 	}

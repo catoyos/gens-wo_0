@@ -1,16 +1,20 @@
 package data_storage;
 
+import java.io.IOException;
+import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.List;
 
 import model.Language;
 import model.Storable.StorableType;
 
 public class LanguageStorage extends AbstractStorage<Language> {
-	// private HashMap<String, Language> depot;
+	
+	private HashMap<String, Language> depot;
 
 	protected LanguageStorage(String id) {
 		super(id, StorableType.LANGUAGE, "langs.dat");
-		// this.depot = new HashMap<String, Language>(5);
+		this.depot = new HashMap<String, Language>(30);
 	}
 
 	protected Language generateNewItem(String zoneID) {
@@ -22,38 +26,36 @@ public class LanguageStorage extends AbstractStorage<Language> {
 
 	@Override
 	protected int getNItems() {
-		// TODO Auto-generated method stub
-		return 0;
+		return depot.size();
 	}
 
 	@Override
 	protected List<String> getItemIdsList() {
-		// TODO Auto-generated method stub
-		return null;
+		return new LinkedList<String>(depot.keySet());
 	}
 
 	@Override
 	protected List<Language> getItemsList() {
-		// TODO Auto-generated method stub
-		return null;
+		return new LinkedList<Language>(depot.values());
 	}
 
 	@Override
 	protected Language getClearItem() {
-		// TODO Auto-generated method stub
-		return null;
+		return new Language();
 	}
 
 	@Override
 	protected Language getItemById(String itemid) {
-		// TODO Auto-generated method stub
-		return null;
+		return depot.get(itemid);
 	}
 
 	@Override
 	protected List<Language> getItemsById(List<String> itemids) {
-		// TODO Auto-generated method stub
-		return null;
+		List<Language> res = new LinkedList<Language>();
+		for (String wid : itemids) {
+			res.add(getItemById(wid));
+		}
+		return res;
 	}
 
 	@Override
@@ -82,32 +84,35 @@ public class LanguageStorage extends AbstractStorage<Language> {
 
 	@Override
 	protected void insertItem(Language item) {
-		// TODO Auto-generated method stub
-
+		depot.put(item.getLanguageID(), item);
 	}
 
 	@Override
 	protected boolean exists(String itemid) {
-		// TODO Auto-generated method stub
-		return false;
+		return isInMemory(itemid) || isInFile(itemid);
 	}
 
 	@Override
 	protected boolean isInMemory(String itemid) {
-		// TODO Auto-generated method stub
-		return false;
+		return depot.containsKey(itemid);
 	}
 
 	@Override
 	protected boolean isInFile(String itemid) {
-		// TODO Auto-generated method stub
 		return false;
 	}
 
 	@Override
 	protected void finish() {
-		// TODO Auto-generated method stub
-
+		try {
+			LinkedList<String> records = new LinkedList<String>();
+			for (Language lang : depot.values()) {
+				records.add(lang.toFileString());
+			}
+			super.printToFile(records);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 	}
 
 }

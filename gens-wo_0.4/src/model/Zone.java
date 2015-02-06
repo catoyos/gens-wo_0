@@ -4,6 +4,7 @@ import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
 
+import model.Individual.Gender;
 import model.utils.StringUtils;
 
 public class Zone extends Storable {
@@ -27,7 +28,7 @@ public class Zone extends Storable {
 	public static void generateNewZone(Zone res, String worldID) {
 		res.zoneID = worldID + StringUtils.generateId((int)(newIDn++ % StringUtils.ID_N_25_2), 2);
 		res.parentWorldID = worldID;
-		res.lang = new Language();
+		res.lang = Arch.generateNewLanguage(res.zoneID);
 		if (res.cityIDs == null) {
 			res.cityIDs = new LinkedList<String>();
 		} else {
@@ -47,8 +48,7 @@ public class Zone extends Storable {
 			res.lastUpdated = 0;
 		}
 		
-		if (res.lang == null) res.lang = new Language();
-		Language.generateFromString(res.lang, null);//TODO Language.generateFromString
+		res.lang = null;
 		
 		if (data.length > 2) {
 			res.cityIDs = Arrays.asList(data[3].split("@"));
@@ -74,11 +74,19 @@ public class Zone extends Storable {
 		this.parentWorldID = parentWorldID;
 	}
 	
-	public Language getLang() {
-		return lang;
+//	public Language getLang() {
+//		return lang;
+//	}
+//	public void setLang(Language lang) {
+//		this.lang = lang;
+//	}
+	public String getRandomName(Gender gender) {
+		if (lang == null) lang = Arch.getLanguageById(zoneID);
+		return lang == null ? null : lang.getRandomName(gender);
 	}
-	public void setLang(Language lang) {
-		this.lang = lang;
+	public String getRandomSurname() {
+		if (lang == null) lang = Arch.getLanguageById(zoneID);
+		return lang == null ? null : lang.getRandomSurname();
 	}
 	
 	public List<String> getCityIDs() {
@@ -246,9 +254,5 @@ public class Zone extends Storable {
 		}
 		return res.toString();
 	}
-
-	@Override
-	public String toString() {
-		return "Zone [zoneID=" + zoneID + "]";
-	}
+	
 }

@@ -205,10 +205,10 @@ public class City extends Storable {
 		return Arch.sto == null ? null : Arch.sto.getZoneById(parentZoneID);
 	}
 
-	public Language getLanguage() {
-		Zone aux = getParentZone();
-		return aux == null ? null : aux.getLang();
-	}
+//	public Language getLanguage() {
+//		Zone aux = getParentZone();
+//		return aux == null ? null : aux.getLang();
+//	}
 
 	public Individual getRandomCitizen() {
 		return Arch.aie == null ? null : Arch.aie.getRandomCitizen(this);
