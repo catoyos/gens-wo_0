@@ -89,7 +89,7 @@ public class City extends Storable {
 	}
 
 	public void addCitizen(Individual zIndividual) {
-		citizens.add(zIndividual.getIndividualID());
+		if (zIndividual!=null) citizens.add(zIndividual.getIndividualID());
 	}
 
 	public boolean containsCitizen(String sIndividualID) {
@@ -97,6 +97,7 @@ public class City extends Storable {
 	}
 
 	public boolean containsCitizen(Individual zIndividual) {
+		if (zIndividual == null) return false;
 		return citizens.contains(zIndividual.getIndividualID());
 	}
 
@@ -109,6 +110,7 @@ public class City extends Storable {
 	}
 
 	public boolean removeCitizen(Individual zIndividual) {
+		if (zIndividual==null) return false;
 		return citizens.remove(zIndividual.getIndividualID());
 	}
 
@@ -126,7 +128,7 @@ public class City extends Storable {
 	
 	protected void setAdjacentCities(City[] acs){
 		for (int i = 0; i < adjacentCityIDs.length &&  i < acs.length; i++) {
-			adjacentCityIDs[i] = acs[i].cityID;
+			if (acs[i]!=null) adjacentCityIDs[i] = acs[i].cityID;
 		}
 	}
 	
@@ -152,7 +154,8 @@ public class City extends Storable {
 			break;
 		}
 		
-		try {
+		if (ca!=null && cb!=null) try {
+			
 			City cc = null;
 			
 			if (ca.adjacentCityIDs[resA] != null) {
@@ -217,6 +220,10 @@ public class City extends Storable {
 
 	public void changeParentZone(Zone nZone) {
 		if(Arch.aie != null) Arch.aie.changeParentZone(this, nZone);
+	}
+	
+	public void procIndividualDeath(Individual individual, float deathDate) {
+		if(Arch.aie != null) Arch.aie.procIndividualDeath(this, individual, deathDate);
 	}
 	
 	/*------------------------------------------------*/

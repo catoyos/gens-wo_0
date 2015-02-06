@@ -140,6 +140,11 @@ public class MyAIEngine implements IAIEngine {
 		MyAIEngineCity.changeParentZone(city, nZone);
 	}
 
+	@Override
+	public void procIndividualDeath(City city, Individual individual, float deathDate) {
+		MyAIEngineCity.procIndividualDeath(city, individual, deathDate);
+	}
+
 	/*----------INDIVIDUAL-------------------------------*/
 
 	@Override
@@ -166,6 +171,11 @@ public class MyAIEngine implements IAIEngine {
 	@Override
 	public void divorce(Individual indA, Individual indB) {
 		MyAIEngineIndividual.divorce(indA, indB);
+	}
+
+	@Override
+	public void propagateReputation(Individual individual, float val) {
+		MyAIEngineIndividual.propagateReputation(individual, val);
 	}
 
 	@Override
@@ -276,15 +286,15 @@ public class MyAIEngine implements IAIEngine {
 	}
 
 	@Override
-	public double getChromosomeDominance(int chromosome) {
-		return MyAIEngineGenome.getChromosomeDominance(chromosome);
+	public double getChromosomeDominance(int chromosome, int gene) {
+		return MyAIEngineGenome.getChromosomeDominance(chromosome, gene);
 	}
 
 	/*----------META-------------------------------------*/
 
 	@Override
 	public void finish() {
-		// TODO Auto-generated method stub
+		// TODO finish() 
 		
 	}
 	

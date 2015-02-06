@@ -422,7 +422,6 @@ public class Individual extends Storable {
 	private static float getRepInheritedFromParents(Individual father, Individual mother) {
 		return Arch.aie == null ? 0 : Arch.aie.getRepInheritedFromParents(father,mother);
 	}
-	
 	public static boolean[] agreeToPair(Individual indA, Individual indB, float moment){
 		return Arch.aie == null ? null : Arch.aie.agreeToPair(indA, indB, moment);
 	}
@@ -432,11 +431,12 @@ public class Individual extends Storable {
 	public static void divorce(Individual indA, Individual indB){
 		if (Arch.aie != null) Arch.aie.divorce(indA, indB);
 	}
+	public void propagateReputation(Individual individual, float val) {
+		if (Arch.aie != null) Arch.aie.propagateReputation(this, val);
+	}
 
 	public List<City> getAvailableMigrationTargets() {
 		return Arch.aie == null ? null : Arch.aie.getAvailableMigrationTargets(this);
-//		String[] res = (Arch.sto == null ? null : Arch.sto.getCityById(currentCityID).getAdjacentCityIDs());
-//		return res == null ? null : Arch.sto.getCitiesById(Arrays.asList(res));
 	}
 	public void killIndividual(float deathDate){
 		if (Arch.aie != null) Arch.aie.killIndividual(this,deathDate);

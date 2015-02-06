@@ -140,12 +140,12 @@ public class MyAIEngineWorld {
 	}
 
 	public static void updateZones(World world) {
-		// TODO Auto-generated method stub
+		// TODO updateZones
 
 	}
 
 	public static void updateIndividuals(World world) {
-		// TODO Auto-generated method stub
+		// TODO updateIndividuals
 
 	}
 }

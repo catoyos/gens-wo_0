@@ -66,6 +66,8 @@ public interface IAIEngine {
 
 	public abstract void changeParentZone(City city, Zone nZone);
 
+	public abstract void procIndividualDeath(City city, Individual individual, float deathDate);
+
 	/*----------INDIVIDUAL-------------------------------*/
 
 	public abstract String getCurrentCityFromParents(Individual father, Individual mother);
@@ -77,6 +79,8 @@ public interface IAIEngine {
 	public abstract void pairIndividuals(Individual indA, Individual indB);
 
 	public abstract void divorce(Individual indA, Individual indB);
+
+	public abstract void propagateReputation(Individual individual, float val);
 	
 	public abstract boolean[] agreeToPair(Individual indA, Individual indB, float moment);
 	
@@ -122,7 +126,7 @@ public interface IAIEngine {
 
 	public abstract short getComformity(Genome genome);
 
-	public abstract double getChromosomeDominance(int chromosome);
+	public abstract double getChromosomeDominance(int chromosome, int gene);
 
 	/*----------META-------------------------------------*/
 

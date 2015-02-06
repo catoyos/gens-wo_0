@@ -45,4 +45,10 @@ public class MyAIEngineCity {
 		nZone.addCity(city);
 		city.setParentZoneID(nZone.getZoneID());
 	}
+
+	public static void procIndividualDeath(City city, Individual individual, float deathDate) {
+		if (individual != null && city != null) {
+			city.removeCitizen(individual.getIndividualID());
+		}
+	}
 }

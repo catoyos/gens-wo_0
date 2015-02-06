@@ -6,17 +6,17 @@ public class Language extends Storable {
 
 	public Language() {
 		super(StorableType.LANGUAGE);
-		// TODO Auto-generated constructor stub
+		// TODO public Language() 
 	}
 	
 	public static void generateFromString(Language res, String str) {
 		if(res == null) res = new Language();
-		//TODO
+		//TODO generateFromString
 	}
 
 	public static void generateNewLanguage(Language res, String zoneID) {
 		if(res == null) res = new Language();
-		//TODO
+		//TODO generateNewLanguage
 	}
 
 	public String getRandomName(Gender gender) {
@@ -29,7 +29,7 @@ public class Language extends Storable {
 
 	@Override
 	public String toFileString() {
-		// TODO Auto-generated method stub
+		// TODO toFileString() {
 		return null;
 	}
 

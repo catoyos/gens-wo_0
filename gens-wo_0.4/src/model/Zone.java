@@ -48,7 +48,7 @@ public class Zone extends Storable {
 		}
 		
 		if (res.lang == null) res.lang = new Language();
-		Language.generateFromString(res.lang, null);//TODO
+		Language.generateFromString(res.lang, null);//TODO Language.generateFromString
 		
 		if (data.length > 2) {
 			res.cityIDs = Arrays.asList(data[3].split("@"));

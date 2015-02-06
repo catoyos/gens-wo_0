@@ -5,18 +5,19 @@ import model.Individual.Gender;
 
 public class MyAIEngineGenome {
 
-	private static final double[] props = { 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
-			1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1 };
+	private static final double[] props = { 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 0,
+		1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1 };
 	
 	public static Gender getGender(Genome genome) {
-		return genome.getGenValue(0, 0) < 8 ? Gender.FEMALE : Gender.MALE;
+		return genome.getGenValue(0, 0) < 8 ? Gender.MALE : Gender.FEMALE;
 	}
 
 	public static byte getSexOrientation(Genome genome) {
 		short gv = genome.getGenValue(1, 0);
+		short gw = genome.getGenValue(3, 0);
 //		return (byte) (64 - 128 * gv * gv * gv / 3375);
 //		return (byte) (32 - 64 * gv * gv * gv / 3375);
-		return (byte) (32 - 64 * gv * gv / 225);
+		return (byte) (32 - 64 * gv * gw / 225);
 	}
 
 	public static short getStrength(Genome genome) {
@@ -59,7 +60,7 @@ public class MyAIEngineGenome {
 		return (short) (genome.getGenValue(10, 1) + (15 - genome.getGenValue(1, 2)) + genome.getGenValue(6, 3) * 2 + genome.getGenValue(5, 2) * 3);
 	}
 
-	public static double getChromosomeDominance(int chromosome) {
+	public static double getChromosomeDominance(int chromosome, int gene) {
 		return (chromosome >= 0 && chromosome < 23) ? props[chromosome] : 0.5;
 	}
 }

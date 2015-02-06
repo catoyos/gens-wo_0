@@ -1,7 +1,9 @@
 package ai_engine;
 
+import java.util.LinkedList;
 import java.util.List;
 
+import model.Arch;
 import model.City;
 import model.Individual;
 import model.Individual.Gender;
@@ -75,6 +77,17 @@ public class MyAIEngineIndividual {
 		if(pb != null && pb.equals(indA.getIndividualID())) indB.setPartnerID(null);
 	}
 
+	public static void propagateReputation(Individual individual, float val) {
+		if (val >= 0.4f && !individual.isEmptyChildren()) {
+			List<Individual> children = individual.getChildren();
+			for (Individual child : children) {
+				if (child.isAlive() && child.isEmptyChildren()) { //TODO rep propagada = (25 - 1.6 * edad) *0.01
+					child.modifyReputation(val * 0.125f);
+					child.propagateReputation(child, val * 0.1f);
+				}
+			}
+		}
+	}
 
 	public static boolean[] agreeToPair(Individual indA, Individual indB, float moment) {
 		boolean[] res = {!indA.hasPartner(), !indB.hasPartner()};
@@ -82,7 +95,7 @@ public class MyAIEngineIndividual {
 		float attA = getGenderAttraction(indA, indB.getGender());
 		float desA = getDesirability(indA);
 		
-		float ageB = indA.getAge(moment);
+		float ageB = indB.getAge(moment);
 		float attB = getGenderAttraction(indB, indA.getGender());
 		float desB = getDesirability(indB);
 
@@ -94,29 +107,72 @@ public class MyAIEngineIndividual {
 			res[1] = false;
 		}
 
-		if (res[0] && ((attA * desB * 0.1f) < MyAIEngine.RND.nextFloat())) {
+		double[] rndv = {MyAIEngine.RND.nextInt(101),MyAIEngine.RND.nextInt(101)};
+		
+		if (res[0] && ((attA * desB * 0.1f) < rndv[0])) {
 			res[0] = false;
 		}
-		if (res[1] && ((attB * desA * 0.1f) < MyAIEngine.RND.nextFloat())) {
+		if (res[1] && ((attB * desA * 0.1f) < rndv[1])) {
 			res[1] = false;
 		}
 
+		
+//		System.out.println("y,"+indA.getIndividualID()+","+ageA + "," +attA + "," +desA + "," +ageB + "," +attB + "," +desB + "," +rndv[0] + "," +rndv[1] + "," +res[0] + "," +res[1]);
 		return res;
 	}
 
 	public static List<City> getAvailableMigrationTargets(Individual individual) {
-		// TODO Auto-generated method stub
-		return null;
+		List<City> res = new LinkedList<City>();
+		City curr = individual.getCurrentCity();
+		String[] aux;
+		if (curr != null && (aux = curr.getAdjacentCityIDs()) != null) {
+			for (String str : aux) if (str != null) res.add(Arch.getCityById(str));
+		}
+		return res;
 	}
 
 	public static void killIndividual(Individual individual, float deathDate) {
-		// TODO Auto-generated method stub
-
+		Individual partn = individual.getPartner();
+		if (partn != null && individual.getIndividualID().equals(partn.getPartnerID())) {
+			partn.setPartnerID(null);
+		}
+		
+		City ccity = individual.getCurrentCity();
+		if (ccity != null) {
+			ccity.procIndividualDeath(individual, deathDate);
+		}
+		
+		individual.setDeathDate(deathDate);
 	}
 
 	public static void migrateTo(Individual individual, City nucity) {
-		// TODO Auto-generated method stub
-
+		City oldcity = individual.getCurrentCity();
+		String[]zones = {null,null};
+		boolean modRep = true;
+		if (nucity != null) {
+			nucity.addCitizen(individual.getIndividualID());
+			zones[1] = nucity.getParentZoneID();
+		} else {
+			modRep = false;
+		}
+		
+		if (oldcity != null) {
+			oldcity.removeCitizen(individual.getIndividualID());
+			zones[0] = oldcity.getParentZoneID();
+			
+			if (modRep) {
+				if (zones[1].equals(zones[0])
+						|| zones[1].equals(individual.getOriginalZoneID())) {
+					modRep = false;
+				}
+			}
+		}
+		
+		if (modRep) {
+			float repPenalty = -0.25f * individual.getRep();
+			individual.modifyReputation(repPenalty);
+		}
+		
 	}
 
 	public static float getDesirability(Individual individual) {
@@ -135,18 +191,87 @@ public class MyAIEngineIndividual {
 	}
 
 	public static List<Individual> getAncestors(Individual individual, int lvl) {
-		// TODO Auto-generated method stub
-		return null;
+		List<Individual> res = new LinkedList<Individual>();
+		if (individual != null && lvl > 0) {
+			Individual[]prns = individual.getParents();
+			if(prns[0]!=null)
+				res.add(prns[0]);
+			if(prns[1]!=null)
+				res.add(prns[1]);
+			
+			if(lvl > 1) {
+				List<Individual> aux;
+				aux = getAncestors(prns[0], lvl - 1);
+				for (Individual individual3 : aux) {
+					if (!res.contains(individual3)) {
+						res.add(individual3);
+					}
+				}
+				aux = getAncestors(prns[1], lvl - 1);
+				for (Individual individual3 : aux) {
+					if (!res.contains(individual3)) {
+						res.add(individual3);
+					}
+				}
+				
+			}
+		}
+		return res;
 	}
 
 	public static List<Individual> getDescendants(Individual individual, int lvl) {
-		// TODO Auto-generated method stub
-		return null;
+		List<Individual> res = new LinkedList<Individual>();
+		if (individual != null && lvl > 0) {
+			List<Individual> chls = individual.getChildren();
+			res.addAll(chls);
+			
+			if(lvl > 1) {
+				List<Individual> aux;
+				for (Individual individual2 : chls) {
+					aux = getDescendants(individual2, lvl - 1);
+					for (Individual individual3 : aux) {
+						if (!res.contains(individual3)) {
+							res.add(individual3);
+						}
+					}
+				}				
+			}
+		}
+		return res;
 	}
 
 	public static List<Individual> getRelatives(Individual individual, int lvl) {
-		// TODO Auto-generated method stub
-		return null;
+		List<String> res = new LinkedList<String>();
+		List<Individual> aux = new LinkedList<Individual>();
+		res.add(individual.getIndividualID());
+		aux.add(individual);
+		List<String> bux = new LinkedList<String>();
+		List<String> cux;
+		String nu;
+		for (int i = 0; i <= lvl; i++) {
+			for (Individual str : aux) {
+				nu = str.getFatherID();
+				if (nu != null && !res.contains(nu)) {
+					res.add(nu);
+					bux.add(nu);
+				}
+				nu = str.getMotherID();
+				if (nu != null && !res.contains(nu)) {
+					res.add(nu);
+					bux.add(nu);
+				}
+				cux = individual.getChildrenID();
+				for (String string : cux) {
+					if (string != null && !res.contains(string)) {
+						res.add(string);
+						bux.add(string);
+					}
+				}
+			}
+			aux = Arch.getIndividualsById(bux);
+			bux.clear();
+		}
+		return Arch.getIndividualsById(res);
 	}
 
 }

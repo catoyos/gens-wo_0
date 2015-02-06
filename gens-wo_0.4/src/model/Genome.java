@@ -66,7 +66,7 @@ public class Genome {
 			res[0] = val[1];
 			res[1] = val[0];
 		}
-		double fxt = getChromosomeDominance(chromosome);
+		double fxt = getChromosomeDominance(chromosome, gene);
 		return (byte) (fxt * res[0] + (1 - fxt) * res[1]);
 	}
 
@@ -150,9 +150,8 @@ public class Genome {
 		return Arch.aie.getComformity(this);
 	}
 
-	private static double getChromosomeDominance(int chromosome) {
-		// TODO Auto-generated method stub
-		return Arch.aie == null ? 0.5 : Arch.aie.getChromosomeDominance(chromosome);
+	private static double getChromosomeDominance(int chromosome, int gene) {
+		return Arch.aie == null ? 0.5 : Arch.aie.getChromosomeDominance(chromosome, gene);
 	}
 	
 	/*------------------------------------------------*/

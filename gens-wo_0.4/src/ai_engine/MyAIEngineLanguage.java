@@ -6,12 +6,12 @@ import model.Language;
 public class MyAIEngineLanguage {
 
 	public static String getRandomName(Language language, Gender gender) {
-		// TODO Auto-generated method stub
+		// TODO getRandomName
 		return null;
 	}
 
 	public static String getRandomSurname(Language language) {
-		// TODO Auto-generated method stub
+		// TODO getRandomSurname
 		return null;
 	}
 

@@ -200,7 +200,7 @@ public class MyAIEngineZone {
 	}
 
 	public static void updateIndividuals(Zone zone, float moment) {
-		// TODO Auto-generated method stub
+		// TODO updateIndividuals
 		
 	}
 }
