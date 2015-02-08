@@ -94,11 +94,15 @@ public interface IAIEngine {
 
 	public abstract float getGenderAttraction(Individual individual, Gender target);
 
+	public abstract float[] getGendersAttraction(Individual individual);
+
 	public abstract List<Individual> getAncestors(Individual individual, int lvl);
 
 	public abstract List<Individual> getDescendants(Individual individual, int lvl);
 
 	public abstract List<Individual> getRelatives(Individual individual, int lvl);
+
+	public abstract boolean update(Individual individual, float moment);
 
 	/*----------GENOME-----------------------------------*/
 

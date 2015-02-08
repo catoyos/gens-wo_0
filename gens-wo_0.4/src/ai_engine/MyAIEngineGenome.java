@@ -5,7 +5,7 @@ import model.Individual.Gender;
 
 public class MyAIEngineGenome {
 
-	private static final double[] props = { 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 0,
+	private static final double[] props = { 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0,
 		1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1 };
 	
 	public static Gender getGender(Genome genome) {
@@ -15,10 +15,10 @@ public class MyAIEngineGenome {
 	public static byte getSexOrientation(Genome genome) {
 		short gv = genome.getGenValue(1, 0);
 //		short gw = (short) (genome.getGenValue(3, 0));
-		short gw = (short) (15-genome.getGenValue(3, 0));
+		short gw = (short) (15 - genome.getGenValue(1+gv, 0));
 //		return (byte) (64 - 128 * gv * gv * gv / 3375);
 //		return (byte) (32 - 64 * gv * gv * gv / 3375);
-		return (byte) (32 - 64 * gv * gw / 225);
+		return (byte) (32 - 64 * gw * gw / 225);
 	}
 
 	public static short getStrength(Genome genome) {

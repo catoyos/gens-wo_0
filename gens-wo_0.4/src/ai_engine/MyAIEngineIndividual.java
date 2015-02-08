@@ -101,15 +101,15 @@ public class MyAIEngineIndividual {
 		float attB = getGenderAttraction(indB, indA.getGender());
 		float desB = getDesirability(indB);
 
-		if (ageA > (ageB - 6) * 2) {
+		if (ageA > (ageB - 5) * 2) {
 			res[0] = false;
 			res[1] = false;
-		} else if (ageB > (ageA - 6) * 2) {
+		} else if (ageB > (ageA - 5) * 2) {
 			res[0] = false;
 			res[1] = false;
 		}
 
-		double[] rndv = {MyAIEngine.RND.nextInt(101),MyAIEngine.RND.nextInt(101)};
+		double[] rndv = {MyAIEngine.RND.nextInt(101), MyAIEngine.RND.nextInt(101)};
 		
 		if (res[0] && ((attA * desB * 0.1f) < rndv[0])) {
 			res[0] = false;
@@ -179,17 +179,36 @@ public class MyAIEngineIndividual {
 
 	public static float getDesirability(Individual individual) {
 		short[] caracs = individual.getCharactValues();
-		float res=individual.getRep();
+		float res = individual.getRep();
 		for (short s : caracs) {
 			res += (s * 0.1f);
 		}
 		return res;
 	}
 	public static float getGenderAttraction(Individual individual, Gender target) {
+//		short sexOrientation = individual.getSexOrientation();
+//		float auxnn = sexOrientation + 32f;
+//		if (individual.getGender() == target) auxnn = 64f - auxnn;
+//		return individual.getHorniness() * auxnn / Math.max(32f - sexOrientation, 32f + sexOrientation);
+		int op = target == Gender.MALE ? 0 : 1;
+		return  getGendersAttraction(individual)[op];
+	}
+	public static float[] getGendersAttraction(Individual individual) {
+		float[] res = new float[2];
 		short sexOrientation = individual.getSexOrientation();
-		float auxnn = sexOrientation + 32f;
-		if (individual.getGender() == target) auxnn = 64f - auxnn;
-		return individual.getHorniness() * auxnn / Math.max(32f - sexOrientation, 32f + sexOrientation);
+		float auxnA = sexOrientation + 32f;
+		float auxnB = 64f - auxnA;
+		
+		res[0] = individual.getHorniness() * Math.max(32f - sexOrientation, 32f + sexOrientation);
+		res[1] = res[0];
+		if (individual.getGender() == Gender.MALE) {
+			res[0] *= auxnB;
+			res[1] *= auxnA;
+		} else {
+			res[0] *= auxnA;
+			res[1] *= auxnB;
+		} 
+		return res;
 	}
 
 	public static List<Individual> getAncestors(Individual individual, int lvl) {
@@ -274,6 +293,117 @@ public class MyAIEngineIndividual {
 			bux.clear();
 		}
 		return Arch.getIndividualsById(res);
+	}
+
+	public static boolean update(Individual individual, float moment) {
+		if (!individual.isAlive()) {
+			return false;
+		}
+		
+		short[] caracts = individual.getCharactValues();
+		/*
+		 * 0: strength
+		 * 1: constitution
+		 * 2: speed
+		 * 3: intelligence
+		 * 4: wisdom
+		 * 5: charisma
+		 * 6: beauty
+		 * 7: fertility
+		 * 8: horniness
+		 * 9: comformity
+		 * 
+		 */
+		float age = individual.getAge(moment);
+
+		float prDeath = 0.05f * (100 + age) / (25.0f + caracts[1]);
+		if (prDeath > MyAIEngine.RND.nextFloat()) {
+			individual.killIndividual(moment);
+			return true;
+		}
+		
+		
+		float repI = individual.getRep();
+		int ncs = individual.getNChildren();
+		City ct = individual.getCurrentCity();
+		float[] indAttr = individual.getGendersAttraction();
+		Individual partner;
+		if (individual.hasPartner()) {
+			partner = individual.getPartner();
+			float prntAge = partner.getAge(moment);
+			short prntFert = partner.getFertility();
+			if (age > (18 - caracts[7] * 0.1)
+					&& age < (50 + caracts[7] * 0.3)
+					&& prntAge > (18 - prntFert * 0.1)
+					&& prntAge < (50 + prntFert * 0.3)) {
+				if(processHavingAChild(individual, partner, moment, repI, ncs))
+					return true;
+			}
+
+			float repP = partner.getRep();
+			float prDivorce = 0.001f * ( caracts[4] * (repI - repP) / (ncs + 10f)
+					+ 5 * (100 - caracts[4]) * (100 - caracts[9]) / (partner.getCharisma() + 5f));
+			if (prDivorce > MyAIEngine.RND.nextFloat()) {
+				Individual.divorce(individual, partner);
+				return true;
+			}
+		} else if(age > 12){
+			//TODO mejor buscar pareja
+			if (ct != null) {
+				List<Individual> pret = ct.getRandomCitizens(20);
+				float auxDes = 0;
+				partner = null;
+				for (Individual ppartner : pret) {
+					if (ppartner.getAge(moment) > 12
+							&& 40 < (ppartner.getGender()==Gender.MALE ? indAttr[0] : indAttr[1])
+							&& auxDes < ppartner.getDesirability()) {
+						partner = ppartner;
+						auxDes = partner.getDesirability();
+					}
+				}
+				if (partner != null) {
+					boolean[]acc = Individual.agreeToPair(individual, partner, moment);
+					if (acc[0] && acc[1]) {
+						Individual.pairIndividuals(individual, partner);
+					}
+				}
+			}
+			
+		}
+		
+		//TODO mudarse
+				
+		return false;
+	}
+
+	private static boolean processHavingAChild(Individual individual, Individual partner, float moment, float repI, int ncs) {
+		//TODO tener en cuenta fertility, horniness, situacion de la zona
+		float prChildren = repI * 0.5f + 1f;
+		if (ncs == 0) {
+			prChildren *= 0.5;
+		} else if (ncs == 1) {
+			prChildren *= 0.25;
+		} else if (ncs > 5) {
+			prChildren *= 0.01;
+		} else {
+			prChildren *= Math.pow(0.5, ncs + 1);
+		}
+		
+		if (prChildren > MyAIEngine.RND.nextFloat()) {
+			Individual res = null;
+			City c = null;
+			if (individual.getGender() == Gender.MALE) {
+				res = Arch.generateNewIndividual(individual, partner, moment);
+			} else {
+				res = Arch.generateNewIndividual(partner, individual, moment);
+			}
+			c = res.getCurrentCity();
+			if (res != null && c != null) {
+				c.addCitizen(res);
+			}
+			return true;
+		}
+		return false;
 	}
 
 }

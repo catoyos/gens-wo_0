@@ -72,12 +72,12 @@ public class Genome {
 
 	public byte[] getGenValues(int chromosome, int gene) {
 		byte[] res = new byte[2];
+		
 		int val = signedToUnsigned(genes[0][chromosome]);
-		val = signedToUnsigned(genes[0][chromosome]);
 		res[0] = (byte) ((val / EXP_GENBASE[gene]) - GENBASE * (val / EXP_GENBASE[gene + 1]));
+		
 		val = signedToUnsigned(genes[1][chromosome]);
 		res[1] = (byte) ((val / EXP_GENBASE[gene]) - GENBASE * (val / EXP_GENBASE[gene + 1]));
-		
 		
 		return res;
 	}

@@ -200,7 +200,18 @@ public class MyAIEngineZone {
 	}
 
 	public static void updateIndividuals(Zone zone, float moment) {
-		// TODO updateIndividuals
-		
+		float zlu = zone.getLastUpdated();
+		float lapse = (zlu - moment);
+		int n = (int) (zone.getNCitizens() * lapse * 0.5);
+		if (lapse < 2) {
+			n++;
+		}
+		float indlp = lapse / n;
+		List<Individual> ins = getRandomCitizens(zone, n);
+		for (Individual individual : ins) {
+			zlu += indlp;
+			individual.update(zlu);
+		}
+		zone.setLastUpdated(zlu);
 	}
 }

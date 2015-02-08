@@ -135,14 +135,12 @@ public class Individual extends Storable {
 	}
 
 	public static void generateIndividualFromParents(Individual res, Individual father, Individual mother, float birthDate) {
-		
 		res.currentCityID = getCurrentCityFromParents(father, mother);
-		
-		if(Arch.cityExists(res.currentCityID))//TODO debug
+		if(Arch.cityExists(res.currentCityID))
 			res.originalZoneID = Arch.getCityById(res.currentCityID).getParentZoneID();
 		
-		if(res.originalZoneID == null) { //TODO debug
-			res.originalZoneID="XXXXXXXXX";
+		if(res.originalZoneID == null) {
+			res.originalZoneID = "XXXXXXXXX";
 		}
 		
 		if (res.genome == null) res.genome = new Genome();
@@ -453,6 +451,9 @@ public class Individual extends Storable {
 	public float getGenderAttraction(Gender target) {
 		return Arch.aie == null ? 0 : Arch.aie.getGenderAttraction(this, target);
 	}
+	public float[] getGendersAttraction() {
+		return Arch.aie == null ? new float[2] : Arch.aie.getGendersAttraction(this);
+	}
 	
 	public float getDesirability() {
 		return Arch.aie == null ? 0 : Arch.aie.getDesirability(this);
@@ -468,6 +469,9 @@ public class Individual extends Storable {
 	
 	public List<Individual> getRelatives(int lvl) {
 		return Arch.aie == null ? null : Arch.aie.getRelatives(this,lvl);
+	}
+	public boolean update(float moment) {
+		return Arch.aie == null ? null : Arch.aie.update(this,moment);
 	}
 	
 	/*------------------------------------------------*/

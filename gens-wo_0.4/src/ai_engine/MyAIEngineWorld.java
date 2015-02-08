@@ -145,7 +145,10 @@ public class MyAIEngineWorld {
 	}
 
 	public static void updateIndividuals(World world) {
-		// TODO updateIndividuals
-
+		List<Zone> zns = world.getZones();
+		float moment = world.getMoment();
+		for (Zone zone : zns) {
+			zone.updateIndividuals(moment);
+		}
 	}
 }

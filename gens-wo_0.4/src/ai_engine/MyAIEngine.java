@@ -209,6 +209,11 @@ public class MyAIEngine implements IAIEngine {
 	}
 
 	@Override
+	public float[] getGendersAttraction(Individual individual) {
+		return MyAIEngineIndividual.getGendersAttraction(individual);
+	}
+
+	@Override
 	public List<Individual> getAncestors(Individual individual, int lvl) {
 		return MyAIEngineIndividual.getAncestors(individual, lvl);
 	}
@@ -221,6 +226,11 @@ public class MyAIEngine implements IAIEngine {
 	@Override
 	public List<Individual> getRelatives(Individual individual, int lvl) {
 		return MyAIEngineIndividual.getRelatives(individual, lvl);
+	}
+
+	@Override
+	public boolean update(Individual individual, float moment) {
+		return MyAIEngineIndividual.update(individual, moment);
 	}
 
 	/*----------GENOME-----------------------------------*/
