@@ -38,12 +38,14 @@ public class MyAIEngineCity {
 	}
 
 	public static void changeParentZone(City city, Zone nZone) {
-		if (city.getParentZoneID() != null) {
-			Zone parent = city.getParentZone();
-			parent.removeCity(city);
+		if (!nZone.isID(city.getParentZoneID())) {
+			if (city.getParentZoneID() != null) {
+				Zone parent = city.getParentZone();
+				parent.removeCity(city);
+			}
+			nZone.addCity(city);
+			city.setParentZoneID(nZone.getZoneID());
 		}
-		nZone.addCity(city);
-		city.setParentZoneID(nZone.getZoneID());
 	}
 
 	public static void procIndividualDeath(City city, Individual individual, float deathDate) {

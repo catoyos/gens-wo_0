@@ -68,6 +68,10 @@ public class City extends Storable {
 		this.cityID = cityID;
 	}
 
+	public boolean isID(String oID) {
+		return oID != null && this.cityID.equals(oID) && !this.cityID.equals("");
+	}
+	
 	public String getParentZoneID() {
 		return parentZoneID;
 	}
@@ -154,20 +158,20 @@ public class City extends Storable {
 			break;
 		}
 		
-		if (ca!=null && cb!=null) try {
+		if (ca != null && cb != null) try {
 			
 			City cc = null;
 			
 			if (ca.adjacentCityIDs[resA] != null) {
 				cc = Arch.getCityById(ca.adjacentCityIDs[resA]);
-				if (ca.cityID.equals(cc.adjacentCityIDs[resB])) {
+				if (ca.isID(cc.adjacentCityIDs[resB])) {
 					cc.adjacentCityIDs[resB] = null;
 				}
 			}
 			
 			if (cb.adjacentCityIDs[resB] != null) {
 				cc = Arch.getCityById(cb.adjacentCityIDs[resB]);
-				if (cb.cityID.equals(cc.adjacentCityIDs[resA])) {
+				if (cb.isID(cc.adjacentCityIDs[resA])) {
 					cc.adjacentCityIDs[resA] = null;
 				}
 			}
@@ -229,6 +233,30 @@ public class City extends Storable {
 	/*------------------------------------------------*/
 
 
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + ((cityID == null) ? 0 : cityID.hashCode());
+		return result;
+	}
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		City other = (City) obj;
+		if (cityID == null) {
+			if (other.cityID != null)
+				return false;
+		} else if (!cityID.equals(other.cityID))
+			return false;
+		return true;
+	}
+
 	public String toFileString() {
 		StringBuilder res = new StringBuilder();
 		res.append(cityID).append(",");
@@ -251,7 +279,7 @@ public class City extends Storable {
 		}
 		return res.toString();
 	}
-
+	
 	@Override
 	public String toString() {
 		return "City [cityID=" + cityID + ", citizens=" + citizens + "]";

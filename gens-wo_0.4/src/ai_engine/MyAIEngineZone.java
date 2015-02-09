@@ -137,7 +137,7 @@ public class MyAIEngineZone {
 			String cid = cities.get(0);
 			aux = Arch.getCityById(cid);
 			auzn = aux.getParentZoneID();
-			if(zone.getZoneID().equals(auzn) && !res.contains(auzn)){
+			if(zone.isID(auzn) && !res.contains(auzn)){
 				res.add(auzn);
 				if(cities.size() > 1){
 					cities.removeAll(Arch.getZoneById(auzn).getCityIDs());
@@ -159,7 +159,7 @@ public class MyAIEngineZone {
 		if(zone==null || adj==null)
 			return false;
 			
-		if(zone.getZoneID().equals(adj.getParentZoneID()))
+		if(zone.equals(adj))
 			return false;
 			
 		if(zone.getNCities() == 0)
@@ -167,7 +167,8 @@ public class MyAIEngineZone {
 			
 		String[] adct = adj.getAdjacentCityIDs();
 		for(int i = 0; i < adct.length; i++){
-			if(zone.containsCityID(adct[i])) return true;
+			if(zone.containsCityID(adct[i]))
+				return true;
 		}
 		
 		return false;
@@ -177,7 +178,7 @@ public class MyAIEngineZone {
 		if (zone==null || adj==null)
 			return false;
 			
-		if (zone.getZoneID().equals(adj.getZoneID()))
+		if (zone.equals(adj))
 			return false;
 			
 		if (zone.getNCities() == 0 || adj.getNCities() == 0)
@@ -193,7 +194,8 @@ public class MyAIEngineZone {
 			cities = getAdjacentCityIDs(adj);
 		}
 		for (String string : cities) {
-			if(aux.containsCityID(string)) return true;
+			if(aux.containsCityID(string))
+				return true;
 		}
 				
 		return false;
@@ -209,18 +211,13 @@ public class MyAIEngineZone {
 		
 		if (lapse > 0) {
 			float indlp = lapse / n;
-//			System.out.println(zlu+","+moment+","+lapse+","+zone.getNCitizens()+","+n+","+indlp);
 			List<Individual> ins = getRandomCitizens(zone, n);
-			long t0, t1;
 			for (Individual individual : ins) {
 				zlu += indlp;
-				t0 = System.currentTimeMillis();
 				individual.update(zlu);
-				t1 = System.currentTimeMillis();
-				System.out.println(moment+","+zone.getNCitizens()+","+(t1-t0));
 			}
 			zone.setLastUpdated(zlu);
-
+			zone.getZoneID().equals("");
 		}
 	}
 }

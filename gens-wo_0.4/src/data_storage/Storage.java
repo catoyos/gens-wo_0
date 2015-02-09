@@ -20,7 +20,8 @@ public class Storage implements IStorage {
 	private CityStorage cs;
 	private IndividualStorage is;
 
-	private Storage(String id) {		
+	private Storage(String id, String folder) {
+		if(folder!=null) StorageIO.DEFAULT_ROOT_FOLDER = folder;
 		this.id = id;
 		this.ws = new WorldStorage(id);
 		this.zs = new ZoneStorage(id);
@@ -29,14 +30,22 @@ public class Storage implements IStorage {
 		this.is = new IndividualStorage(id);
 	}
 
+	public static IStorage getUninitiatedStorage(String uniID, String folder) {
+		return new Storage(uniID, folder);
+	}
+
+	public static IStorage getInitiatedStorage(String uniID, String folder) {
+		Storage st = new Storage(uniID, folder);
+		Storage.initiateStorage(st);
+		return st;
+	}
+
 	public static IStorage getUninitiatedStorage(String uniID) {
-		return new Storage(uniID);
+		return getUninitiatedStorage(uniID, "files");
 	}
 
 	public static IStorage getInitiatedStorage(String uniID) {
-		Storage st = new Storage(uniID);
-		Storage.initiateStorage(st);
-		return st;
+		return getInitiatedStorage(uniID, "files");
 	}
 
 	public static void initiateStorage(Storage st) {

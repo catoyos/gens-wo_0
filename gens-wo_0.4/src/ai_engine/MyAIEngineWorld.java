@@ -147,8 +147,14 @@ public class MyAIEngineWorld {
 	public static void updateIndividuals(World world) {
 		List<Zone> zns = world.getZones();
 		float moment = world.getMoment();
+		
+		long t0, t1;
+		
 		for (Zone zone : zns) {
+			t0 = System.currentTimeMillis();
 			zone.updateIndividuals(moment);
+			t1 = System.currentTimeMillis();
+			System.out.println(zone.getZoneID()+","+moment+","+zone.getNCitizens()+","+(t1-t0));//TODO debug
 		}
 	}
 }

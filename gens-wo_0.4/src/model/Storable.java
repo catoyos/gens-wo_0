@@ -41,6 +41,13 @@ public abstract class Storable {
 	public static String toFileString(Storable item){
 		return item.toFileString();
 	}
+
+	@Override
+	public abstract int hashCode();
+
+	@Override
+	public abstract boolean equals(Object obj);
 	
 	public abstract String toFileString();
+	
 }

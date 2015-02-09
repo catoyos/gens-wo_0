@@ -66,6 +66,11 @@ public class Zone extends Storable {
 	public void setZoneID(String zoneID) {
 		this.zoneID = zoneID;
 	}
+
+	public boolean isID(String oID) {
+		return oID != null && this.zoneID.equals(oID) && !this.zoneID.equals("");
+	}
+	
 	
 	public String getParentWorldID() {
 		return parentWorldID;
@@ -237,6 +242,31 @@ public class Zone extends Storable {
 	}
 
 	/*------------------------------------------------*/
+
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + ((zoneID == null) ? 0 : zoneID.hashCode());
+		return result;
+	}
+	
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		Zone other = (Zone) obj;
+		if (zoneID == null) {
+			if (other.zoneID != null)
+				return false;
+		} else if (!zoneID.equals(other.zoneID))
+			return false;
+		return true;
+	}
 	
 	@Override
 	public String toFileString() {
@@ -254,5 +284,4 @@ public class Zone extends Storable {
 		}
 		return res.toString();
 	}
-	
 }

@@ -45,6 +45,7 @@ public class Individual extends Storable {
 	
 	public Individual() {
 		super(StorableType.INDIVIDUAL);
+		this.individualID = "";
 		this.genome = new Genome();
 		this.childrenID = new LinkedList<String>();
 		this.inventory = new LinkedList<String>();
@@ -57,7 +58,7 @@ public class Individual extends Storable {
 			oZone = Arch.getCityById(cityID).getParentZone();
 		
 		if(res.originalZoneID == null) {
-			res.originalZoneID="XXXXXXXXX";
+			res.originalZoneID="XXXXXXXXX";//TODO controlar aqui esto
 		} else {
 			res.originalZoneID = oZone.getZoneID();
 			res.surnameA = oZone.getRandomSurname();
@@ -196,6 +197,9 @@ public class Individual extends Storable {
 	public void setIndividualID(String individualID) {
 		this.individualID = individualID;
 	}
+	public boolean isID(String oID) {
+		return oID != null && this.individualID.equals(oID) && !this.individualID.equals("");
+	}
 	public String getName() {
 		return name;
 	}
@@ -266,6 +270,9 @@ public class Individual extends Storable {
 	public void setMotherID(String motherID) {
 		this.motherID = motherID;
 	}
+	public boolean isChildOf(String pID) {
+		return pID == null || pID.equals(motherID) || pID.equals(fatherID);
+	}
 	public String getPartnerID() {
 		return partnerID;
 	}
@@ -287,7 +294,7 @@ public class Individual extends Storable {
 	}
 
 	public void addChild(Individual zChild) {
-		childrenID.add(zChild.getIndividualID());
+		childrenID.add(zChild.individualID);
 	}
 
 	public boolean containsChild(String sChildID) {
@@ -295,7 +302,7 @@ public class Individual extends Storable {
 	}
 
 	public boolean containsChild(Individual zChild) {
-		return childrenID.contains(zChild.getIndividualID());
+		return childrenID.contains(zChild.individualID);
 	}
 
 	public boolean isEmptyChildren() {
@@ -307,7 +314,7 @@ public class Individual extends Storable {
 	}
 
 	public boolean removeChild(Individual zChild) {
-		return childrenID.remove(zChild.getIndividualID());
+		return childrenID.remove(zChild.individualID);
 	}
 
 	public int getNChildren() {
@@ -475,7 +482,35 @@ public class Individual extends Storable {
 		return Arch.aie == null ? null : Arch.aie.update(this,moment);
 	}
 	
+
+	
 	/*------------------------------------------------*/
+	
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result
+				+ ((individualID == null) ? 0 : individualID.hashCode());
+		return result;
+	}
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		Individual other = (Individual) obj;
+		if (individualID == null) {
+			if (other.individualID != null)
+				return false;
+		} else if (!individualID.equals(other.individualID))
+			return false;
+		return true;
+	}
+	
 	public String toFileString() {
 		StringBuilder res = new StringBuilder();
 		res.append(individualID).append(",");	//0

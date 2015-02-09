@@ -59,6 +59,11 @@ public class World extends Storable {
 	public void setWorldID(String worldID) {
 		this.worldID = worldID;
 	}
+
+	public boolean isID(String oID) {
+		return oID != null && this.worldID.equals(oID) && !this.worldID.equals("");
+	}
+	
 	
 	public String getParentUni() {
 		return parentUni;
@@ -188,6 +193,32 @@ public class World extends Storable {
 	}
 	
 	/*------------------------------------------------*/
+
+
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + ((worldID == null) ? 0 : worldID.hashCode());
+		return result;
+	}
+	
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		World other = (World) obj;
+		if (worldID == null) {
+			if (other.worldID != null)
+				return false;
+		} else if (!worldID.equals(other.worldID))
+			return false;
+		return true;
+	}
 	
 	@Override
 	public String toFileString() {
@@ -205,7 +236,6 @@ public class World extends Storable {
 		}
 		return res.toString();
 	}
-
 	@Override
 	public String toString() {
 		return "World [worldID=" + worldID + ", moment=" + moment + ", num_zonas=" + zoneIDs.size() + ", zonas=" + zoneIDs.toString() + "]";
