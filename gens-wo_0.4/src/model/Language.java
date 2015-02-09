@@ -12,12 +12,12 @@ public class Language extends Storable {
 	}
 
 	public static void generateFromString(Language res, String str) {
-		if(res == null) res = new Language();
+		res.languageID = str;
 		//TODO generateFromString
 	}
 
 	public static void generateNewLanguage(Language res, String zoneID) {
-		if(res == null) res = new Language();
+		res.languageID = zoneID;
 		//TODO generateNewLanguage
 	}
 
@@ -39,8 +39,7 @@ public class Language extends Storable {
 
 	@Override
 	public String toFileString() {
-		// TODO toFileString() {
-		return null;
+		return languageID;
 	}
 
 }

@@ -12,7 +12,8 @@ import java.net.URLConnection;
 import java.util.List;
 
 public class StorageIO {
-	public static final String DEFAULT_ROOT_FOLDER = "files";
+	public static final String DEFAULT_ROOT_FOLDER = "H:\\wsfiles\\gens-wo\\files"; //TODO DEBUG
+//	public static final String DEFAULT_ROOT_FOLDER = "files";
 	public static final String DEFAULT_ENCODING = "ISO-8859-1";
 	
 	public static String getDefaultFolderPath(String id){
@@ -28,7 +29,9 @@ public class StorageIO {
 		file.getParentFile().mkdirs();
 		if (!records.isEmpty()) {
 			int bufsz = records.size();
-			if (bufsz <= 2) {
+			if (bufsz == 0) {
+				;
+			} else if (bufsz <= 2) {
 				bufsz *= (records.get(0).length() * 2);
 			} else if (bufsz > 20000) {
 				bufsz += 10;

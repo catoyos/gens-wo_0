@@ -51,7 +51,7 @@ public class Zone extends Storable {
 		res.lang = null;
 		
 		if (data.length > 2) {
-			res.cityIDs = Arrays.asList(data[3].split("@"));
+			res.cityIDs =  new LinkedList<String>(Arrays.asList(data[3].split("@")));
 		} else if (res.cityIDs == null) {
 			res.cityIDs = new LinkedList<String>();
 		} else {

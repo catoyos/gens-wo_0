@@ -119,8 +119,8 @@ public class Individual extends Storable {
 			e.printStackTrace();
 			res.rep = 0;
 		}
-		res.childrenID = StringUtils.compactStringToList(data[13], "|");
-		res.inventory = StringUtils.compactStringToList(data[14], "|");
+		res.childrenID =  new LinkedList<String>(StringUtils.compactStringToList(data[13], "|"));
+		res.inventory =  new LinkedList<String>(StringUtils.compactStringToList(data[14], "|"));
 
 		try {
 			if (res.genome == null) res.genome = new Genome();
@@ -233,7 +233,8 @@ public class Individual extends Storable {
 		this.deathDate = deathDate;
 	}
 	public boolean isAlive() {
-		return deathDate != -1;
+//		return deathDate != -1f;
+		return deathDate < 0f;
 	}
 	public String getOriginalZoneID() {
 		return originalZoneID;

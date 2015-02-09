@@ -42,7 +42,7 @@ public class City extends Storable {
 		res.parentZoneID = data[1];
 
 		if (data.length > 1 && !"".equals(data[2])) {
-			res.citizens = Arrays.asList(data[2].split("@"));
+			res.citizens = new LinkedList<String>(Arrays.asList(data[2].split("@")));
 		} else if (res.citizens == null) {
 			res.citizens = new LinkedList<String>();
 		} else {

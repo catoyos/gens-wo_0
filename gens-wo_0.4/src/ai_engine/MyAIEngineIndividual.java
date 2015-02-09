@@ -56,13 +56,13 @@ public class MyAIEngineIndividual {
 	public static void pairIndividuals(Individual indA, Individual indB) {
 		if (indA.hasPartner()) {
 			if (!indA.getPartnerID().equals(indB.getIndividualID())) {
-				divorce(indA, indA.getPartner());
+				Individual.divorce(indA, indA.getPartner());
 			}
 		}
 		
 		if (indB.hasPartner()) {
 			if (!indB.getPartnerID().equals(indA.getIndividualID())) {
-				divorce(indB.getPartner(), indB);
+				Individual.divorce(indB.getPartner(), indB);
 			}
 		}
 
@@ -174,7 +174,6 @@ public class MyAIEngineIndividual {
 			float repPenalty = -0.25f * individual.getRep();
 			individual.modifyReputation(repPenalty);
 		}
-		
 	}
 
 	public static float getDesirability(Individual individual) {
@@ -185,6 +184,7 @@ public class MyAIEngineIndividual {
 		}
 		return res;
 	}
+	
 	public static float getGenderAttraction(Individual individual, Gender target) {
 //		short sexOrientation = individual.getSexOrientation();
 //		float auxnn = sexOrientation + 32f;
@@ -193,6 +193,7 @@ public class MyAIEngineIndividual {
 		int op = target == Gender.MALE ? 0 : 1;
 		return  getGendersAttraction(individual)[op];
 	}
+	
 	public static float[] getGendersAttraction(Individual individual) {
 		float[] res = new float[2];
 		short sexOrientation = individual.getSexOrientation();
@@ -294,6 +295,18 @@ public class MyAIEngineIndividual {
 		}
 		return Arch.getIndividualsById(res);
 	}
+	
+	public static int getFamilyDegree(Individual indA, Individual indB){
+		int res = -1;
+		String ida = indA.getIndividualID();
+		String idb = indB.getIndividualID();
+		if(ida.equals(idb)){
+			res = 0;
+		} else if (indA.containsChild(idb) || indB.containsChild(ida)) {
+			res = 1;
+		} else ;//TODO family degree
+		return res;
+	}
 
 	public static boolean update(Individual individual, float moment) {
 		if (!individual.isAlive()) {
@@ -319,25 +332,27 @@ public class MyAIEngineIndividual {
 		float prDeath = 0.05f * (100 + age) / (25.0f + caracts[1]);
 		if (prDeath > MyAIEngine.RND.nextFloat()) {
 			individual.killIndividual(moment);
+			System.out.println("----update: muerte");
 			return true;
 		}
-		
 		
 		float repI = individual.getRep();
 		int ncs = individual.getNChildren();
 		City ct = individual.getCurrentCity();
-		float[] indAttr = individual.getGendersAttraction();
 		Individual partner;
 		if (individual.hasPartner()) {
 			partner = individual.getPartner();
 			float prntAge = partner.getAge(moment);
 			short prntFert = partner.getFertility();
-			if (age > (18 - caracts[7] * 0.1)
+			if (individual.getCurrentCityID().equals(partner.getCurrentCityID())
+					&& age > (18 - caracts[7] * 0.1)
 					&& age < (50 + caracts[7] * 0.3)
 					&& prntAge > (18 - prntFert * 0.1)
 					&& prntAge < (50 + prntFert * 0.3)) {
-				if(processHavingAChild(individual, partner, moment, repI, ncs))
+				if(processHavingAChild(individual, partner, moment, repI, ncs)) {
+					System.out.println("----update: hijo");
 					return true;
+				}
 			}
 
 			float repP = partner.getRep();
@@ -345,34 +360,90 @@ public class MyAIEngineIndividual {
 					+ 5 * (100 - caracts[4]) * (100 - caracts[9]) / (partner.getCharisma() + 5f));
 			if (prDivorce > MyAIEngine.RND.nextFloat()) {
 				Individual.divorce(individual, partner);
+				System.out.println("----update: divorcio");
 				return true;
 			}
 		} else if(age > 12){
-			//TODO mejor buscar pareja
 			if (ct != null) {
-				List<Individual> pret = ct.getRandomCitizens(20);
-				float auxDes = 0;
-				partner = null;
-				for (Individual ppartner : pret) {
-					if (ppartner.getAge(moment) > 12
-							&& 40 < (ppartner.getGender()==Gender.MALE ? indAttr[0] : indAttr[1])
-							&& auxDes < ppartner.getDesirability()) {
-						partner = ppartner;
-						auxDes = partner.getDesirability();
-					}
-				}
-				if (partner != null) {
-					boolean[]acc = Individual.agreeToPair(individual, partner, moment);
-					if (acc[0] && acc[1]) {
-						Individual.pairIndividuals(individual, partner);
-					}
+				if(processFindAPartner(individual, moment, ct)) {
+					System.out.println("----update: pareja");
+					return true;
 				}
 			}
 			
 		}
 		
-		//TODO mudarse
+		if (age > (15 + (caracts[4] - caracts[9]) * 0.05) && ct != null){
+			if(processMigrate(individual, moment, ct)){
+				return true;
+			}
+			
+		}
 				
+		return false;
+	}
+	
+	private static boolean processMigrate(Individual individual, float moment, City ct) {
+		float prMove = 0.5f;//TODO
+		if (prMove > MyAIEngine.RND.nextFloat()) {
+			List<City> cts = getAvailableMigrationTargets(individual);
+			if (!cts.isEmpty()) {
+				City tgt = null;
+				float points = 0;
+				float auxpoints = 0;
+				for (City city : cts) {
+					auxpoints = evalueCityAsDestination(city);
+					if(auxpoints > points){
+						tgt = city;
+						points = auxpoints;
+					}
+				}
+				if (tgt != null) {
+					if (agreeToMove(individual, tgt, moment)) {
+						individual.migrateTo(tgt);
+						return true;
+					}
+				}
+			}
+		}
+		return false;
+	}
+	
+	private static boolean agreeToMove(Individual individual, City tgt,
+			float moment) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	private static float evalueCityAsDestination(City city) {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	private static boolean processFindAPartner(Individual individual,
+			float moment, City city) {
+		//TODO mejor buscar pareja
+		Individual partner;
+		List<Individual> pret = city.getRandomCitizens(20);
+		float[] indAttr = individual.getGendersAttraction();
+		float auxDes = 0;
+		partner = null;
+		for (Individual ppartner : pret) {
+			if (ppartner.getAge(moment) > 12
+					&& 40 < (ppartner.getGender()==Gender.MALE ? indAttr[0] : indAttr[1])
+					&& auxDes < ppartner.getDesirability()) {
+				partner = ppartner;
+				auxDes = partner.getDesirability();
+			}
+		}
+		if (partner != null) {
+			boolean[]acc = Individual.agreeToPair(individual, partner, moment);
+			if (acc[0] && acc[1]) {
+				Individual.pairIndividuals(individual, partner);
+				return true;
+			}
+		}
+		
 		return false;
 	}
 
@@ -388,8 +459,10 @@ public class MyAIEngineIndividual {
 		} else {
 			prChildren *= Math.pow(0.5, ncs + 1);
 		}
-		
-		if (prChildren > MyAIEngine.RND.nextFloat()) {
+		int iccp = individual.getCurrentCity().getNCitizens();
+		int pccp = partner.getCurrentCity().getNCitizens();
+		float prCityPop = 1f - (iccp + pccp) * 0.005f; //TODO manejar city pop BIEN
+		if ((prChildren * prCityPop) > MyAIEngine.RND.nextFloat()) {
 			Individual res = null;
 			City c = null;
 			if (individual.getGender() == Gender.MALE) {

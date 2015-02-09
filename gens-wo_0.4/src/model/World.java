@@ -45,7 +45,7 @@ public class World extends Storable {
 		}
 		
 		if (data.length > 2) {
-			res.zoneIDs = Arrays.asList(data[3].split("@"));
+			res.zoneIDs = new LinkedList<String>(Arrays.asList(data[3].split("@")));
 		} else if (res.zoneIDs == null) {
 			res.zoneIDs = new LinkedList<String>();
 		} else {
