@@ -116,9 +116,9 @@ public class MyAIEngineIndividual {
 		if (res[1] && ((attB * desA * 0.1f) < rndv[1])) {
 			res[1] = false;
 		}
-
+		
+		@SuppressWarnings("unused")
 		int familydgAB = getFamilyDegree(indA, indB);//TODO tener en cuenta
-
 
 		return res;
 	}

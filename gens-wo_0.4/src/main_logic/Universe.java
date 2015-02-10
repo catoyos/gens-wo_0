@@ -26,11 +26,11 @@ public class Universe {
 	public Universe(IAIEngine aieng) {
 		this(generateId(), aieng, "files");
 	}
-	
+
 	public Universe(IAIEngine aieng, String rootfolder) {
 		this(generateId(), aieng, rootfolder);
 	}
-	
+
 	public Universe(String uniID, IAIEngine aieng) {
 		this(uniID, aieng, "files");
 	}

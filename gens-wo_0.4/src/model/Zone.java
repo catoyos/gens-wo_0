@@ -72,8 +72,7 @@ public class Zone extends Storable {
 
 	public boolean isID(String oID) {
 		return oID != null && this.zoneID.equals(oID) && !this.zoneID.equals("");
-	}
-	
+	}	
 	
 	public String getParentWorldID() {
 		return parentWorldID;

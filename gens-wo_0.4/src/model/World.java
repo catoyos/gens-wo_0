@@ -66,7 +66,6 @@ public class World extends Storable {
 		return oID != null && this.worldID.equals(oID) && !this.worldID.equals("");
 	}
 	
-	
 	public String getParentUni() {
 		return parentUni;
 	}

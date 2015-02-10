@@ -33,8 +33,7 @@ public class Language extends Storable {
 
 	public boolean isID(String oID) {
 		return oID != null && this.languageID.equals(oID) && !this.languageID.equals("");
-	}
-	
+	}	
 
 	public String getRandomName(Gender gender) {
 		return Arch.aie == null ? null : Arch.aie.getRandomName(this, gender);
