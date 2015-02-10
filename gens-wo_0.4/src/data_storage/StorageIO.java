@@ -12,7 +12,8 @@ import java.net.URLConnection;
 import java.util.List;
 
 public class StorageIO {
-	public static final String DEFAULT_ROOT_FOLDER = "H:\\wsfiles\\gens-wo\\files"; //TODO DEBUG
+	public static String DEFAULT_ROOT_FOLDER;
+//	public static String DEFAULT_ROOT_FOLDER = "H:\\wsfiles\\gens-wo\\files"; //TODO DEBUG
 //	public static final String DEFAULT_ROOT_FOLDER = "files";
 	public static final String DEFAULT_ENCODING = "ISO-8859-1";
 	

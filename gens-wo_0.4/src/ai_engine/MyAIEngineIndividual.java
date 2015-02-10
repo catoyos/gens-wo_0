@@ -1,7 +1,9 @@
 package ai_engine;
 
+import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Set;
 
 import model.Arch;
 import model.City;
@@ -55,13 +57,13 @@ public class MyAIEngineIndividual {
 
 	public static void pairIndividuals(Individual indA, Individual indB) {
 		if (indA.hasPartner()) {
-			if (!indA.getPartnerID().equals(indB.getIndividualID())) {
+			if (!indB.isID(indA.getPartnerID())) {
 				Individual.divorce(indA, indA.getPartner());
 			}
 		}
 		
 		if (indB.hasPartner()) {
-			if (!indB.getPartnerID().equals(indA.getIndividualID())) {
+			if (!indA.isID(indB.getPartnerID())) {
 				Individual.divorce(indB.getPartner(), indB);
 			}
 		}
@@ -72,11 +74,8 @@ public class MyAIEngineIndividual {
 	}
 
 	public static void divorce(Individual indA, Individual indB) {
-		String pa = indA.getPartnerID();
-		String pb = indB.getPartnerID();
-		
-		if(pa != null && pa.equals(indB.getIndividualID())) indA.setPartnerID(null);
-		if(pb != null && pb.equals(indA.getIndividualID())) indB.setPartnerID(null);
+		if(indB.isID(indA.getPartnerID())) indA.setPartnerID(null);
+		if(indA.isID(indB.getPartnerID())) indB.setPartnerID(null);
 	}
 
 	public static void propagateReputation(Individual individual, float val) {
@@ -118,8 +117,9 @@ public class MyAIEngineIndividual {
 			res[1] = false;
 		}
 
-		
-//		System.out.println("y,"+indA.getIndividualID()+","+ageA + "," +attA + "," +desA + "," +ageB + "," +attB + "," +desB + "," +rndv[0] + "," +rndv[1] + "," +res[0] + "," +res[1]);
+		int familydgAB = getFamilyDegree(indA, indB);//TODO tener en cuenta
+
+
 		return res;
 	}
 
@@ -135,7 +135,7 @@ public class MyAIEngineIndividual {
 
 	public static void killIndividual(Individual individual, float deathDate) {
 		Individual partn = individual.getPartner();
-		if (partn != null && individual.getIndividualID().equals(partn.getPartnerID())) {
+		if (partn != null && individual.isID(partn.getPartnerID())) {
 			partn.setPartnerID(null);
 		}
 		
@@ -154,7 +154,9 @@ public class MyAIEngineIndividual {
 		if (nucity != null) {
 			nucity.addCitizen(individual.getIndividualID());
 			zones[1] = nucity.getParentZoneID();
+			individual.setCurrentCityID(nucity.getCityID());
 		} else {
+			individual.setCurrentCityID(null);
 			modRep = false;
 		}
 		
@@ -297,15 +299,66 @@ public class MyAIEngineIndividual {
 	}
 	
 	public static int getFamilyDegree(Individual indA, Individual indB){
-		int res = -1;
-		String ida = indA.getIndividualID();
-		String idb = indB.getIndividualID();
-		if(ida.equals(idb)){
-			res = 0;
-		} else if (indA.containsChild(idb) || indB.containsChild(ida)) {
-			res = 1;
-		} else ;//TODO family degree
-		return res;
+		if(indA.equals(indB)){
+			return 0;
+		}
+		
+		if (indA.containsChild(indB) || indB.containsChild(indA)) {
+			return 1;
+		}
+
+		Individual tgt;
+		String centerid;
+		Set<String> relatives1dg;
+		if (indA.getNChildren() < indB.getNChildren()) {
+			tgt = indB;
+			centerid = indA.getIndividualID();
+			relatives1dg = new HashSet<String>(indA.getChildrenID());
+			if (indA.getFatherID() != null) relatives1dg.add(indA.getFatherID());
+			if (indA.getMotherID() != null) relatives1dg.add(indA.getMotherID());
+		} else {
+			tgt = indA;
+			centerid = indB.getIndividualID();
+			relatives1dg = new HashSet<String>(indB.getChildrenID());
+			if (indB.getFatherID() != null) relatives1dg.add(indB.getFatherID());
+			if (indB.getMotherID() != null) relatives1dg.add(indB.getMotherID());
+		}
+		
+		Set<String> relatives2dg = new HashSet<String>(relatives1dg.size() * 4);
+		Individual aux;
+		String auxid;
+		List<String> auxlist;
+		for (String rel : relatives1dg) {
+			if (tgt.containsChild(rel) || tgt.isChildOf(rel)) {
+				return 2;
+			}
+			aux = Arch.getIndividualById(rel);
+			auxid = aux.getFatherID();
+				
+			if (auxid != null && !centerid.equals(auxid) && !relatives1dg.contains(auxid)) {
+				relatives2dg.add(auxid);
+			}
+			
+			auxid = aux.getMotherID();
+			if (auxid != null && !centerid.equals(auxid) && !relatives1dg.contains(auxid)) {
+				relatives2dg.add(auxid);
+			}
+			
+			auxlist = aux.getChildrenID();
+			for (String child : auxlist) {
+				if (child != null && !centerid.equals(child) && !relatives1dg.contains(child)) {
+					relatives2dg.add(child);
+				}
+			}
+		}
+		
+		for (String rel : relatives2dg) {
+			if (tgt.containsChild(rel) || tgt.isChildOf(rel)) {
+				return 3;
+			}
+		}
+		
+		return -1;
 	}
 
 	public static boolean update(Individual individual, float moment) {
@@ -332,7 +385,7 @@ public class MyAIEngineIndividual {
 		float prDeath = 0.05f * (100 + age) / (25.0f + caracts[1]);
 		if (prDeath > MyAIEngine.RND.nextFloat()) {
 			individual.killIndividual(moment);
-			System.out.println("----update: muerte");
+//			System.out.println("----update: muerte");
 			return true;
 		}
 		
@@ -345,12 +398,13 @@ public class MyAIEngineIndividual {
 			float prntAge = partner.getAge(moment);
 			short prntFert = partner.getFertility();
 			if (individual.getCurrentCityID().equals(partner.getCurrentCityID())
+					&& individual.getGender() != partner.getGender()
 					&& age > (18 - caracts[7] * 0.1)
 					&& age < (50 + caracts[7] * 0.3)
 					&& prntAge > (18 - prntFert * 0.1)
 					&& prntAge < (50 + prntFert * 0.3)) {
 				if(processHavingAChild(individual, partner, moment, repI, ncs)) {
-					System.out.println("----update: hijo");
+//					System.out.println("----update: hijo");
 					return true;
 				}
 			}
@@ -360,13 +414,13 @@ public class MyAIEngineIndividual {
 					+ 5 * (100 - caracts[4]) * (100 - caracts[9]) / (partner.getCharisma() + 5f));
 			if (prDivorce > MyAIEngine.RND.nextFloat()) {
 				Individual.divorce(individual, partner);
-				System.out.println("----update: divorcio");
+//				System.out.println("----update: divorcio");
 				return true;
 			}
 		} else if(age > 12){
 			if (ct != null) {
 				if(processFindAPartner(individual, moment, ct)) {
-					System.out.println("----update: pareja");
+//					System.out.println("----update: pareja");
 					return true;
 				}
 			}
@@ -375,11 +429,13 @@ public class MyAIEngineIndividual {
 		
 		if (age > (15 + (caracts[4] - caracts[9]) * 0.05) && ct != null){
 			if(processMigrate(individual, moment, ct)){
+//				System.out.println("----update: migracion");
 				return true;
 			}
 			
 		}
 				
+//		System.out.println("----no update");
 		return false;
 	}
 	
@@ -392,7 +448,7 @@ public class MyAIEngineIndividual {
 				float points = 0;
 				float auxpoints = 0;
 				for (City city : cts) {
-					auxpoints = evalueCityAsDestination(city);
+					auxpoints = evalueCityAsDestination(individual,ct,city);
 					if(auxpoints > points){
 						tgt = city;
 						points = auxpoints;
@@ -409,15 +465,15 @@ public class MyAIEngineIndividual {
 		return false;
 	}
 	
-	private static boolean agreeToMove(Individual individual, City tgt,
-			float moment) {
+	private static boolean agreeToMove(Individual individual, City tgt, float moment) {
 		// TODO Auto-generated method stub
-		return false;
+		
+		return (MyAIEngine.RND.nextFloat() > 0.8);
 	}
 
-	private static float evalueCityAsDestination(City city) {
+	private static float evalueCityAsDestination(Individual individual, City current, City target) {
 		// TODO Auto-generated method stub
-		return 0;
+		return target.getNCitizens() - current.getNCitizens();
 	}
 
 	private static boolean processFindAPartner(Individual individual,
@@ -429,8 +485,9 @@ public class MyAIEngineIndividual {
 		float auxDes = 0;
 		partner = null;
 		for (Individual ppartner : pret) {
-			if (ppartner.getAge(moment) > 12
-					&& 40 < (ppartner.getGender()==Gender.MALE ? indAttr[0] : indAttr[1])
+			if (!individual.equals(ppartner)
+					&& ppartner.getAge(moment) > 12
+					&& 40 < (ppartner.getGender() == Gender.MALE ? indAttr[0] : indAttr[1])
 					&& auxDes < ppartner.getDesirability()) {
 				partner = ppartner;
 				auxDes = partner.getDesirability();
@@ -471,9 +528,14 @@ public class MyAIEngineIndividual {
 				res = Arch.generateNewIndividual(partner, individual, moment);
 			}
 			c = res.getCurrentCity();
-			if (res != null && c != null) {
-				c.addCitizen(res);
+			if (res != null) {
+				if (c != null) {
+					c.addCitizen(res);
+				}
+				individual.addChild(res);
+				partner.addChild(res);
 			}
+			
 			return true;
 		}
 		return false;

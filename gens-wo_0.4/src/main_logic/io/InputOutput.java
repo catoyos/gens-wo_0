@@ -17,7 +17,7 @@ import data_storage.StorageIO;
 
 public class InputOutput {
 
-	public static final String DEFAULT_ROOT_FOLDER = StorageIO.DEFAULT_ROOT_FOLDER;
+//	public static final String DEFAULT_ROOT_FOLDER = StorageIO.DEFAULT_ROOT_FOLDER;
 //	public static final String DEFAULT_ROOT_FOLDER = "H:\\wsfiles\\gens-wo\\files"; //TODO DEBUG
 //	public static final String DEFAULT_ROOT_FOLDER = "files";
 	public static final String DEFAULT_ENCODING = StorageIO.DEFAULT_ENCODING;
@@ -47,7 +47,12 @@ public class InputOutput {
 	}
 	
 	public static String getDefaultFolderPath(String id){
-		return DEFAULT_ROOT_FOLDER + File.separator + id;
+//		return DEFAULT_ROOT_FOLDER + File.separator + id;
+		return getDefaultFolderPath(StorageIO.DEFAULT_ROOT_FOLDER, id);
+	}
+
+	public static String getDefaultFolderPath(String folder, String id) {
+		return folder + File.separator + id;
 	}
 	
 	public static String getDefaultFilePath(String fileroot, String filename){

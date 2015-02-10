@@ -1,6 +1,7 @@
 package model;
 
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -21,6 +22,7 @@ public class City extends Storable {
 	
 	public City() {
 		super(StorableType.CITY);
+		this.cityID = "";
 		this.citizens = new LinkedList<String>();
 	}
 	
@@ -64,31 +66,40 @@ public class City extends Storable {
 		return cityID;
 	}
 
-	public void setCityID(String cityID) {
-		this.cityID = cityID;
-	}
+//	public void setCityID(String cityID) {
+//		super.modified = true;
+//		this.cityID = cityID;
+//	}
 
+	public boolean isID(String oID) {
+		return oID != null && this.cityID.equals(oID) && !this.cityID.equals("");
+	}
+	
 	public String getParentZoneID() {
 		return parentZoneID;
 	}
 
 	public void setParentZoneID(String parentZoneID) {
+		super.modified = true;
 		this.parentZoneID = parentZoneID;
 	}
 
 	public List<String> getCitizens() {
-		return citizens;
+		return Collections.unmodifiableList(citizens);
 	}
 
 	public void setCitizens(List<String> individuals) {
+		super.modified = true;
 		this.citizens = individuals;
 	}
 
 	public void addCitizen(String sIndividualID) {
+		super.modified = true;
 		citizens.add(sIndividualID);
 	}
 
 	public void addCitizen(Individual zIndividual) {
+		super.modified = true;
 		if (zIndividual!=null) citizens.add(zIndividual.getIndividualID());
 	}
 
@@ -106,11 +117,13 @@ public class City extends Storable {
 	}
 
 	public boolean removeCitizen(String sIndividualID) {
+		super.modified = true;
 		return citizens.remove(sIndividualID);
 	}
 
 	public boolean removeCitizen(Individual zIndividual) {
 		if (zIndividual==null) return false;
+		super.modified = true;
 		return citizens.remove(zIndividual.getIndividualID());
 	}
 
@@ -118,15 +131,17 @@ public class City extends Storable {
 		return citizens.size();
 	}
 
-	public String[] getAdjacentCityIDs() {
+	public String[] getAdjacentCityIDs() {//TODO no permitir acceso a array
 		return adjacentCityIDs;
 	}
 
 	protected void setAdjacentCityIDs(String[] adjacentCityIDs) {
+		super.modified = true;
 		this.adjacentCityIDs = adjacentCityIDs;
 	}
 	
 	protected void setAdjacentCities(City[] acs){
+		super.modified = true;
 		for (int i = 0; i < adjacentCityIDs.length &&  i < acs.length; i++) {
 			if (acs[i]!=null) adjacentCityIDs[i] = acs[i].cityID;
 		}
@@ -154,26 +169,30 @@ public class City extends Storable {
 			break;
 		}
 		
-		if (ca!=null && cb!=null) try {
+		if (ca != null && cb != null) try {
 			
 			City cc = null;
 			
 			if (ca.adjacentCityIDs[resA] != null) {
 				cc = Arch.getCityById(ca.adjacentCityIDs[resA]);
-				if (ca.cityID.equals(cc.adjacentCityIDs[resB])) {
+				if (ca.isID(cc.adjacentCityIDs[resB])) {
 					cc.adjacentCityIDs[resB] = null;
+					cc.modified = true;
 				}
 			}
 			
 			if (cb.adjacentCityIDs[resB] != null) {
 				cc = Arch.getCityById(cb.adjacentCityIDs[resB]);
-				if (cb.cityID.equals(cc.adjacentCityIDs[resA])) {
+				if (cb.isID(cc.adjacentCityIDs[resA])) {
 					cc.adjacentCityIDs[resA] = null;
+					cc.modified = true;
 				}
 			}
 			
 			ca.adjacentCityIDs[resA] = cb.cityID;
 			cb.adjacentCityIDs[resB] = ca.cityID;
+			ca.modified = true;
+			cb.modified = true;
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -229,6 +248,30 @@ public class City extends Storable {
 	/*------------------------------------------------*/
 
 
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + ((cityID == null) ? 0 : cityID.hashCode());
+		return result;
+	}
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		City other = (City) obj;
+		if (cityID == null) {
+			if (other.cityID != null)
+				return false;
+		} else if (!cityID.equals(other.cityID))
+			return false;
+		return true;
+	}
+
 	public String toFileString() {
 		StringBuilder res = new StringBuilder();
 		res.append(cityID).append(",");
@@ -251,7 +294,7 @@ public class City extends Storable {
 		}
 		return res.toString();
 	}
-
+	
 	@Override
 	public String toString() {
 		return "City [cityID=" + cityID + ", citizens=" + citizens + "]";

@@ -20,6 +20,7 @@ public class CityStorage extends AbstractStorage<City> {
 	protected City generateNewItem(String worldID, String parentZoneID) {
 		City res = getClearItem();
 		City.generateNewCity(res, worldID, parentZoneID);
+		res.modified = true;
 		insertItem(res);
 		return res;
 	}

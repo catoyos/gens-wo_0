@@ -1,6 +1,7 @@
 package model;
 
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -21,6 +22,7 @@ public class Zone extends Storable {
 	
 	public Zone() {
 		super(StorableType.ZONE);
+		this.zoneID = "";
 		this.cityIDs = new LinkedList<String>();
 		this.lang = new Language();
 	}
@@ -63,14 +65,21 @@ public class Zone extends Storable {
 	public String getZoneID() {
 		return zoneID;
 	}
-	public void setZoneID(String zoneID) {
-		this.zoneID = zoneID;
+//	public void setZoneID(String zoneID) {
+//		super.modified = true;
+//		this.zoneID = zoneID;
+//	}
+
+	public boolean isID(String oID) {
+		return oID != null && this.zoneID.equals(oID) && !this.zoneID.equals("");
 	}
+	
 	
 	public String getParentWorldID() {
 		return parentWorldID;
 	}
 	public void setParentWorldID(String parentWorldID) {
+		super.modified = true;
 		this.parentWorldID = parentWorldID;
 	}
 	
@@ -90,15 +99,18 @@ public class Zone extends Storable {
 	}
 	
 	public List<String> getCityIDs() {
-		return cityIDs;
+		return Collections.unmodifiableList(cityIDs);
 	}
 	public void setCityIDs(List<String> cityIDs) {
+		super.modified = true;
 		this.cityIDs = cityIDs;
 	}
 	public void addCityId(String sCityID) {
+		super.modified = true;
 		cityIDs.add(sCityID);
 	}
 	public void addCity(City zCity) {
+		super.modified = true;
 		cityIDs.add(zCity.getCityID());
 	}
 
@@ -112,9 +124,11 @@ public class Zone extends Storable {
 		return cityIDs.isEmpty();
 	}
 	public boolean removeCityID(String sCityID) {
+		super.modified = true;
 		return cityIDs.remove(sCityID);
 	}
 	public boolean removeCity(City zCity) {
+		super.modified = true;
 		return cityIDs.remove(zCity.getCityID());
 	}	
 	public int getNCities() {
@@ -125,9 +139,11 @@ public class Zone extends Storable {
 		return lastUpdated;
 	}
 	public void setLastUpdated(float lastUpdated) {
+		super.modified = true;
 		this.lastUpdated = lastUpdated;
 	}
 	public void modifyUpdated(float lapse) {
+		super.modified = true;
 		this.lastUpdated += lapse;
 	}
 	
@@ -237,6 +253,31 @@ public class Zone extends Storable {
 	}
 
 	/*------------------------------------------------*/
+
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + ((zoneID == null) ? 0 : zoneID.hashCode());
+		return result;
+	}
+	
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		Zone other = (Zone) obj;
+		if (zoneID == null) {
+			if (other.zoneID != null)
+				return false;
+		} else if (!zoneID.equals(other.zoneID))
+			return false;
+		return true;
+	}
 	
 	@Override
 	public String toFileString() {
@@ -254,5 +295,4 @@ public class Zone extends Storable {
 		}
 		return res.toString();
 	}
-	
 }

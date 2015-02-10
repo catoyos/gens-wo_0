@@ -10,7 +10,6 @@ import model.Arch;
 import model.City;
 import model.City.Direction;
 import model.Individual;
-import model.Individual.Gender;
 import model.World;
 import model.Zone;
 import model.interfaces.IAIEngine;
@@ -25,15 +24,23 @@ public class Universe {
 	private World currentWorld;
 	
 	public Universe(IAIEngine aieng) {
-		this(generateId(), aieng);
+		this(generateId(), aieng, "files");
+	}
+	
+	public Universe(IAIEngine aieng, String rootfolder) {
+		this(generateId(), aieng, rootfolder);
+	}
+	
+	public Universe(String uniID, IAIEngine aieng) {
+		this(uniID, aieng, "files");
 	}
 
-	public Universe(String uniID, IAIEngine aieng) {
+	public Universe(String uniID, IAIEngine aie, String rootfolder) {
 		this.uniID = uniID;
 		this.worldIDs = new LinkedList<String>();
 		this.currentWorld = null;
-		Arch.setAIEngine(aieng);
-		Storage.getInitiatedStorage(uniID);
+		Arch.setAIEngine(aie);
+		Storage.getInitiatedStorage(uniID, rootfolder);
 	}
 
 	private static String generateId(){
@@ -43,8 +50,12 @@ public class Universe {
 //	public static Universe generateFromString(String universeFile) {
 //		return generateFromString(universeFile, null);
 //	}
-	
+
 	public static Universe generateFromString(String universeFile, IAIEngine aieng) {
+		return generateFromString(universeFile, aieng, "files");
+	}
+	
+	public static Universe generateFromString(String universeFile, IAIEngine aieng, String rootfolder) {
 		String[] lines = universeFile.split("\n");
 		Universe uni = null;
 		try {
@@ -52,7 +63,7 @@ public class Universe {
 			String[] widsarr = null;
 			String cuid = null;
 			
-			uni = new Universe(nuid, aieng);
+			uni = new Universe(nuid, aieng, rootfolder);
 			
 			if(lines.length > 1){
 				widsarr = lines[1].split(",");
@@ -101,6 +112,10 @@ public class Universe {
 		return new File(InputOutput.getDefaultFilePath(InputOutput.getDefaultFolderPath(id), UNIVERSE_FILE));
 	}
 
+	public static File getUniverseFile(String id, String folder) {
+		return new File(InputOutput.getDefaultFilePath(InputOutput.getDefaultFolderPath(folder, id), UNIVERSE_FILE));
+	}
+
 	public static void setAIEngine(IAIEngine aieng) {
 		Arch.setAIEngine(aieng);
 	}
@@ -136,7 +151,7 @@ public class Universe {
 	public World getWorld(String world) {
 		World w	= null;
 		for (String string : worldIDs) {
-			if (string.equalsIgnoreCase(world)) {
+			if (string.equals(world)) {
 				w = Arch.getWorldById(string);
 			}
 		}
@@ -165,7 +180,6 @@ public class Universe {
 			}
 		}
 
-//		List<City> caux = new LinkedList<City>();
 		for (int i = 0; i < cities.length; i++) {
 			for (int j = 0; j < cities[0].length; j++) {
 				
@@ -174,14 +188,7 @@ public class Universe {
 				City.setAdjacentCities(cities[i][j], Direction.SOUTH, cities[(i + size + 1) % size][j]);
 				City.setAdjacentCities(cities[i][j], Direction.WEST, cities[i][(j + size - 1) % size]);
 				
-//				acs[0] = cities[(i + size - 1) % size][j];
-//				acs[1] = cities[i][(j + size + 1) % size];
-//				acs[2] = cities[(i + size + 1) % size][j];
-//				acs[3] = cities[i][(j + size - 1) % size];
-//				
-//				cities[i][j].setAdjacentCities(acs);
 				zz.addCity(cities[i][j]);
-//				caux.add(cities[i][j]);
 			}
 		}
 		
@@ -196,50 +203,50 @@ public class Universe {
 			cc.addCitizen(iaux);
 			world.modifyMoment(lapse);
 		}
+//
+//		Individual father = null;
+//		Individual mother = null;
+//		List<Individual> rndIndList = zz.getRandomCitizens(30);
+//		for (int i = 0; i < 50; i++) {
+//			
+//			if (rndIndList.isEmpty()) {
+//				rndIndList.addAll(zz.getRandomCitizens(10));
+//			}
+//			
+//			if (rndIndList.get(0).getGender() == Gender.MALE) {
+//				father = rndIndList.get(0);
+//			} else {
+//				mother = rndIndList.get(0);
+//			}
+//			rndIndList.remove(0);
+//			do {
+//				for (int j = 0; j < rndIndList.size() && (father == null || mother == null); j++) {
+//					Individual individual = rndIndList.get(j);
+//					if (individual.getGender() == (father == null ? Gender.MALE : Gender.FEMALE)) {
+//						if (father == null) {
+//							father = individual;
+//						} else {
+//							mother = individual;
+//						}
+//						rndIndList.remove(j);
+//					}
+//				}
+//				if (father == null || mother == null) {
+//					rndIndList.addAll(zz.getRandomCitizens(10));
+//				}
+//			} while(father == null || mother == null);
+//
+//			iaux = Arch.generateNewIndividual(father, mother, world.getMoment());
+//			initIndividual(iaux);
+//			cc = Arch.getCityById(iaux.getCurrentCityID());
+//			cc.addCitizen(iaux);
+//			world.modifyMoment(lapse);
+//
+//			father = null;
+//			mother = null;
+//		}
 
-		Individual father = null;
-		Individual mother = null;
-		List<Individual> rndIndList = zz.getRandomCitizens(30);
-		for (int i = 0; i < 50; i++) {
-			
-			if (rndIndList.isEmpty()) {
-				rndIndList.addAll(zz.getRandomCitizens(10));
-			}
-			
-			if (rndIndList.get(0).getGender() == Gender.MALE) {
-				father = rndIndList.get(0);
-			} else {
-				mother = rndIndList.get(0);
-			}
-			rndIndList.remove(0);
-			do {
-				for (int j = 0; j < rndIndList.size() && (father == null || mother == null); j++) {
-					Individual individual = rndIndList.get(j);
-					if (individual.getGender() == (father == null ? Gender.MALE : Gender.FEMALE)) {
-						if (father == null) {
-							father = individual;
-						} else {
-							mother = individual;
-						}
-						rndIndList.remove(j);
-					}
-				}
-				if (father == null || mother == null) {
-					rndIndList.addAll(zz.getRandomCitizens(10));
-				}
-			} while(father == null || mother == null);
-
-			iaux = Arch.generateNewIndividual(father, mother, world.getMoment());
-			initIndividual(iaux);
-			cc = Arch.getCityById(iaux.getCurrentCityID());
-			cc.addCitizen(iaux);
-			world.modifyMoment(lapse);
-
-			father = null;
-			mother = null;
-		}
-//		zz.updateIndividuals(world.getMoment());
-		world.updateIndividuals();
+//		world.updateIndividuals();
 	}
 
 	public void initZone(Zone zone) {;}
@@ -278,9 +285,9 @@ public class Universe {
 
 	public void spreadWealth(double lapse) {
 		// TODO Auto-generated method stub
-		int kf = 14;
+		int kf = 8;
 		int kfsq = kf * kf;
-		int lf = 1400;
+		int lf = 800;
 		int cs = getNCurrentCitizens();
 		int reps = cs;
 		if (cs < kf) {
@@ -296,8 +303,9 @@ public class Universe {
 		
 		float val = 0;
 		List<Individual> lst = getRandomCurrentCitizens(reps);
+		Individual individual;
 		for (int i = 0; i < lst.size(); i++) {
-			Individual individual = lst.get(i);
+			individual = lst.get(i);
 			val = (individual.getCharactValues()[i % 9]) / 100f;
 //			val = 1;
 			individual.modifyReputation(val);

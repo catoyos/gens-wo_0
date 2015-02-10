@@ -1,5 +1,6 @@
 package model;
 
+import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -45,6 +46,7 @@ public class Individual extends Storable {
 	
 	public Individual() {
 		super(StorableType.INDIVIDUAL);
+		this.individualID = "";
 		this.genome = new Genome();
 		this.childrenID = new LinkedList<String>();
 		this.inventory = new LinkedList<String>();
@@ -57,7 +59,7 @@ public class Individual extends Storable {
 			oZone = Arch.getCityById(cityID).getParentZone();
 		
 		if(res.originalZoneID == null) {
-			res.originalZoneID="XXXXXXXXX";
+			res.originalZoneID="XXXXXXXXX";//TODO controlar aqui esto
 		} else {
 			res.originalZoneID = oZone.getZoneID();
 			res.surnameA = oZone.getRandomSurname();
@@ -119,8 +121,8 @@ public class Individual extends Storable {
 			e.printStackTrace();
 			res.rep = 0;
 		}
-		res.childrenID =  new LinkedList<String>(StringUtils.compactStringToList(data[13], "|"));
-		res.inventory =  new LinkedList<String>(StringUtils.compactStringToList(data[14], "|"));
+		res.childrenID =  new LinkedList<String>(StringUtils.compactStringToList(data[13], "\\|"));
+		res.inventory =  new LinkedList<String>(StringUtils.compactStringToList(data[14], "\\|"));
 
 		try {
 			if (res.genome == null) res.genome = new Genome();
@@ -193,25 +195,31 @@ public class Individual extends Storable {
 	public String getIndividualID() {
 		return individualID;
 	}
-	public void setIndividualID(String individualID) {
-		this.individualID = individualID;
+//	public void setIndividualID(String individualID) {
+//		this.individualID = individualID;
+//	}
+	public boolean isID(String oID) {
+		return oID != null && this.individualID.equals(oID) && !this.individualID.equals("");
 	}
 	public String getName() {
 		return name;
 	}
 	public void setName(String name) {
+		super.modified = true;
 		this.name = name;
 	}
 	public String getSurnameA() {
 		return surnameA;
 	}
 	public void setSurnameA(String surnameA) {
+		super.modified = true;
 		this.surnameA = surnameA;
 	}
 	public String getSurnameB() {
 		return surnameB;
 	}
 	public void setSurnameB(String surnameB) {
+		super.modified = true;
 		this.surnameB = surnameB;
 	}
 	public String getNameSurnames() {
@@ -221,6 +229,7 @@ public class Individual extends Storable {
 		return birthDate;
 	}
 	public void setBirthDate(float birthDate) {
+		super.modified = true;
 		this.birthDate = birthDate;
 	}
 	public float getAge(float moment) {
@@ -230,6 +239,7 @@ public class Individual extends Storable {
 		return deathDate;
 	}
 	public void setDeathDate(float deathDate) {
+		super.modified = true;
 		this.deathDate = deathDate;
 	}
 	public boolean isAlive() {
@@ -240,54 +250,60 @@ public class Individual extends Storable {
 		return originalZoneID;
 	}
 	public void setOriginalZoneID(String originalZoneID) {
-		this.originalZoneID= originalZoneID;
+		super.modified = true;
+		this.originalZoneID = originalZoneID;
 	}
 	public String getCurrentCityID() {
 		return currentCityID;
 	}
 	public void setCurrentCityID(String currentCityID) {
+		super.modified = true;
 		this.currentCityID = currentCityID;
 	}
-	public Genome getGenome() {
-		return genome;
-	}
-	public void setGenome(Genome genome) {
-		this.genome = genome;
-	}
+
 	public String getFatherID() {
 		return fatherID;
 	}
 	public void setFatherID(String fatherID) {
+		super.modified = true;
 		this.fatherID = fatherID;
 	}
 	public String getMotherID() {
 		return motherID;
 	}
 	public void setMotherID(String motherID) {
+		super.modified = true;
 		this.motherID = motherID;
+	}
+	public boolean isChildOf(String pID) {
+		return pID != null && (pID.equals(motherID) || pID.equals(fatherID));
 	}
 	public String getPartnerID() {
 		return partnerID;
 	}
 	public void setPartnerID(String partnerID) {
+		super.modified = true;
 		this.partnerID = partnerID;
 	}
 	public boolean hasPartner(){
 		return partnerID != null;
 	}
 	public List<String> getChildrenID() {
-		return childrenID;
+		return Collections.unmodifiableList(childrenID);
 	}
 	public void setChildrenID(List<String> childrenID) {
+		super.modified = true;
 		this.childrenID = childrenID;
 	}
 	
 	public void addChild(String sChildID) {
+		super.modified = true;
 		childrenID.add(sChildID);
 	}
 
 	public void addChild(Individual zChild) {
-		childrenID.add(zChild.getIndividualID());
+		super.modified = true;
+		childrenID.add(zChild.individualID);
 	}
 
 	public boolean containsChild(String sChildID) {
@@ -295,7 +311,7 @@ public class Individual extends Storable {
 	}
 
 	public boolean containsChild(Individual zChild) {
-		return childrenID.contains(zChild.getIndividualID());
+		return childrenID.contains(zChild.individualID);
 	}
 
 	public boolean isEmptyChildren() {
@@ -303,11 +319,13 @@ public class Individual extends Storable {
 	}
 
 	public boolean removeChild(String sChildID) {
+		super.modified = true;
 		return childrenID.remove(sChildID);
 	}
 
 	public boolean removeChild(Individual zChild) {
-		return childrenID.remove(zChild.getIndividualID());
+		super.modified = true;
+		return childrenID.remove(zChild.individualID);
 	}
 
 	public int getNChildren() {
@@ -315,18 +333,21 @@ public class Individual extends Storable {
 	}
 	
 	public List<String> getInventory() {
-		return inventory;
+		return Collections.unmodifiableList(inventory);
 	}
 	public void setInventory(List<String> inventory) {
+		super.modified = true;
 		this.inventory = inventory;
 	}
 	public float getRep() {
 		return rep;
 	}
 	public void setRep(float rep) {
+		super.modified = true;
 		this.rep = rep;
 	}
 	public void modifyReputation(float val) {
+		super.modified = true;
 		rep += val;
 	}
 	public Gender getGender() {
@@ -408,9 +429,11 @@ public class Individual extends Storable {
 		return Arch.sto == null ? null : Arch.sto.getCityById(currentCityID);
 	}
 	public Zone getCurrentZone(){
+		if (!Arch.sto.cityExists(currentCityID)) return null;
 		return Arch.sto == null ? null : Arch.sto.getCityById(currentCityID).getParentZone();
 	}
 	public boolean isInOriginalZone(){
+		if (!Arch.sto.cityExists(currentCityID)) return false;
 		return Arch.sto == null ? false : Arch.sto.getCityById(currentCityID).getParentZoneID() == this.originalZoneID;
 	}
 	
@@ -475,7 +498,35 @@ public class Individual extends Storable {
 		return Arch.aie == null ? null : Arch.aie.update(this,moment);
 	}
 	
+
+	
 	/*------------------------------------------------*/
+	
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result
+				+ ((individualID == null) ? 0 : individualID.hashCode());
+		return result;
+	}
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		Individual other = (Individual) obj;
+		if (individualID == null) {
+			if (other.individualID != null)
+				return false;
+		} else if (!individualID.equals(other.individualID))
+			return false;
+		return true;
+	}
+	
 	public String toFileString() {
 		StringBuilder res = new StringBuilder();
 		res.append(individualID).append(",");	//0

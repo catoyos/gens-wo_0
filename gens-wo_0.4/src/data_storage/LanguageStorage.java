@@ -20,6 +20,7 @@ public class LanguageStorage extends AbstractStorage<Language> {
 	protected Language generateNewItem(String zoneID) {
 		Language res = getClearItem();
 		Language.generateNewLanguage(res, zoneID);
+		res.modified = true;
 		insertItem(res);
 		return res;
 	}

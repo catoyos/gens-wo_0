@@ -23,7 +23,8 @@ public class MyAIEngineCity {
 			return res;
 		} else {
 			if (n == 1) {
-				 res.add(getRandomCitizen(city));
+				Individual a = getRandomCitizen(city);
+				if (a != null) res.add(a);
 			} else {
 				LinkedList<String> itemids = new LinkedList<String>();
 				int idx = 0;
@@ -38,12 +39,14 @@ public class MyAIEngineCity {
 	}
 
 	public static void changeParentZone(City city, Zone nZone) {
-		if (city.getParentZoneID() != null) {
-			Zone parent = city.getParentZone();
-			parent.removeCity(city);
+		if (!nZone.isID(city.getParentZoneID())) {
+			if (city.getParentZoneID() != null) {
+				Zone parent = city.getParentZone();
+				parent.removeCity(city);
+			}
+			nZone.addCity(city);
+			city.setParentZoneID(nZone.getZoneID());
 		}
-		nZone.addCity(city);
-		city.setParentZoneID(nZone.getZoneID());
 	}
 
 	public static void procIndividualDeath(City city, Individual individual, float deathDate) {

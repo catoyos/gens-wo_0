@@ -3,6 +3,7 @@ package model.utils;
 import java.text.DecimalFormat;
 import java.text.DecimalFormatSymbols;
 import java.util.Arrays;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Locale;
 
@@ -59,7 +60,11 @@ public class StringUtils {
 	}
 	
 	public static List<String> compactStringToList(String str, String sep) {
-		return Arrays.asList(str.split(sep));
+		List<String> res = new LinkedList<String>();
+		if (str != null && !"".equals(str)) {
+			res.addAll(Arrays.asList(str.split(sep)));
+		}
+		return res;
 	}
 	
 }

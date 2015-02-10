@@ -20,6 +20,7 @@ public class WorldStorage extends AbstractStorage<World> {
 	protected World generateNewItem(String uniID) {
 		World res = getClearItem();
 		World.generateNewWorld(res, uniID);
+		res.modified = true;
 		insertItem(res);
 		return res;
 	}

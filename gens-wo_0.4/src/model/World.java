@@ -1,6 +1,7 @@
 package model;
 
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -56,27 +57,37 @@ public class World extends Storable {
 	public String getWorldID() {
 		return worldID;
 	}
-	public void setWorldID(String worldID) {
-		this.worldID = worldID;
+//	public void setWorldID(String worldID) {
+//		super.modified = true;
+//		this.worldID = worldID;
+//	}
+
+	public boolean isID(String oID) {
+		return oID != null && this.worldID.equals(oID) && !this.worldID.equals("");
 	}
+	
 	
 	public String getParentUni() {
 		return parentUni;
 	}
 	public void setParentUni(String parentUni) {
+		super.modified = true;
 		this.parentUni = parentUni;
 	}
 	
 	public List<String> getZoneIDs() {
-		return zoneIDs;
+		return Collections.unmodifiableList(zoneIDs);
 	}
 	public void setZoneIDs(List<String> zoneIDs) {
+		super.modified = true;
 		this.zoneIDs = zoneIDs;
 	}
 	public void addZoneId(String sZoneID) {
+		super.modified = true;
 		zoneIDs.add(sZoneID);
 	}
 	public void addZone(Zone zZone) {
+		super.modified = true;
 		zoneIDs.add(zZone.getZoneID());
 	}
 	
@@ -90,9 +101,11 @@ public class World extends Storable {
 		return zoneIDs.isEmpty();
 	}
 	public boolean removeZoneID(String sZoneID) {
+		super.modified = true;
 		return zoneIDs.remove(sZoneID);
 	}
 	public boolean removeZone(Zone zZone) {
+		super.modified = true;
 		return zoneIDs.remove(zZone.getZoneID());
 	}	
 	public int getNZones() {
@@ -103,9 +116,11 @@ public class World extends Storable {
 		return moment;
 	}
 	public void setMoment(float moment) {
+		super.modified = true;
 		this.moment = moment;
 	}
 	public void modifyMoment(float lapse) {
+		super.modified = true;
 		this.moment += lapse;
 	}
 
@@ -188,6 +203,32 @@ public class World extends Storable {
 	}
 	
 	/*------------------------------------------------*/
+
+
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + ((worldID == null) ? 0 : worldID.hashCode());
+		return result;
+	}
+	
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		World other = (World) obj;
+		if (worldID == null) {
+			if (other.worldID != null)
+				return false;
+		} else if (!worldID.equals(other.worldID))
+			return false;
+		return true;
+	}
 	
 	@Override
 	public String toFileString() {
@@ -205,7 +246,6 @@ public class World extends Storable {
 		}
 		return res.toString();
 	}
-
 	@Override
 	public String toString() {
 		return "World [worldID=" + worldID + ", moment=" + moment + ", num_zonas=" + zoneIDs.size() + ", zonas=" + zoneIDs.toString() + "]";

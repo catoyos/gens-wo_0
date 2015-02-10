@@ -22,6 +22,7 @@ public class IndividualStorage extends AbstractStorage<Individual> {
 		String strCity = city.getCityID();
 		Individual res = getClearItem();
 		Individual.generateNewIndividual(res, strCity, birthDate);
+		res.modified = true;
 		insertItem(res);
 		return res;
 	}

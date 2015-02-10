@@ -20,7 +20,8 @@ public class MainPLD4 {
 	private Player player;
 
 	public MainPLD4() {
-		this(InputOutput.DEFAULT_ROOT_FOLDER + File.separator + "config.properties");
+//		this(InputOutput.DEFAULT_ROOT_FOLDER + File.separator + "config.properties");
+		this("config.properties");
 	}
 	
 	public MainPLD4(String configfile) {
@@ -33,6 +34,10 @@ public class MainPLD4 {
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
+		}
+		
+		if (!properties.containsKey("folder")) {
+			properties.setProperty("folder", "files");
 		}
 	}
 	
@@ -145,10 +150,11 @@ public class MainPLD4 {
 	private Universe loadUniverse() {
 		Universe res = null;
 		IAIEngine aieng = loadAIEngine();
+		String rootfolder = properties.getProperty("folder");
 		try {
 			if (properties.getProperty("universe") != null) {
-				File file = Universe.getUniverseFile(properties.getProperty("universe"));
-				res = Universe.generateFromString(InputOutput.getFileContent(file), aieng);
+				File file = Universe.getUniverseFile(properties.getProperty("universe"), rootfolder);
+				res = Universe.generateFromString(InputOutput.getFileContent(file), aieng, rootfolder);
 			}
 		} catch (MalformedURLException e) {
 			e.printStackTrace();
@@ -157,7 +163,7 @@ public class MainPLD4 {
 		}
 		
 		if (res == null) {
-			res = new Universe(aieng);
+			res = new Universe(aieng, rootfolder);
 			properties.setProperty("universe", res.uniID);
 		}
 		
@@ -258,11 +264,12 @@ public class MainPLD4 {
 	}
 
 	public static void main(String[] args) {
-		String configfile = InputOutput.DEFAULT_ROOT_FOLDER + File.separator + "config.properties";
+		String configfile = "config.properties";
+//		String configfile = InputOutput.DEFAULT_ROOT_FOLDER + File.separator + "config.properties";
 		MainPLD4 m = new MainPLD4(configfile);
 		m.run();
 		try {
-			m.properties.store(new FileOutputStream(configfile), "");
+			m.properties.store(new FileOutputStream(configfile), "folder=H:\\\\wsfiles\\\\gens-wo\\\\files");
 		} catch (FileNotFoundException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

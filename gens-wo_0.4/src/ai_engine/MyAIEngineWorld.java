@@ -11,10 +11,6 @@ import model.Zone;
 
 public class MyAIEngineWorld {
 
-//	public static List<Zone> getZones(World world) {
-//		return Arch.getZonesById(world.getZoneIDs());
-//	}
-
 	public static Zone getRandomZone(World world) {
 		int nzs = world.getNZones();
 		if (nzs > 1) {
@@ -129,7 +125,8 @@ public class MyAIEngineWorld {
 				}
 			}
 		} else if (n == 1) {
-			res.add(getRandomCitizen(world));
+			Individual a = getRandomCitizen(world);
+			if (a != null) res.add(a);
 		}
 
 		if (res.size() > n) {
@@ -147,8 +144,14 @@ public class MyAIEngineWorld {
 	public static void updateIndividuals(World world) {
 		List<Zone> zns = world.getZones();
 		float moment = world.getMoment();
+		
+		long t0, t1;
+		
 		for (Zone zone : zns) {
+			t0 = System.currentTimeMillis();
 			zone.updateIndividuals(moment);
+			t1 = System.currentTimeMillis();
+			System.out.println(zone.getZoneID()+","+moment+","+zone.getNCitizens()+","+(t1-t0));//TODO debug
 		}
 	}
 }
