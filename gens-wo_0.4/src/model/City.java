@@ -8,6 +8,11 @@ import java.util.List;
 import model.utils.StringUtils;
 
 public class City extends Storable {
+//TODO resolver error de IO
+	private static final String FILESTRING_SEP = ",".intern();
+	private static final String LIST_SEP = "@".intern();
+	private static final String EMPTY_ID = "".intern();
+	private static final String NULL_VALUE = "-".intern();
 
 	public static enum Direction { NORTH, EAST, SOUTH, WEST };
 
@@ -22,12 +27,12 @@ public class City extends Storable {
 	
 	public City() {
 		super(StorableType.CITY);
-		this.cityID = "";
+		this.cityID = EMPTY_ID;
 		this.citizens = new LinkedList<String>();
 	}
 	
 	public static void generateNewCity(City res, String worldID, String parentZoneID) {
-		res.cityID = worldID + StringUtils.generateId((int)(newIDn++ % StringUtils.ID_N_25_3), 3);
+		res.cityID = (worldID + StringUtils.generateId((int)(newIDn++ % StringUtils.ID_N_25_3), 3)).intern();
 		res.parentZoneID = parentZoneID;
 		
 		if (res.citizens == null) {
@@ -39,12 +44,12 @@ public class City extends Storable {
 	}
 	
 	public static void generateFromString(City res, String string) {
-		String[] data = string.split(",");
-		res.cityID = data[0];
-		res.parentZoneID = data[1];
+		String[] data = string.split(FILESTRING_SEP);
+		res.cityID = data[0].intern();
+		res.parentZoneID = data[1].intern();
 
-		if (data.length > 1 && !"".equals(data[2])) {
-			res.citizens = new LinkedList<String>(Arrays.asList(data[2].split("@")));
+		if (data.length > 2 && !"".equals(data[2])) {
+			res.citizens = StringUtils.compactStringToList(data[2], LIST_SEP);
 		} else if (res.citizens == null) {
 			res.citizens = new LinkedList<String>();
 		} else {
@@ -52,13 +57,8 @@ public class City extends Storable {
 		}
 		
 		res.adjacentCityIDs = new String[4];
-		if (data.length > 2) {
-			String[] cts = data[3].split("@");
-			for (int i = 0; i < cts.length && i < res.adjacentCityIDs.length; i++) {
-				if (!"-".equals(cts[i])) {
-					res.adjacentCityIDs[i] = cts[i];
-				}
-			}
+		if (data.length > 3) {
+			res.citizens = StringUtils.compactStringToList(data[3], LIST_SEP, NULL_VALUE);
 		}
 	}
 
@@ -72,7 +72,7 @@ public class City extends Storable {
 //	}
 
 	public boolean isID(String oID) {
-		return oID != null && this.cityID.equals(oID) && !this.cityID.equals("");
+		return oID != null && this.cityID.equals(oID) && !this.cityID.equals(EMPTY_ID);
 	}
 	
 	public String getParentZoneID() {
@@ -274,24 +274,10 @@ public class City extends Storable {
 
 	public String toFileString() {
 		StringBuilder res = new StringBuilder();
-		res.append(cityID).append(",");
-		res.append(parentZoneID).append(",");
-		if (!citizens.isEmpty()) {
-			res.append(citizens.get(0));
-			for (int i = 1; i < citizens.size(); i++) {
-				res.append("@").append(citizens.get(i));
-			}
-		}
-		
-		res.append(",");
-		for (String string : adjacentCityIDs) {
-			if (string != null) {
-				res.append(string);
-			} else {
-				res.append("-");
-			}
-			res.append("@");
-		}
+		res.append(cityID).append(FILESTRING_SEP);
+		res.append(parentZoneID).append(FILESTRING_SEP);
+		res.append(StringUtils.listToCompactString(citizens, LIST_SEP)).append(FILESTRING_SEP);
+		res.append(StringUtils.listToCompactString(Arrays.asList(adjacentCityIDs), LIST_SEP, NULL_VALUE));
 		return res.toString();
 	}
 	

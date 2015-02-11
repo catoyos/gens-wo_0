@@ -1,6 +1,5 @@
 package model;
 
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
@@ -10,6 +9,10 @@ import model.utils.StringUtils;
 
 public class Zone extends Storable {
 
+	private static final String FILESTRING_SEP = ",".intern();
+	private static final String LIST_SEP = "@".intern();
+	private static final String EMPTY_ID = "".intern();
+	
 	private static long newIDn = Arch.RND.nextInt(StringUtils.ID_N_25_2);
 	public static void setNewIDn(long nid) { newIDn = nid; }
 	public static long getNewIDn() { return newIDn; }
@@ -22,13 +25,13 @@ public class Zone extends Storable {
 	
 	public Zone() {
 		super(StorableType.ZONE);
-		this.zoneID = "";
+		this.zoneID = EMPTY_ID;
 		this.cityIDs = new LinkedList<String>();
 		this.lang = new Language();
 	}
 	
 	public static void generateNewZone(Zone res, String worldID) {
-		res.zoneID = worldID + StringUtils.generateId((int)(newIDn++ % StringUtils.ID_N_25_2), 2);
+		res.zoneID = (worldID + StringUtils.generateId((int)(newIDn++ % StringUtils.ID_N_25_2), 2)).intern();
 		res.parentWorldID = worldID;
 		res.lang = Arch.generateNewLanguage(res.zoneID);
 		if (res.cityIDs == null) {
@@ -40,9 +43,9 @@ public class Zone extends Storable {
 	}
 	
 	public static void generateFromString(Zone res, String string) {
-		String[] data = string.split(",");
-		res.zoneID = data[0];
-		res.parentWorldID = data[1];
+		String[] data = string.split(FILESTRING_SEP);
+		res.zoneID = data[0].intern();
+		res.parentWorldID = data[1].intern();
 		try {
 			res.lastUpdated = Float.parseFloat(data[2]);
 		} catch (Exception e) {
@@ -52,8 +55,8 @@ public class Zone extends Storable {
 		
 		res.lang = null;
 		
-		if (data.length > 2) {
-			res.cityIDs =  new LinkedList<String>(Arrays.asList(data[3].split("@")));
+		if (data.length > 3) {
+			res.cityIDs = StringUtils.compactStringToList(data[3], LIST_SEP);
 		} else if (res.cityIDs == null) {
 			res.cityIDs = new LinkedList<String>();
 		} else {
@@ -71,7 +74,7 @@ public class Zone extends Storable {
 //	}
 
 	public boolean isID(String oID) {
-		return oID != null && this.zoneID.equals(oID) && !this.zoneID.equals("");
+		return oID != null && this.zoneID.equals(oID) && !this.zoneID.equals(EMPTY_ID);
 	}	
 	
 	public String getParentWorldID() {
@@ -281,17 +284,10 @@ public class Zone extends Storable {
 	@Override
 	public String toFileString() {
 		StringBuilder res = new StringBuilder();
-		res.append(zoneID).append(",");
-		res.append(parentWorldID).append(",");
-		res.append(lastUpdated);
-		if (!cityIDs.isEmpty()) {
-			res.append(",").append(cityIDs.get(0));
-			for (int i = 1; i < cityIDs.size(); i++) {
-				res.append("@").append(cityIDs.get(i));
-			}
-		} else {
-			res.append(",");
-		}
+		res.append(zoneID).append(FILESTRING_SEP);
+		res.append(parentWorldID).append(FILESTRING_SEP);
+		res.append(lastUpdated).append(FILESTRING_SEP);
+		res.append(StringUtils.listToCompactString(cityIDs, LIST_SEP));
 		return res.toString();
 	}
 }

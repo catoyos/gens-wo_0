@@ -4,11 +4,15 @@ import model.Individual.Gender;
 
 public class Language extends Storable {
 
+	private static final String FILESTRING_SEP = ",".intern();
+	private static final String LIST_SEP = "@".intern();
+	private static final String EMPTY_ID = "".intern();
+
 	private String languageID;
 	
 	public Language() {
 		super(StorableType.LANGUAGE);
-		this.languageID = "";
+		this.languageID = EMPTY_ID;
 		// TODO public Language() 
 	}
 
@@ -32,7 +36,7 @@ public class Language extends Storable {
 //	}
 
 	public boolean isID(String oID) {
-		return oID != null && this.languageID.equals(oID) && !this.languageID.equals("");
+		return oID != null && this.languageID.equals(oID) && !this.languageID.equals(EMPTY_ID);
 	}	
 
 	public String getRandomName(Gender gender) {

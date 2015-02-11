@@ -7,6 +7,14 @@ import java.util.List;
 import model.utils.StringUtils;
 
 public class Individual extends Storable {
+
+	private static final String FILESTRING_SEP = ",".intern();
+	private static final String LIST_SEP = "@".intern();
+	private static final String EMPTY_ID = "".intern();
+	private static final String FSTR_GM = "*".intern();
+	private static final String FSTR_GF = "+".intern();
+	
+	
 	public static enum Gender { MALE, FEMALE }
 	public static enum HairColor { WHITE, PLATINUM, BLONDE, LITEBROWN, RED, BROWN, AUBURN, BLACK }
 	public static enum EyeColor { GRAY, BLUE, GREEN, HAZEL, BROWN, BLACK }
@@ -46,27 +54,26 @@ public class Individual extends Storable {
 	
 	public Individual() {
 		super(StorableType.INDIVIDUAL);
-		this.individualID = "";
+		this.individualID = EMPTY_ID;
 		this.genome = new Genome();
 		this.childrenID = new LinkedList<String>();
 		this.inventory = new LinkedList<String>();
 	}
 	
-	public static void generateNewIndividual(Individual res,
-			String cityID, float birthDate) {
+	public static void generateNewIndividual(Individual res, String cityID, float birthDate) {
 		Zone oZone = null;
 		if(Arch.cityExists(cityID))
 			oZone = Arch.getCityById(cityID).getParentZone();
 		
 		if(res.originalZoneID == null) {
-			res.originalZoneID="XXXXXXXXX";//TODO controlar aqui esto
+			res.originalZoneID="XXXXXXXXX".intern();//TODO controlar aqui esto
 		} else {
 			res.originalZoneID = oZone.getZoneID();
 			res.surnameA = oZone.getRandomSurname();
 			res.surnameB = oZone.getRandomSurname();
 		}
 		
-		res.individualID = generateId(newIDn++, res.originalZoneID.substring( res.originalZoneID.length() - 2, res.originalZoneID.length()));
+		res.individualID = StringUtils.generateIndividualId(newIDn++, res.originalZoneID.substring( res.originalZoneID.length() - 2, res.originalZoneID.length()));
 		res.birthDate = birthDate;
 		res.deathDate = -1;
 		res.currentCityID = cityID;
@@ -86,17 +93,17 @@ public class Individual extends Storable {
 
 		loadDataFromGenome(res);
 		
-		if(oZone != null) res.name = oZone.getRandomName(res.gender);
+		if(oZone != null) res.name = oZone.getRandomName(res.gender).intern();
 		
 	}
 
 	public static void generateFromString(Individual res, String string) {
-		String[] data = string.split(",");
-		res.individualID = data[0];
-		res.name = data[1];
-		res.surnameA = data[2];
-		res.surnameB = data[3];
-		res.gender = data[4].equals("*") ? Gender.MALE : Gender.FEMALE;
+		String[] data = string.split(FILESTRING_SEP);
+		res.individualID = data[0].intern();
+		res.name = data[1].intern();
+		res.surnameA = data[2].intern();
+		res.surnameB = data[3].intern();
+		res.gender = data[4].equals(FSTR_GM) ? Gender.MALE : Gender.FEMALE;
 		try {
 			res.birthDate = StringUtils.df.parse(data[5]).floatValue();
 		} catch (Exception e) {
@@ -109,11 +116,11 @@ public class Individual extends Storable {
 			e.printStackTrace();
 			res.deathDate = res.birthDate;
 		}
-		res.originalZoneID = data[7];
-		res.currentCityID = data[8];
-		res.fatherID = data[9].equals("") ? null : data[9];
-		res.motherID = data[10].equals("") ? null : data[10];
-		res.partnerID = data[11].equals("") ? null : data[11];
+		res.originalZoneID = data[7].intern();
+		res.currentCityID = data[8].intern();
+		res.fatherID = data[9].equals(EMPTY_ID) ? null : data[9].intern();
+		res.motherID = data[10].equals(EMPTY_ID) ? null : data[10].intern();
+		res.partnerID = data[11].equals(EMPTY_ID) ? null : data[11].intern();
 
 		try {
 			res.rep = StringUtils.df.parse(data[12]).floatValue();
@@ -121,8 +128,8 @@ public class Individual extends Storable {
 			e.printStackTrace();
 			res.rep = 0;
 		}
-		res.childrenID =  new LinkedList<String>(StringUtils.compactStringToList(data[13], "\\|"));
-		res.inventory =  new LinkedList<String>(StringUtils.compactStringToList(data[14], "\\|"));
+		res.childrenID = new LinkedList<String>(StringUtils.compactStringToList(data[13], LIST_SEP));
+		res.inventory = new LinkedList<String>(StringUtils.compactStringToList(data[14], LIST_SEP));
 
 		try {
 			if (res.genome == null) res.genome = new Genome();
@@ -142,7 +149,7 @@ public class Individual extends Storable {
 			res.originalZoneID = Arch.getCityById(res.currentCityID).getParentZoneID();
 		
 		if(res.originalZoneID == null) {
-			res.originalZoneID = "XXXXXXXXX";
+			res.originalZoneID = "XXXXXXXXX".intern();
 		}
 		
 		if (res.genome == null) res.genome = new Genome();
@@ -150,7 +157,7 @@ public class Individual extends Storable {
 
 		loadDataFromGenome(res);
 
-		res.individualID = generateId(newIDn++, res.originalZoneID.substring(res.originalZoneID.length() - 2, res.originalZoneID.length()));
+		res.individualID = StringUtils.generateIndividualId(newIDn++, res.originalZoneID.substring(res.originalZoneID.length() - 2, res.originalZoneID.length()));
 
 		String[] nameSurnames = getNameSurnamesFromParents(res.gender, father, mother);
 		res.name = nameSurnames[0];
@@ -185,12 +192,6 @@ public class Individual extends Storable {
 		indi.horniness = indi.genome.getHorniness();
 		indi.comformity = indi.genome.getComformity();
 	}
-
-	private static String generateId(long i, String zid) {
-		StringBuffer res = new StringBuffer((zid == null) ? ("ZZ") : (zid));
-		res.append(String.format("%7s", "" + i).replace(' ', '0'));
-		return res.toString();
-	}
 	
 	public String getIndividualID() {
 		return individualID;
@@ -199,7 +200,7 @@ public class Individual extends Storable {
 //		this.individualID = individualID;
 //	}
 	public boolean isID(String oID) {
-		return oID != null && this.individualID.equals(oID) && !this.individualID.equals("");
+		return oID != null && this.individualID.equals(oID) && !this.individualID.equals(EMPTY_ID);
 	}
 	public String getName() {
 		return name;
@@ -529,22 +530,22 @@ public class Individual extends Storable {
 	
 	public String toFileString() {
 		StringBuilder res = new StringBuilder();
-		res.append(individualID).append(",");	//0
-		res.append(name).append(",");	//1
-		res.append(surnameA).append(",");	//2
-		res.append(surnameB).append(",");	//3
-		res.append(gender == Gender.MALE ? "*" : "+").append(",");	//4
-		res.append(StringUtils.df.format(birthDate)).append(",");	//5
-		res.append(StringUtils.df.format(deathDate)).append(",");	//6
-		res.append(originalZoneID).append(",");	//7
-		res.append(currentCityID).append(",");	//8
-		res.append(fatherID == null ? "" : fatherID).append(",");	//9
-		res.append(motherID == null ? "" : motherID).append(",");	//10
-		res.append(partnerID == null ? "" : partnerID).append(",");	//11
-		res.append(StringUtils.df.format(rep)).append(",");	//12
+		res.append(individualID).append(FILESTRING_SEP);	//0
+		res.append(name).append(FILESTRING_SEP);	//1
+		res.append(surnameA).append(FILESTRING_SEP);	//2
+		res.append(surnameB).append(FILESTRING_SEP);	//3
+		res.append(gender == Gender.MALE ? FSTR_GM : FSTR_GF).append(FILESTRING_SEP);	//4
+		res.append(StringUtils.df.format(birthDate)).append(FILESTRING_SEP);	//5
+		res.append(StringUtils.df.format(deathDate)).append(FILESTRING_SEP);	//6
+		res.append(originalZoneID).append(FILESTRING_SEP);	//7
+		res.append(currentCityID).append(FILESTRING_SEP);	//8
+		res.append(fatherID == null ? EMPTY_ID : fatherID).append(FILESTRING_SEP);	//9
+		res.append(motherID == null ? EMPTY_ID : motherID).append(FILESTRING_SEP);	//10
+		res.append(partnerID == null ? EMPTY_ID : partnerID).append(FILESTRING_SEP);	//11
+		res.append(StringUtils.df.format(rep)).append(FILESTRING_SEP);	//12
 
-		res.append(StringUtils.listToCompactString(childrenID, "|")).append(",");	//13
-		res.append(StringUtils.listToCompactString(inventory, "|")).append(",");	//14
+		res.append(StringUtils.listToCompactString(childrenID, LIST_SEP)).append(FILESTRING_SEP);	//13
+		res.append(StringUtils.listToCompactString(inventory, LIST_SEP)).append(FILESTRING_SEP);	//14
 		res.append(genome.toFileString());	//15
 		return res.toString();
 	}

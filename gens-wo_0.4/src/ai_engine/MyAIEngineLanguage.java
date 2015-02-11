@@ -7,12 +7,12 @@ public class MyAIEngineLanguage {
 
 	public static String getRandomName(Language language, Gender gender) {
 		// TODO getRandomName
-		return null;
+		return ("[RANDOM "+gender+" NAME FROM LANG "+language.getLanguageID()+"]").intern();
 	}
 
 	public static String getRandomSurname(Language language) {
 		// TODO getRandomSurname
-		return null;
+		return ("[RANDOM SURNAME FROM LANG "+language.getLanguageID()+"]").intern();
 	}
 
 }

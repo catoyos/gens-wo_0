@@ -3,6 +3,10 @@ package model;
 import model.Individual.Gender;
 
 public class Genome {
+	private static final String STRAND_SEP = "#".intern();
+	private static final String GEN_SEP = "·".intern();
+	private static final String GENOME_ID = "G".intern();
+	
 	private static final int GENES_PER_CHR = 4;
 	private static final int GENBASE = 16;
 	private static final int[] EXP_GENBASE = {1, 16, 256, 4096, 65536, 1048576};
@@ -30,10 +34,10 @@ public class Genome {
 
 	public static void generateFromString(Genome res, String string) {
 		res.genes = new short[2][23];
-		String[] strands = string.split("#");
+		String[] strands = string.split(STRAND_SEP);
 		String[] strgen;
 		for (int a = 0; a < 2; a++) {
-			strgen = strands[a + 1].split("·");
+			strgen = strands[a + 1].split(GEN_SEP);
 			for (int i = 0; i < res.genes[0].length; i++) {
 				res.genes[a][i] = (short) (Integer.parseInt(strgen[i], 36));
 			}
@@ -158,13 +162,13 @@ public class Genome {
 
 	public String toFileString() {
 		StringBuilder res = new StringBuilder();
-		res.append("G");
+		res.append(GENOME_ID);
 		if (genes != null) {
 			for (int j = 0; j < genes.length; j++) {
-				res.append("#");
+				res.append(STRAND_SEP);
 				res.append(Integer.toString(signedToUnsigned(genes[j][0]),36));
 				for (int i = 1; i < genes[0].length; i++) {
-					res.append("·").append(Integer.toString(signedToUnsigned(genes[j][i]),36));
+					res.append(GEN_SEP).append(Integer.toString(signedToUnsigned(genes[j][i]),36));
 				}
 			}
 		}

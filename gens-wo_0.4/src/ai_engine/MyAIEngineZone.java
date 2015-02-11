@@ -11,7 +11,6 @@ import model.Zone;
 
 public class MyAIEngineZone {
 
-
 	public static City getRandomCity(Zone zone) {
 		int nzs = zone.getNCities();
 		if (nzs > 1) {

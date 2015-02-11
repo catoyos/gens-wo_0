@@ -1,6 +1,5 @@
 package model;
 
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
@@ -8,6 +7,10 @@ import java.util.List;
 import model.utils.StringUtils;
 
 public class World extends Storable {
+
+	private static final String FILESTRING_SEP = ",".intern();
+	private static final String LIST_SEP = "@".intern();
+	private static final String EMPTY_ID = "".intern();
 
 	private static long newIDn = Arch.RND.nextInt(StringUtils.ID_N_25_2);
 	public static void setNewIDn(long nid) { newIDn = nid; }
@@ -21,10 +24,11 @@ public class World extends Storable {
 	public World() {
 		super(StorableType.WORLD);
 		this.zoneIDs = new LinkedList<String>();
+		this.worldID = EMPTY_ID;
 	}
 	
 	public static void generateNewWorld(World res, String uniID) {
-		res.worldID = uniID + StringUtils.generateId((int)(newIDn++ % StringUtils.ID_N_25_2), 2);
+		res.worldID = (uniID + StringUtils.generateId((int)(newIDn++ % StringUtils.ID_N_25_2), 2)).intern();
 		res.parentUni = uniID;
 		if (res.zoneIDs == null) {
 			res.zoneIDs = new LinkedList<String>();
@@ -35,9 +39,9 @@ public class World extends Storable {
 	}
 	
 	public static void generateFromString(World res, String str) {
-		String[] data = str.split(",");
-		res.worldID = data[0];
-		res.parentUni = data[1];
+		String[] data = str.split(FILESTRING_SEP);
+		res.worldID = data[0].intern();
+		res.parentUni = data[1].intern();
 		try {
 			res.moment = Float.parseFloat(data[2]);
 		} catch (Exception e) {
@@ -45,8 +49,8 @@ public class World extends Storable {
 			res.moment = 0;
 		}
 		
-		if (data.length > 2) {
-			res.zoneIDs = new LinkedList<String>(Arrays.asList(data[3].split("@")));
+		if (data.length > 3) {
+			res.zoneIDs = StringUtils.compactStringToList(data[3], LIST_SEP);
 		} else if (res.zoneIDs == null) {
 			res.zoneIDs = new LinkedList<String>();
 		} else {
@@ -63,7 +67,7 @@ public class World extends Storable {
 //	}
 
 	public boolean isID(String oID) {
-		return oID != null && this.worldID.equals(oID) && !this.worldID.equals("");
+		return oID != null && this.worldID.equals(oID) && !this.worldID.equals(EMPTY_ID);
 	}
 	
 	public String getParentUni() {
@@ -232,17 +236,12 @@ public class World extends Storable {
 	@Override
 	public String toFileString() {
 		StringBuilder res = new StringBuilder();
-		res.append(worldID).append(",");
-		res.append(parentUni).append(",");
-		res.append(moment);
-		if (!zoneIDs.isEmpty()) {
-			res.append(",").append(zoneIDs.get(0));
-			for (int i = 1; i < zoneIDs.size(); i++) {
-				res.append("@").append(zoneIDs.get(i));
-			}
-		} else {
-			res.append(",");
-		}
+		res.append(worldID).append(FILESTRING_SEP);
+		res.append(parentUni).append(FILESTRING_SEP);
+		res.append(moment).append(FILESTRING_SEP);
+
+		res.append(StringUtils.listToCompactString(zoneIDs, LIST_SEP));
+		
 		return res.toString();
 	}
 	@Override
