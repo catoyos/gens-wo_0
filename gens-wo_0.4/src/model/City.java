@@ -58,7 +58,10 @@ public class City extends Storable {
 		
 		res.adjacentCityIDs = new String[4];
 		if (data.length > 3) {
-			res.citizens = StringUtils.compactStringToList(data[3], LIST_SEP, NULL_VALUE);
+			List<String> adjcts = StringUtils.compactStringToList(data[3], LIST_SEP, NULL_VALUE);
+			for (int i = 0; i < res.adjacentCityIDs.length; i++) {
+				res.adjacentCityIDs[i] = adjcts.get(i);
+			}
 		}
 	}
 

@@ -92,6 +92,9 @@ public class MyAIEngineIndividual {
 
 	public static boolean[] agreeToPair(Individual indA, Individual indB, float moment) {
 		boolean[] res = {!indA.hasPartner(), !indB.hasPartner()};
+		
+		if(!res[0] && !res[1]) return res;
+		
 		float ageA = indA.getAge(moment);
 		float attA = getGenderAttraction(indA, indB.getGender());
 		float desA = getDesirability(indA);
@@ -108,18 +111,30 @@ public class MyAIEngineIndividual {
 			res[1] = false;
 		}
 
+		if(!res[0] && !res[1]) return res;
+		
+		int familydg = getFamilyDegree(indA, indB);
+		float fdgfactor = 0;
+		switch (familydg) {
+		case 0:fdgfactor = 0;break;			
+		case 1:fdgfactor = 0.125f;break;			
+		case 2:fdgfactor = 0.34375f;break;			
+		case 3:fdgfactor = 0.58984f;break;			
+		case 4:fdgfactor = 0.79492f;break;			
+		case 5:fdgfactor = 0.9231f;break;			
+		case 6:fdgfactor = 0.97116f;break;
+		default:fdgfactor = 1;break;
+		}
+		
 		double[] rndv = {MyAIEngine.RND.nextInt(101), MyAIEngine.RND.nextInt(101)};
 		
-		if (res[0] && ((attA * desB * 0.1f) < rndv[0])) {
+		if (res[0] && ((attA * desB * fdgfactor * 0.25f) < rndv[0])) {
 			res[0] = false;
 		}
-		if (res[1] && ((attB * desA * 0.1f) < rndv[1])) {
+		if (res[1] && ((attB * desA * fdgfactor * 0.25f) < rndv[1])) {
 			res[1] = false;
 		}
 		
-		@SuppressWarnings("unused")
-		int familydgAB = getFamilyDegree(indA, indB);//TODO tener en cuenta
-
 		return res;
 	}
 
@@ -362,7 +377,10 @@ public class MyAIEngineIndividual {
 	}
 
 	public static boolean update(Individual individual, float moment) {
+
+//		System.out.print("[update:->");
 		if (!individual.isAlive()) {
+			System.out.println("?tamuerto");
 			return false;
 		}
 		
@@ -383,6 +401,7 @@ public class MyAIEngineIndividual {
 		float age = individual.getAge(moment);
 
 		float prDeath = 0.05f * (100 + age) / (25.0f + caracts[1]);
+//		System.out.print("----TRY muerte");
 		if (prDeath > MyAIEngine.RND.nextFloat()) {
 			individual.killIndividual(moment);
 //			System.out.println("----update: muerte");
@@ -403,6 +422,7 @@ public class MyAIEngineIndividual {
 					&& age < (50 + caracts[7] * 0.3)
 					&& prntAge > (18 - prntFert * 0.1)
 					&& prntAge < (50 + prntFert * 0.3)) {
+//				System.out.print("----TRY hijo");
 				if(processHavingAChild(individual, partner, moment, repI, ncs)) {
 //					System.out.println("----update: hijo");
 					return true;
@@ -412,6 +432,7 @@ public class MyAIEngineIndividual {
 			float repP = partner.getRep();
 			float prDivorce = 0.001f * ( caracts[4] * (repI - repP) / (ncs + 10f)
 					+ 5 * (100 - caracts[4]) * (100 - caracts[9]) / (partner.getCharisma() + 5f));
+//			System.out.print("----TRY divorcio");
 			if (prDivorce > MyAIEngine.RND.nextFloat()) {
 				Individual.divorce(individual, partner);
 //				System.out.println("----update: divorcio");
@@ -419,6 +440,7 @@ public class MyAIEngineIndividual {
 			}
 		} else if(age > 12){
 			if (ct != null) {
+//				System.out.print("----TRY pareja");
 				if(processFindAPartner(individual, moment, ct)) {
 //					System.out.println("----update: pareja");
 					return true;
@@ -428,6 +450,7 @@ public class MyAIEngineIndividual {
 		}
 		
 		if (age > (15 + (caracts[4] - caracts[9]) * 0.05) && ct != null){
+//			System.out.print("----TRY migracion");
 			if(processMigrate(individual, moment, ct)){
 //				System.out.println("----update: migracion");
 				return true;
@@ -468,19 +491,19 @@ public class MyAIEngineIndividual {
 	private static boolean agreeToMove(Individual individual, City tgt, float moment) {
 		// TODO Auto-generated method stub
 		
-		return (MyAIEngine.RND.nextFloat() > 0.8);
+		return (MyAIEngine.RND.nextFloat() > 0.75);
 	}
 
 	private static float evalueCityAsDestination(Individual individual, City current, City target) {
 		// TODO Auto-generated method stub
-		return target.getNCitizens() - current.getNCitizens();
+		return current.getNCitizens() - target.getNCitizens();
 	}
 
 	private static boolean processFindAPartner(Individual individual,
 			float moment, City city) {
 		//TODO mejor buscar pareja
 		Individual partner;
-		List<Individual> pret = city.getRandomCitizens(20);
+		List<Individual> pret = city.getRandomCitizens(15);
 		float[] indAttr = individual.getGendersAttraction();
 		float auxDes = 0;
 		partner = null;
@@ -518,7 +541,7 @@ public class MyAIEngineIndividual {
 		}
 		int iccp = individual.getCurrentCity().getNCitizens();
 		int pccp = partner.getCurrentCity().getNCitizens();
-		float prCityPop = 1f - (iccp + pccp) * 0.005f; //TODO manejar city pop BIEN
+		float prCityPop = 1f - (iccp + pccp) * 0.003f; //TODO manejar city pop BIEN
 		if ((prChildren * prCityPop) > MyAIEngine.RND.nextFloat()) {
 			Individual res = null;
 			City c = null;
