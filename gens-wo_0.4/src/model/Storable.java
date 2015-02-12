@@ -41,6 +41,8 @@ public abstract class Storable {
 	public static String toFileString(Storable item){
 		return item.toFileString();
 	}
+	
+	public abstract void clear();
 
 	@Override
 	public abstract int hashCode();

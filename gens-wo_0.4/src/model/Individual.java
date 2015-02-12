@@ -19,9 +19,7 @@ public class Individual extends Storable {
 	public static enum HairColor { WHITE, PLATINUM, BLONDE, LITEBROWN, RED, BROWN, AUBURN, BLACK }
 	public static enum EyeColor { GRAY, BLUE, GREEN, HAZEL, BROWN, BLACK }
 
-	private static long newIDn = 1l;
-	public static void setNewIDn(long nid) { newIDn = nid; }
-	public static long getNewIDn() { return newIDn; }
+	protected static long newIDn = 1l;
 
 	private String individualID;
 	private String name;
@@ -65,7 +63,7 @@ public class Individual extends Storable {
 		if(Arch.cityExists(cityID))
 			oZone = Arch.getCityById(cityID).getParentZone();
 		
-		if(res.originalZoneID == null) {
+		if(oZone == null) {
 			res.originalZoneID="XXXXXXXXX".intern();//TODO controlar aqui esto
 		} else {
 			res.originalZoneID = oZone.getZoneID();
@@ -191,6 +189,45 @@ public class Individual extends Storable {
 		indi.fertility = indi.genome.getFertility();
 		indi.horniness = indi.genome.getHorniness();
 		indi.comformity = indi.genome.getComformity();
+	}
+
+	public void clear() {
+		super.modified = false;
+		this.individualID = EMPTY_ID;
+		this.name = null;
+		this.surnameA = null;
+		this.surnameB = null;
+		
+		this.gender = null;
+		
+		this.birthDate = 0;
+		this.deathDate = 0;
+		this.originalZoneID = null;
+		this.currentCityID = null;
+		if(genome == null) this.genome = new Genome();
+		else this.genome.clear();
+		
+		this.fatherID = null;
+		this.motherID = null;
+		this.partnerID = null;
+		if(childrenID == null) this.childrenID = new LinkedList<String>();
+		else this.childrenID.clear();
+
+		if(inventory == null) this.inventory = new LinkedList<String>();
+		else this.inventory.clear();
+		
+		this.rep = 0;
+		this.sexOrientation = 0;
+		this.strength = 0;
+		this.constitution = 0;
+		this.speed = 0;
+		this.intelligence = 0;
+		this.wisdom = 0;
+		this.charisma = 0;
+		this.beauty = 0;
+		this.fertility = 0;
+		this.horniness = 0;
+		this.comformity = 0;
 	}
 	
 	public String getIndividualID() {

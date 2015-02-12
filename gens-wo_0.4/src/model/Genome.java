@@ -52,7 +52,11 @@ public class Genome {
 		}
 	}
 
-	public short[][] getGenes() {
+	public void clear() {
+		this.genes = new short[2][23];
+	}
+	
+	public short[][] getGenes() {//TODO restringir acceso
 		return genes;
 	}
 

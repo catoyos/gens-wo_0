@@ -12,9 +12,7 @@ public class World extends Storable {
 	private static final String LIST_SEP = "@".intern();
 	private static final String EMPTY_ID = "".intern();
 
-	private static long newIDn = Arch.RND.nextInt(StringUtils.ID_N_25_2);
-	public static void setNewIDn(long nid) { newIDn = nid; }
-	public static long getNewIDn() { return newIDn; }
+	protected static long newIDn = Arch.RND.nextInt(StringUtils.ID_N_25_2);
 	
 	private String worldID;
 	private String parentUni;
@@ -56,6 +54,16 @@ public class World extends Storable {
 		} else {
 			res.zoneIDs.clear();
 		}
+	}
+
+	public void clear() {		
+		super.modified = false;
+		this.worldID = EMPTY_ID;
+		this.parentUni = null;
+		if(zoneIDs == null) this.zoneIDs = new LinkedList<String>();
+		else this.zoneIDs.clear();
+		
+		this.moment = 0;
 	}
 	
 	public String getWorldID() {

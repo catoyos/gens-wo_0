@@ -26,6 +26,11 @@ public class Language extends Storable {
 		//TODO generateNewLanguage
 	}
 
+	public void clear() {		
+		super.modified = false;
+		this.languageID = EMPTY_ID;
+	}
+
 	public String getLanguageID() {
 		return languageID;
 	}
@@ -51,8 +56,8 @@ public class Language extends Storable {
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
-		result = prime * result
-				+ ((languageID == null) ? 0 : languageID.hashCode());
+		result = prime * result + ((languageID == null) ?
+				0 : languageID.hashCode());
 		return result;
 	}
 

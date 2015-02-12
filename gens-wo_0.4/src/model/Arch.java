@@ -3,6 +3,7 @@ package model;
 import java.util.List;
 import java.util.Random;
 
+import model.Storable.StorableType;
 import model.interfaces.IAIEngine;
 import model.interfaces.IStorage;
 
@@ -13,6 +14,69 @@ public final class Arch {
 		
 	private Arch() throws Exception {
 		throw new Exception("What are you doing tryin' to instantiate this? Stahp it pls.");
+	}
+	
+	public static long[] getNewIDns() {
+		long[] newIDns = new long[4];
+		newIDns[0] = World.newIDn;
+		newIDns[1] = Zone.newIDn;
+		newIDns[2] = City.newIDn;
+		newIDns[3] = Individual.newIDn;
+		
+		return newIDns;
+	}
+	
+	public static long getNewIDn(StorableType type){
+		long res = -1;
+		switch (type) {
+		case WORLD:
+			res = World.newIDn;
+			break;
+		case ZONE:
+			res = Zone.newIDn;
+			break;
+		case CITY:
+			res = City.newIDn;
+			break;
+		case INDIVIDUAL:
+			res = Individual.newIDn;
+			break;
+		default:res = -1;
+			break;
+		}
+		
+		return res;
+	}
+	
+	public static void setNewIDns(long[] newIDns) throws Exception{
+		if (newIDns == null || newIDns.length != 4) throw new Exception("null or malformed newIDn array");
+		
+		if(newIDns[0] >= 0) World.newIDn = newIDns[0];
+		if(newIDns[1] >= 0) Zone.newIDn = newIDns[1];
+		if(newIDns[2] >= 0) City.newIDn = newIDns[2];
+		if(newIDns[3] >= 0) Individual.newIDn = newIDns[3];
+	}
+	
+	public static void setNewIDn(long id, StorableType type){
+		switch (type) {
+		case WORLD:
+			World.newIDn = id;
+			break;
+		case ZONE:
+			Zone.newIDn = id;
+			break;
+		case CITY:
+			City.newIDn = id;
+			break;
+		case INDIVIDUAL:
+			Individual.newIDn = id;
+			break;
+		case LANGUAGE:/*huh?*/
+			break;
+		default:/*emm?*/
+			break;
+
+		}
 	}
 	
 	public static void setStorage(IStorage storage){

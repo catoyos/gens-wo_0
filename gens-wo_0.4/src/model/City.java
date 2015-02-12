@@ -8,7 +8,7 @@ import java.util.List;
 import model.utils.StringUtils;
 
 public class City extends Storable {
-//TODO resolver error de IO
+
 	private static final String FILESTRING_SEP = ",".intern();
 	private static final String LIST_SEP = "@".intern();
 	private static final String EMPTY_ID = "".intern();
@@ -16,9 +16,7 @@ public class City extends Storable {
 
 	public static enum Direction { NORTH, EAST, SOUTH, WEST };
 
-	private static long newIDn = Arch.RND.nextInt(StringUtils.ID_N_25_3);
-	public static void setNewIDn(long nid) { newIDn = nid; }
-	public static long getNewIDn() { return newIDn; }
+	protected static long newIDn = Arch.RND.nextInt(StringUtils.ID_N_25_3);
 
 	private String cityID;
 	private String parentZoneID;
@@ -65,6 +63,15 @@ public class City extends Storable {
 		}
 	}
 
+	public void clear() {
+		super.modified = false;
+		this.cityID = EMPTY_ID;
+		this.parentZoneID = null;
+		if(citizens == null) this.citizens = new LinkedList<String>();
+		else this.citizens.clear();
+		this.adjacentCityIDs = null;
+	}
+	
 	public String getCityID() {
 		return cityID;
 	}

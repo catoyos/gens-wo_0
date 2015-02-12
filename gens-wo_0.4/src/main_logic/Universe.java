@@ -81,26 +81,16 @@ public class Universe {
 			}
 			if(lines.length > 3){
 				String[] nids = lines[3].split(",");
-				try {
-					World.setNewIDn(Long.parseLong(nids[0]));
-				} catch (NumberFormatException e) {
-					e.printStackTrace();
+				long[] lnids = {-1, -1, -1, -1};
+				for (int i = 0; i < lnids.length && i < nids.length; i++) {
+					try {
+						lnids[i] = Long.parseLong(nids[i]);
+					} catch (NumberFormatException e) {
+						lnids[i] = -1;
+						e.printStackTrace();
+					}
 				}
-				try {
-					Zone.setNewIDn(Long.parseLong(nids[1]));
-				} catch (NumberFormatException e) {
-					e.printStackTrace();
-				}
-				try {
-					City.setNewIDn(Long.parseLong(nids[2]));
-				} catch (NumberFormatException e) {
-					e.printStackTrace();
-				}
-				try {
-					Individual.setNewIDn(Long.parseLong(nids[3]));
-				} catch (NumberFormatException e) {
-					e.printStackTrace();
-				}
+				Arch.setNewIDns(lnids);
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -196,11 +186,12 @@ public class Universe {
 		City cc;
 		int n = 100;
 		float lapse = 20f / n;
-		for (int i = 0; i < n - 50; i++) {
+		for (int i = 0; i < n; i++) {
 			cc = zz.getRandomCity();
 			iaux = Arch.generateNewIndividual(cc, world.getMoment());
 			initIndividual(iaux);
 			cc.addCitizen(iaux);
+			zz.setLastUpdated(world.getMoment());
 			world.modifyMoment(lapse);
 		}
 //
@@ -245,8 +236,15 @@ public class Universe {
 //			father = null;
 //			mother = null;
 //		}
-
-//		world.updateIndividuals();
+		world.modifyMoment(10);
+		world.updateZones();
+		world.updateIndividuals();
+		world.modifyMoment(10);
+		world.updateZones();
+		world.updateIndividuals();
+		world.modifyMoment(10);
+		world.updateZones();
+		world.updateIndividuals();
 	}
 
 	public void initZone(Zone zone) {;}
@@ -339,7 +337,8 @@ public class Universe {
 		} else {
 			records.add("");
 		}
-		records.add(World.getNewIDn() + "," + Zone.getNewIDn()+","+City.getNewIDn()+","+Individual.getNewIDn());
+		long[] lnids = Arch.getNewIDns();
+		records.add(lnids[0] + "," + lnids[1]+","+lnids[2]+","+lnids[3]);
 		return records;
 	}
 

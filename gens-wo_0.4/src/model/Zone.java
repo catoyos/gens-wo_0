@@ -13,9 +13,7 @@ public class Zone extends Storable {
 	private static final String LIST_SEP = "@".intern();
 	private static final String EMPTY_ID = "".intern();
 	
-	private static long newIDn = Arch.RND.nextInt(StringUtils.ID_N_25_2);
-	public static void setNewIDn(long nid) { newIDn = nid; }
-	public static long getNewIDn() { return newIDn; }
+	protected static long newIDn = Arch.RND.nextInt(StringUtils.ID_N_25_2);
 	
 	private String zoneID;
 	private String parentWorldID;
@@ -63,6 +61,19 @@ public class Zone extends Storable {
 			res.cityIDs.clear();
 		}
 
+	}
+
+	public void clear() {		
+		super.modified = false;
+		this.zoneID = EMPTY_ID;
+		this.parentWorldID = null;
+		if(lang == null) this.lang = new Language();
+		else this.lang.clear();
+		
+		if(cityIDs == null) this.cityIDs = new LinkedList<String>();
+		else this.cityIDs.clear();
+		
+		this.lastUpdated = 0;
 	}
 	
 	public String getZoneID() {
