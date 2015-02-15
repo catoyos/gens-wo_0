@@ -14,17 +14,17 @@ import main_logic.io.InputOutput;
 import model.interfaces.IAIEngine;
 import ai_engine.MyAIEngine;
 
-public class MainPLD4 {
+public class MainWOPLD04 {
 	private Properties properties;
 	private Universe uni;
 	private Player player;
 
-	public MainPLD4() {
+	public MainWOPLD04() {
 //		this(InputOutput.DEFAULT_ROOT_FOLDER + File.separator + "config.properties");
 		this("config.properties");
 	}
 	
-	public MainPLD4(String configfile) {
+	public MainWOPLD04(String configfile) {
 		this.properties = new Properties();
 		try {
 			properties.load(new FileInputStream(configfile));
@@ -266,7 +266,7 @@ public class MainPLD4 {
 	public static void main(String[] args) {
 		String configfile = "config.properties";
 //		String configfile = InputOutput.DEFAULT_ROOT_FOLDER + File.separator + "config.properties";
-		MainPLD4 m = new MainPLD4(configfile);
+		MainWOPLD04 m = new MainWOPLD04(configfile);
 		m.run();
 		try {
 			m.properties.store(new FileOutputStream(configfile), "folder=H:\\\\wsfiles\\\\gens-wo\\\\files");

@@ -541,7 +541,16 @@ public class MyAIEngineIndividual {
 		}
 		int iccp = individual.getCurrentCity().getNCitizens();
 		int pccp = partner.getCurrentCity().getNCitizens();
-		float prCityPop = 1f - (iccp + pccp) * 0.003f; //TODO manejar city pop BIEN
+		float sumccp = 1f + 0.5f * (iccp + pccp);
+		float prCityPop = 0.05f;
+		if (sumccp < 20) {
+			prCityPop = 2f - 0.05f * sumccp;
+		} else if (sumccp < 80) {
+			prCityPop = 1.32f - 0.014f * sumccp;
+		} else if (sumccp < 120) {
+			prCityPop = 0.35f - 0.002f * sumccp;
+		}
+		
 		if ((prChildren * prCityPop) > MyAIEngine.RND.nextFloat()) {
 			Individual res = null;
 			City c = null;
