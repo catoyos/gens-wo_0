@@ -73,7 +73,7 @@ public class Individual extends Storable {
 		
 		res.individualID = StringUtils.generateIndividualId(newIDn++, res.originalZoneID.substring( res.originalZoneID.length() - 2, res.originalZoneID.length()));
 		res.birthDate = birthDate;
-		res.deathDate = -1;
+		res.deathDate = -1f;
 		res.currentCityID = cityID;
 		res.fatherID = null;
 		res.motherID = null;
@@ -162,7 +162,7 @@ public class Individual extends Storable {
 		res.surnameA = nameSurnames[1];
 		res.surnameB = nameSurnames[2];
 		res.birthDate = birthDate;
-		res.deathDate = -1;
+		res.deathDate = -1f;
 		res.fatherID = father.individualID;
 		res.motherID = mother.individualID;
 		res.partnerID = null;
@@ -472,7 +472,7 @@ public class Individual extends Storable {
 	}
 	public boolean isInOriginalZone(){
 		if (!Arch.sto.cityExists(currentCityID)) return false;
-		return Arch.sto == null ? false : Arch.sto.getCityById(currentCityID).getParentZoneID() == this.originalZoneID;
+		return Arch.sto == null ? false : Arch.sto.getCityById(currentCityID).getParentZoneID().equals(this.originalZoneID);
 	}
 	
 
